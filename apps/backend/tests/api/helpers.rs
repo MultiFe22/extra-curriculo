@@ -1,13 +1,13 @@
 use argon2::password_hash::SaltString;
 use argon2::{Algorithm, Argon2, Params, PasswordHasher, Version};
-use once_cell::sync::Lazy;
-use sqlx::{Connection, Executor, PgConnection, PgPool};
-use uuid::Uuid;
-use wiremock::MockServer;
 use extracurriculo::configuration::{get_configuration, DatabaseSettings};
 use extracurriculo::startup::get_connection_pool;
 use extracurriculo::startup::Application;
 use extracurriculo::telemetry::{get_subscriber, init_subscriber};
+use once_cell::sync::Lazy;
+use sqlx::{Connection, Executor, PgConnection, PgPool};
+use uuid::Uuid;
+use wiremock::MockServer;
 
 // pub struct ConfirmationLinks {
 //     pub html: reqwest::Url,
