@@ -51,6 +51,16 @@ impl TestApp {
     //         .expect("Failed to execute request.")
     // }
 
+    pub async fn post_project(&self, body: String) -> reqwest::Response {
+        self.api_client
+            .post(&format!("{}/project", &self.address))
+            .header("Content-Type", "application/json")
+            .body(body)
+            .send()
+            .await
+            .expect("Failed to execute request.")
+    }
+
     // pub async fn post_newsletters(&self, body: serde_json::Value) -> reqwest::Response {
     //     self.api_client
     //         .post(&format!("{}/newsletters", &self.address))

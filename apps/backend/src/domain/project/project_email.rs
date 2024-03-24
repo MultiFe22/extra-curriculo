@@ -1,19 +1,19 @@
 use validator::validate_email;
 
 #[derive(Debug)]
-pub struct UserEmail(String);
+pub struct ProjectEmail(String);
 
-impl UserEmail {
-    pub fn parse(s: String) -> Result<UserEmail, String> {
+impl ProjectEmail {
+    pub fn parse(s: String) -> Result<ProjectEmail, String> {
         if validate_email(&s) {
             Ok(Self(s))
         } else {
-            Err(format!("{} is not a valid user email", s))
+            Err(format!("{} is not a valid project email", s))
         }
     }
 }
 
-impl std::fmt::Display for UserEmail {
+impl std::fmt::Display for ProjectEmail {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         // We just forward to the Display implementation of
         // the wrapped String.
@@ -21,7 +21,7 @@ impl std::fmt::Display for UserEmail {
     }
 }
 
-impl AsRef<str> for UserEmail {
+impl AsRef<str> for ProjectEmail {
     fn as_ref(&self) -> &str {
         &self.0
     }
@@ -29,7 +29,7 @@ impl AsRef<str> for UserEmail {
 
 #[cfg(test)]
 mod tests {
-    use super::UserEmail;
+    use super::ProjectEmail;
     use claims::assert_err;
     use fake::faker::internet::en::SafeEmail;
     use fake::Fake;
@@ -46,21 +46,21 @@ mod tests {
     #[test]
     fn empty_string_is_rejected() {
         let email = "".to_string();
-        assert_err!(UserEmail::parse(email));
+        assert_err!(ProjectEmail::parse(email));
     }
     #[test]
     fn email_missing_at_symbol_is_rejected() {
         let email = "ursuladomain.com".to_string();
-        assert_err!(UserEmail::parse(email));
+        assert_err!(ProjectEmail::parse(email));
     }
     #[test]
     fn email_missing_subject_is_rejected() {
         let email = "@domain.com".to_string();
-        assert_err!(UserEmail::parse(email));
+        assert_err!(ProjectEmail::parse(email));
     }
 
     #[quickcheck_macros::quickcheck]
     fn valid_emails_are_parsed_successfully(valid_email: ValidEmailFixture) -> bool {
-        UserEmail::parse(valid_email.0).is_ok()
+        ProjectEmail::parse(valid_email.0).is_ok()
     }
 }
