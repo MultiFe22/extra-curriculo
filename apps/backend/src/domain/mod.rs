@@ -3,6 +3,7 @@ mod project;
 mod tag;
 mod user_email;
 mod username;
+pub use project::NewProject;
 pub use project::ProjectAddress;
 pub use project::ProjectBanner;
 pub use project::ProjectDescription;
