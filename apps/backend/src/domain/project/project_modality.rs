@@ -5,15 +5,15 @@ pub struct ProjectModality(String);
 
 impl ProjectModality {
     /// Parses a given string into a `ProjectModality` if it meets the validation constraints.
-    /// 
+    ///
     /// Constraints:
     /// - The modality name must not be empty.
     /// - The modality name must not exceed 30 graphemes in length.
-    /// 
+    ///
     /// Returns an `Ok(ProjectModality)` if the input is valid, or an `Err` with a message otherwise.
     pub fn parse(s: String) -> Result<ProjectModality, String> {
         let grapheme_count = s.graphemes(true).count();
-        
+
         if s.is_empty() {
             Err("The modality name cannot be empty.".to_string())
         } else if grapheme_count > 30 {

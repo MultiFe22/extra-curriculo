@@ -19,8 +19,14 @@ impl ProjectInstagram {
             return Err("Instagram handle must start with a letter.".to_string());
         }
 
-        if !s.chars().all(|c| c.is_alphanumeric() || c == '.' || c == '_') {
-            return Err("Instagram handle can only contain letters, numbers, periods, and underscores.".to_string());
+        if !s
+            .chars()
+            .all(|c| c.is_alphanumeric() || c == '.' || c == '_')
+        {
+            return Err(
+                "Instagram handle can only contain letters, numbers, periods, and underscores."
+                    .to_string(),
+            );
         }
 
         Ok(Self(s))

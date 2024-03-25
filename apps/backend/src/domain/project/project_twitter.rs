@@ -13,8 +13,12 @@ impl ProjectTwitter {
     pub fn parse(s: String) -> Result<ProjectTwitter, String> {
         if !s.starts_with('@') {
             Err("Twitter handle must start with '@'.".to_string())
-        } else if s.len() < 2 || s.len() > 16 { // Including @
-            Err("Twitter handle must be between 2 and 15 characters long, excluding '@'.".to_string())
+        } else if s.len() < 2 || s.len() > 16 {
+            // Including @
+            Err(
+                "Twitter handle must be between 2 and 15 characters long, excluding '@'."
+                    .to_string(),
+            )
         } else if !s[1..].chars().all(|c| c.is_alphanumeric() || c == '_') {
             Err("Twitter handle can only contain letters, numbers, and underscores.".to_string())
         } else {

@@ -14,12 +14,15 @@ impl ProjectProfessor {
     /// Returns an `Ok(ProjectProfessor)` if the input is valid, or an `Err` with a message otherwise.
     pub fn parse(s: String) -> Result<ProjectProfessor, String> {
         let grapheme_count = s.graphemes(true).count();
-        
+
         if s.is_empty() {
             Err("The name cannot be empty.".to_string())
         } else if grapheme_count > 100 {
             Err("The name must not exceed 100 graphemes.".to_string())
-        } else if !s.chars().all(|c| c.is_alphabetic() || c == ' ' || c == '.' || c == '-' || c == '\'') {
+        } else if !s
+            .chars()
+            .all(|c| c.is_alphabetic() || c == ' ' || c == '.' || c == '-' || c == '\'')
+        {
             Err("The name contains invalid characters. Only letters, spaces, periods, and hyphens are allowed.".to_string())
         } else {
             Ok(Self(s))
@@ -48,7 +51,6 @@ mod tests {
     fn valid_names_are_parsed_successfully(valid_name: ValidNameFixture) -> bool {
         ProjectProfessor::parse(valid_name.0).is_ok()
     }
-
 
     #[test]
     fn name_empty_is_rejected() {

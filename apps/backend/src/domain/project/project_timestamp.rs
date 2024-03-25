@@ -25,7 +25,8 @@ mod tests {
         assert!(result.is_ok());
 
         // Optionally, verify the parsed datetime matches the expected value
-        let expected_datetime = NaiveDateTime::parse_from_str(valid_timestamp_str, "%Y-%m-%d %H:%M:%S").unwrap();
+        let expected_datetime =
+            NaiveDateTime::parse_from_str(valid_timestamp_str, "%Y-%m-%d %H:%M:%S").unwrap();
         assert_eq!(result.unwrap().0, expected_datetime);
     }
 

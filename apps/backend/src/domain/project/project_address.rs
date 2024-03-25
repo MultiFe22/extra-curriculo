@@ -5,14 +5,14 @@ pub struct ProjectAddress(String);
 
 impl ProjectAddress {
     /// Parses a given string into a `ProjectAddress` if it meets the validation constraints.
-    /// 
+    ///
     /// Constraints:
     /// - The address must not be less than 5 graphemes in length.
-    /// 
+    ///
     /// Returns an `Ok(ProjectAddress)` if the input is valid, or an `Err` with a message otherwise.
     pub fn parse(s: String) -> Result<ProjectAddress, String> {
         let grapheme_count = s.graphemes(true).count();
-        
+
         if grapheme_count < 5 {
             Err("The address must be at least 5 graphemes long.".to_string())
         } else {
