@@ -132,14 +132,14 @@ pub async fn post_project(
         .begin()
         .await
         .context("Failed to acquire a Postgres connection from the Pool.")?;
-    let _project_id = insert_project(&mut transaction, &new_project)
+    let project_id = insert_project(&mut transaction, &new_project)
         .await
         .context("Failed to insert new subscriber in the database.")?;
     transaction
         .commit()
         .await
         .context("Failed to commit SQL transaction to store a new subscriber.")?;
-    Ok(HttpResponse::Ok().finish())
+    Ok(HttpResponse::Ok().json(project_id))
 }
 
 #[tracing::instrument(
@@ -178,4 +178,114 @@ pub async fn insert_project(
     .execute(transaction)
     .await?;
     Ok(project_id)
+}
+
+#[derive(thiserror::Error)]
+pub enum GetProjectError {
+    #[error("Project not found")]
+    NotFound,
+    #[error(transparent)]
+    UnexpectedError(#[from] anyhow::Error),
+}
+
+impl std::fmt::Debug for GetProjectError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        error_chain_fmt(self, f)
+    }
+}
+
+impl ResponseError for GetProjectError {
+    fn status_code(&self) -> StatusCode {
+        match self {
+            Self::NotFound => StatusCode::NOT_FOUND,
+            Self::UnexpectedError(_) => StatusCode::INTERNAL_SERVER_ERROR,
+        }
+    }
+}
+
+#[tracing::instrument(
+    name = "Getting a project by ID",
+    skip(pool),
+    fields(project_id = %id)
+)]
+pub async fn get_project(
+    pool: web::Data<PgPool>,
+    id: web::Path<uuid::Uuid>,
+) -> Result<HttpResponse, GetProjectError> {
+    let project_id = id.into_inner();
+    
+    let project = find_project_by_id(&pool, project_id).await?;
+
+    match project {
+        Some(project) => Ok(HttpResponse::Ok().json(project)),
+        None => Ok(HttpResponse::NotFound().finish()),
+    }
+
+}
+
+#[derive(Debug, serde::Serialize)]
+pub struct ExistingProject {
+    pub id: Uuid,
+    pub name: String,
+    pub description: String,
+    pub modality: String,
+    pub professor: String,
+    pub email: String,
+    pub website: String,
+    pub facebook: String,
+    pub instagram: String,
+    pub linkedin: String,
+    pub twitter: String,
+    pub address: String,
+    pub banner: String,
+    pub picture: String,
+    pub category_id: Uuid,
+    pub is_recruiting: bool,
+}
+
+#[tracing::instrument(
+    name = "Querying the database for a project by ID",
+    skip(pool),
+    fields(project_id = %project_id)
+)]
+pub async fn find_project_by_id(
+    pool: &PgPool,
+    project_id: Uuid,
+) -> Result<Option<ExistingProject>, anyhow::Error> {
+    let project = sqlx::query!(
+        r#"
+        SELECT id, name, description, picture, banner, is_recruiting, email, modality,
+        address, professor, website, facebook, instagram, linkedin, twitter, category_id
+        FROM project
+        WHERE id = $1
+        "#,
+        project_id
+    )
+    .fetch_optional(pool)
+    .await?;
+
+    // check if the project is found, if not return None
+    let project = match project {
+        Some(project) => project,
+        None => return Ok(None),
+    };
+
+    Ok(Some(ExistingProject {
+        id: project.id,
+        name: project.name,
+        description: project.description,
+        modality: project.modality,
+        professor: project.professor,
+        email: project.email,
+        website: project.website.unwrap_or("".to_string()),
+        facebook: project.facebook.unwrap_or("".to_string()),
+        instagram: project.instagram.unwrap_or("".to_string()),
+        linkedin: project.linkedin.unwrap_or("".to_string()),
+        twitter: project.twitter.unwrap_or("".to_string()),
+        address: project.address,
+        banner: project.banner.unwrap_or("".to_string()),
+        picture: project.picture.unwrap_or("".to_string()),
+        category_id: project.category_id,
+        is_recruiting: project.is_recruiting,
+    }))
 }

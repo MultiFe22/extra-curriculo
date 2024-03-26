@@ -174,3 +174,43 @@ async fn post_project_fails_if_there_is_a_fatal_database_error() {
     // Assert
     assert_eq!(response.status().as_u16(), 500);
 }
+
+#[tokio::test]
+async fn get_project_returns_a_200_for_valid_uuid() {
+    let app = spawn_app().await;
+
+    let new_project = serde_json::json!({
+        "name": "Environmental Sustainability Project",
+        "description": "This project aims to develop sustainable business practices to reduce environmental impact.",
+        "picture": "https://example.com/images/project-picture.jpg",
+        "banner": "https://example.com/images/project-banner.jpg",
+        "is_recruiting": true,
+        "email": "sustainability@example.com",
+        "modality": "Hybrid",
+        "address": "123 Eco Way, Green City, Earth",
+        "professor": "Dr. Greenleaf",
+        "instagram": "testing",
+        "facebook": "https://facebook.com/environment_project",
+        "linkedin": "https://linkedin.com/company/environment_project",
+        "twitter": "@testing",
+        "website": "https://www.environmentproject.com",
+        "category_id": "90cb0d68-9a9d-4526-ab74-9b686d50a4e2"
+    });
+
+    let response: reqwest::Response = app.post_project(new_project).await;
+    let project_id: Uuid = response.json().await.expect("Failed to parse the response body");
+
+    let response = app.get_project(project_id).await;
+
+    assert_eq!(response.status().as_u16(), 200);
+    
+}
+
+#[tokio::test]
+async fn get_project_returns_a_404_for_invalid_uuid() {
+    let app = spawn_app().await;
+
+    let response = app.get_project(Uuid::new_v4()).await;
+
+    assert_eq!(response.status().as_u16(), 404);
+}
