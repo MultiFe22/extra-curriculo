@@ -8,6 +8,8 @@ use once_cell::sync::Lazy;
 use sqlx::{Connection, Executor, PgConnection, PgPool};
 use uuid::Uuid;
 use wiremock::MockServer;
+use serde_json::Value;
+
 
 // pub struct ConfirmationLinks {
 //     pub html: reqwest::Url,
@@ -51,11 +53,10 @@ impl TestApp {
     //         .expect("Failed to execute request.")
     // }
 
-    pub async fn post_project(&self, body: String) -> reqwest::Response {
+    pub async fn post_project(&self, project: Value) -> reqwest::Response {
         self.api_client
-            .post(&format!("{}/project", &self.address))
-            .header("Content-Type", "application/json")
-            .body(body)
+            .post(&format!("{}/projects", &self.address))
+            .json(&project)
             .send()
             .await
             .expect("Failed to execute request.")

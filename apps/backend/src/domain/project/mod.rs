@@ -1,6 +1,7 @@
 mod new_project;
 mod project_address;
 mod project_banner;
+mod project_category_id;
 mod project_description;
 mod project_email;
 mod project_facebook;
@@ -16,6 +17,7 @@ mod project_website;
 pub use new_project::NewProject;
 pub use project_address::ProjectAddress;
 pub use project_banner::ProjectBanner;
+pub use project_category_id::ProjectCategoryId;
 pub use project_description::ProjectDescription;
 pub use project_email::ProjectEmail;
 pub use project_facebook::ProjectFacebook;

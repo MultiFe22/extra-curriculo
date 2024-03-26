@@ -6,6 +6,7 @@ mod username;
 pub use project::NewProject;
 pub use project::ProjectAddress;
 pub use project::ProjectBanner;
+pub use project::ProjectCategoryId;
 pub use project::ProjectDescription;
 pub use project::ProjectEmail;
 pub use project::ProjectFacebook;

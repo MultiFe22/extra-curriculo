@@ -1,8 +1,9 @@
 use super::{
-    ProjectAddress, ProjectBanner, ProjectDescription, ProjectEmail, ProjectFacebook,
-    ProjectInstagram, ProjectLinkedin, ProjectModality, ProjectName, ProjectPicture,
-    ProjectProfessor, ProjectTwitter, ProjectWebsite,
+    ProjectAddress, ProjectBanner, ProjectCategoryId, ProjectDescription, ProjectEmail,
+    ProjectFacebook, ProjectInstagram, ProjectLinkedin, ProjectModality, ProjectName,
+    ProjectPicture, ProjectProfessor, ProjectTwitter, ProjectWebsite,
 };
+
 
 pub struct NewProject {
     pub address: ProjectAddress,
@@ -18,5 +19,6 @@ pub struct NewProject {
     pub twitter: ProjectTwitter,
     pub website: ProjectWebsite,
     pub picture: ProjectPicture,
-    pub category_id: uuid::Uuid,
+    pub category_id: ProjectCategoryId,
+    pub is_recruiting: bool,
 }
