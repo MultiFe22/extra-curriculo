@@ -5,14 +5,11 @@ use sqlx::{PgPool, Postgres, Transaction};
 use uuid::Uuid;
 
 use crate::domain::ProjectCategoryId;
-use crate::{
-    domain::{
+use crate::domain::{
         NewProject, ProjectAddress, ProjectBanner, ProjectDescription, ProjectEmail,
         ProjectFacebook, ProjectInstagram, ProjectLinkedin, ProjectModality, ProjectName,
         ProjectPicture, ProjectProfessor, ProjectTwitter, ProjectWebsite,
-    },
-    startup::ApplicationBaseUrl,
-};
+    };
 
 #[derive(serde::Deserialize)]
 pub struct NewProjectForm {
