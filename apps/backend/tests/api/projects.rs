@@ -1,4 +1,3 @@
-
 use uuid::Uuid;
 
 use crate::helpers::spawn_app;
@@ -61,22 +60,38 @@ async fn post_project_persists_project_in_database() {
 
     assert_eq!(saved.name, "Environmental Sustainability Project");
     assert_eq!(saved.description, "This project aims to develop sustainable business practices to reduce environmental impact.");
-    assert_eq!(saved.picture.unwrap_or("".to_string()), "https://example.com/images/project-picture.jpg");
-    assert_eq!(saved.banner.unwrap_or("".to_string()), "https://example.com/images/project-banner.jpg");
+    assert_eq!(
+        saved.picture.unwrap_or("".to_string()),
+        "https://example.com/images/project-picture.jpg"
+    );
+    assert_eq!(
+        saved.banner.unwrap_or("".to_string()),
+        "https://example.com/images/project-banner.jpg"
+    );
     assert_eq!(saved.is_recruiting, true);
     assert_eq!(saved.email, "sustainability@example.com");
     assert_eq!(saved.modality, "Hybrid");
     assert_eq!(saved.address, "123 Eco Way, Green City, Earth");
     assert_eq!(saved.professor, "Dr. Greenleaf");
     assert_eq!(saved.instagram.unwrap_or("".to_string()), "testing");
-    assert_eq!(saved.facebook.unwrap_or("".to_string()), "https://facebook.com/environment_project");
-    assert_eq!(saved.linkedin.unwrap_or("".to_string()), "https://linkedin.com/company/environment_project");
+    assert_eq!(
+        saved.facebook.unwrap_or("".to_string()),
+        "https://facebook.com/environment_project"
+    );
+    assert_eq!(
+        saved.linkedin.unwrap_or("".to_string()),
+        "https://linkedin.com/company/environment_project"
+    );
     assert_eq!(saved.twitter.unwrap_or("".to_string()), "@testing");
-    assert_eq!(saved.website.unwrap_or("".to_string()), "https://www.environmentproject.com");
-    assert_eq!(saved.category_id, Uuid::parse_str("90cb0d68-9a9d-4526-ab74-9b686d50a4e2").unwrap());
+    assert_eq!(
+        saved.website.unwrap_or("".to_string()),
+        "https://www.environmentproject.com"
+    );
+    assert_eq!(
+        saved.category_id,
+        Uuid::parse_str("90cb0d68-9a9d-4526-ab74-9b686d50a4e2").unwrap()
+    );
 }
-
-
 
 #[tokio::test]
 async fn post_project_returns_a_400_for_invalid_json_data() {
@@ -99,7 +114,7 @@ async fn post_project_returns_a_400_for_invalid_json_data() {
 }
 
 #[tokio::test]
-async fn post_project_returns_a_400_when_fields_are_present_but_invalid(){
+async fn post_project_returns_a_400_when_fields_are_present_but_invalid() {
     let app = spawn_app().await;
 
     let new_project = serde_json::json!({

@@ -5,11 +5,10 @@ use extracurriculo::startup::get_connection_pool;
 use extracurriculo::startup::Application;
 use extracurriculo::telemetry::{get_subscriber, init_subscriber};
 use once_cell::sync::Lazy;
+use serde_json::Value;
 use sqlx::{Connection, Executor, PgConnection, PgPool};
 use uuid::Uuid;
 use wiremock::MockServer;
-use serde_json::Value;
-
 
 // pub struct ConfirmationLinks {
 //     pub html: reqwest::Url,

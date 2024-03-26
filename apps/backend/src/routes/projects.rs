@@ -6,10 +6,10 @@ use uuid::Uuid;
 
 use crate::domain::ProjectCategoryId;
 use crate::domain::{
-        NewProject, ProjectAddress, ProjectBanner, ProjectDescription, ProjectEmail,
-        ProjectFacebook, ProjectInstagram, ProjectLinkedin, ProjectModality, ProjectName,
-        ProjectPicture, ProjectProfessor, ProjectTwitter, ProjectWebsite,
-    };
+    NewProject, ProjectAddress, ProjectBanner, ProjectDescription, ProjectEmail, ProjectFacebook,
+    ProjectInstagram, ProjectLinkedin, ProjectModality, ProjectName, ProjectPicture,
+    ProjectProfessor, ProjectTwitter, ProjectWebsite,
+};
 
 #[derive(serde::Deserialize)]
 pub struct NewProjectForm {

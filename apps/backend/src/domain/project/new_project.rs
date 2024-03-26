@@ -4,7 +4,6 @@ use super::{
     ProjectPicture, ProjectProfessor, ProjectTwitter, ProjectWebsite,
 };
 
-
 pub struct NewProject {
     pub address: ProjectAddress,
     pub banner: ProjectBanner,
