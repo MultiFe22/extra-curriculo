@@ -1,0 +1,32 @@
+meta {
+  name: new_project
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{api_url}}/projects
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "name": "Environmental Sustainability Project",
+    "description": "This project aims to develop sustainable business practices to reduce environmental impact.",
+    "picture": "https://example.com/images/project-picture.jpg",
+    "banner": "https://example.com/images/project-banner.jpg",
+    "is_recruiting": true,
+    "email": "sustainability@example.com",
+    "modality": "Hybrid",
+    "address": "123 Eco Way, Green City, Earth",
+    "professor": "Dr. Greenleaf",
+    "instagram": "testing",
+    "facebook": "https://facebook.com/environment_project",
+    "linkedin": "https://linkedin.com/company/environment_project",
+    "twitter": "@testing",
+    "website": "https://www.environmentproject.com",
+    "category_id": "90cb0d68-9a9d-4526-ab74-9b686d50a4e2"
+  }
+  
+}

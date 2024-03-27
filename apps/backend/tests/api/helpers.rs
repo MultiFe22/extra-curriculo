@@ -5,6 +5,7 @@ use extracurriculo::startup::get_connection_pool;
 use extracurriculo::startup::Application;
 use extracurriculo::telemetry::{get_subscriber, init_subscriber};
 use once_cell::sync::Lazy;
+use serde_json::Value;
 use sqlx::{Connection, Executor, PgConnection, PgPool};
 use uuid::Uuid;
 use wiremock::MockServer;
@@ -50,6 +51,23 @@ impl TestApp {
     //         .await
     //         .expect("Failed to execute request.")
     // }
+
+    pub async fn post_project(&self, project: Value) -> reqwest::Response {
+        self.api_client
+            .post(&format!("{}/projects", &self.address))
+            .json(&project)
+            .send()
+            .await
+            .expect("Failed to execute request.")
+    }
+
+    pub async fn get_project(&self, project_id: Uuid) -> reqwest::Response {
+        self.api_client
+            .get(&format!("{}/projects/{}", &self.address, project_id))
+            .send()
+            .await
+            .expect("Failed to execute request.")
+    }
 
     // pub async fn post_newsletters(&self, body: serde_json::Value) -> reqwest::Response {
     //     self.api_client

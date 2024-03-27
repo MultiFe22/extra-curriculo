@@ -1,7 +1,24 @@
 //! src/domain/mod.rs
+mod project;
 mod tag;
 mod user_email;
 mod username;
+pub use project::NewProject;
+pub use project::ProjectAddress;
+pub use project::ProjectBanner;
+pub use project::ProjectCategoryId;
+pub use project::ProjectDescription;
+pub use project::ProjectEmail;
+pub use project::ProjectFacebook;
+pub use project::ProjectInstagram;
+pub use project::ProjectLinkedin;
+pub use project::ProjectModality;
+pub use project::ProjectName;
+pub use project::ProjectPicture;
+pub use project::ProjectProfessor;
+pub use project::ProjectTimestamp;
+pub use project::ProjectTwitter;
+pub use project::ProjectWebsite;
 pub use tag::TagName;
 pub use user_email::UserEmail;
 pub use username::UserName;

@@ -63,6 +63,7 @@ urlencoding = "2"
 htmlescape = "0.3"
 actix-web-flash-messages = { version = "0.4", features = ["cookies"] }
 actix-session = { version = "0.7", features = ["redis-rs-tls-session"] }
+url = "2.5.0"
 
 # Using table-like toml syntax to avoid a super-long line!
 [dependencies.sqlx]
