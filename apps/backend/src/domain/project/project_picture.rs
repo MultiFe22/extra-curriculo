@@ -11,9 +11,7 @@ impl ProjectPicture {
     /// Returns `Ok` with the `ProjectPicture` if the URL is valid or if there is no URL.
     /// Returns `Err` with validation errors if the URL is not valid.
     pub fn parse(s: String) -> Result<ProjectPicture, String> {
-        if s.is_empty() {
-            Ok(ProjectPicture(s))
-        } else if validate_url(&s) {
+        if s.is_empty() || validate_url(&s) {
             Ok(ProjectPicture(s))
         } else {
             Err(format!("{} is not a valid picture link", s))
