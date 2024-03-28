@@ -2,6 +2,7 @@
 use crate::configuration::DatabaseSettings;
 use crate::configuration::Settings;
 use crate::email_client::EmailClient;
+use crate::routes::get_all_projects;
 use crate::routes::get_project;
 use crate::routes::health_check;
 use crate::routes::post_project;
@@ -49,6 +50,7 @@ async fn run(
             .wrap(TracingLogger::default())
             .route("/health_check", web::get().to(health_check))
             .route("/projects", web::post().to(post_project))
+            .route("/projects", web::get().to(get_all_projects))
             .route("/projects/{id}", web::get().to(get_project))
             // .route("/subscriptions", web::post().to(subscribe))
             // .route("/subscriptions/confirm", web::get().to(confirm))
