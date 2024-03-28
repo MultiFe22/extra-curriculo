@@ -7,6 +7,10 @@ env:
   SQLX_VERSION: 0.7.1
   SQLX_FEATURES: "rustls,postgres"
 
+defaults:
+  run:
+    working-directory: ./apps/backend
+
 jobs:
   test:
     name: Test
