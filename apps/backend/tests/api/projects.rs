@@ -216,3 +216,187 @@ async fn get_project_returns_a_404_for_invalid_uuid() {
 
     assert_eq!(response.status().as_u16(), 404);
 }
+
+#[tokio::test]
+async fn get_project_fails_if_there_is_a_fatal_database_error() {
+    // Arrange
+    let app = spawn_app().await;
+
+    let new_project = serde_json::json!({
+        "name": "Environmental Sustainability Project",
+        "description": "This project aims to develop sustainable business practices to reduce environmental impact.",
+        "picture": "https://example.com/images/project-picture.jpg",
+        "banner": "https://example.com/images/project-banner.jpg",
+        "is_recruiting": true,
+        "email": "sustainability@example.com",
+        "modality": "Hybrid",
+        "address": "123 Eco Way, Green City, Earth",
+        "professor": "Dr. Greenleaf",
+        "instagram": "testing",
+        "facebook": "https://facebook.com/environment_project",
+        "linkedin": "https://linkedin.com/company/environment_project",
+        "twitter": "@testing",
+        "website": "https://www.environmentproject.com",
+        "category_id": "90cb0d68-9a9d-4526-ab74-9b686d50a4e2"
+    });
+
+    let response: reqwest::Response = app.post_project(new_project).await;
+
+    assert!(response.status().is_success());
+
+    // Sabotage the database
+    sqlx::query!("ALTER TABLE project DROP COLUMN name;")
+        .execute(&app.db_pool)
+        .await
+        .unwrap();
+
+    let project_id: Uuid = response
+        .json()
+        .await
+        .expect("Failed to parse the response body");
+    // Act
+    let response = app.get_project(project_id).await;
+    // Assert
+    assert_eq!(response.status().as_u16(), 500);
+}
+
+#[tokio::test]
+async fn get_all_projects_returns_a_200_and_a_list_of_projects() {
+    let app = spawn_app().await;
+
+    // Optionally, insert a project to ensure the list is not empty
+    let new_project = serde_json::json!({
+        "name": "Global Health Initiative",
+        "description": "A project aimed at improving global health outcomes through innovation.",
+        "picture": "https://example.com/images/health-project-picture.jpg",
+        "banner": "https://example.com/images/health-project-banner.jpg",
+        "is_recruiting": true,
+        "email": "health@example.com",
+        "modality": "Remote",
+        "address": "456 Health Blvd, Wellness City, Earth",
+        "professor": "Dr. Healwell",
+        "instagram": "health_initiative",
+        "facebook": "https://facebook.com/global_health_initiative",
+        "linkedin": "https://linkedin.com/company/global_health_initiative",
+        "twitter": "@healthforall",
+        "website": "https://www.globalhealthinitiative.com",
+        "category_id": "90cb0d68-9a9d-4526-ab74-9b686d50a4e2"
+    });
+
+    app.post_project(new_project).await;
+
+    // Fetching all projects
+    let response = app.get_all_projects().await;
+
+    assert_eq!(response.status().as_u16(), 200);
+
+    // Optionally, verify the structure of the response or the presence of the inserted project
+    let projects: Vec<serde_json::Value> = response
+        .json()
+        .await
+        .expect("Failed to parse the response body");
+    assert!(
+        !projects.is_empty(),
+        "Expected at least one project in the response"
+    );
+}
+
+#[tokio::test]
+async fn get_all_projects_returns_a_200_and_correct_project_details() {
+    let app = spawn_app().await;
+
+    // Define two projects with distinct names
+    let project_names = vec!["Project Alpha", "Project Beta"];
+    let base_project = serde_json::json!({
+        "description": "A project aimed at testing the get all projects endpoint.",
+        "picture": "https://example.com/images/project-picture.jpg",
+        "banner": "https://example.com/images/project-banner.jpg",
+        "is_recruiting": true,
+        "email": "project@example.com",
+        "modality": "Remote",
+        "address": "123 Project St, Test City, Earth",
+        "professor": "Dr. Test",
+        "instagram": "test_project",
+        "facebook": "https://facebook.com/test_project",
+        "linkedin": "https://linkedin.com/company/test_project",
+        "twitter": "@testproject",
+        "website": "https://www.testproject.com",
+        "category_id": "90cb0d68-9a9d-4526-ab74-9b686d50a4e2"
+    });
+
+    // Post the two projects
+    for name in &project_names {
+        let mut project = base_project.clone();
+        project["name"] = serde_json::Value::from(*name);
+        app.post_project(project).await;
+    }
+
+    // Fetching all projects
+    let response = app.get_all_projects().await;
+    assert_eq!(response.status().as_u16(), 200);
+
+    // Parse response and verify size
+    let projects: Vec<serde_json::Value> = response
+        .json()
+        .await
+        .expect("Failed to parse the response body");
+    assert_eq!(
+        projects.len(),
+        2,
+        "Expected exactly two projects in the response"
+    );
+
+    // Verify that the projects in the response have the correct names
+    let mut project_names_from_response: Vec<String> = projects
+        .iter()
+        .map(|p| p["name"].as_str().unwrap().to_string())
+        .collect();
+    project_names_from_response.sort_unstable();
+    let mut project_names_expected: Vec<&str> = project_names.iter().cloned().collect();
+    project_names_expected.sort_unstable();
+
+    assert_eq!(
+        project_names_from_response, project_names_expected,
+        "The project names in the response do not match the expected names"
+    );
+}
+
+#[tokio::test]
+async fn get_all_projects_returns_a_404_when_no_projects_exist() {
+    let app = spawn_app().await;
+
+    // Attempt to fetch all projects when none have been created
+    let response = app.get_all_projects().await;
+
+    // Assert that the response status is `404 Not Found`
+    assert_eq!(
+        response.status().as_u16(),
+        404,
+        "Expected a 404 status for no projects available"
+    );
+
+    // Optionally, verify the response body is empty
+    let body = response.text().await.expect("Failed to read response body");
+    assert!(
+        body.is_empty(),
+        "Expected an empty response body for no projects available"
+    );
+}
+
+#[tokio::test]
+async fn get_all_projects_fails_if_there_is_a_fatal_database_error() {
+    // Arrange
+    let app = spawn_app().await;
+
+    // Sabotage the database
+    sqlx::query!("ALTER TABLE project DROP COLUMN name;")
+        .execute(&app.db_pool)
+        .await
+        .unwrap();
+
+    // Act
+    let response = app.get_all_projects().await;
+
+    // Assert
+    assert_eq!(response.status().as_u16(), 500);
+}

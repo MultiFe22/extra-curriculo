@@ -288,3 +288,49 @@ pub async fn find_project_by_id(
         is_recruiting: project.is_recruiting,
     }))
 }
+
+#[tracing::instrument(name = "Getting all projects", skip(pool))]
+pub async fn get_all_projects(pool: web::Data<PgPool>) -> Result<HttpResponse, GetProjectError> {
+    let projects = find_all_projects(&pool).await?;
+
+    if projects.is_empty() {
+        Ok(HttpResponse::NotFound().finish())
+    } else {
+        Ok(HttpResponse::Ok().json(projects))
+    }
+}
+
+#[tracing::instrument(name = "Querying the database for all projects", skip(pool))]
+pub async fn find_all_projects(pool: &PgPool) -> Result<Vec<ExistingProject>, anyhow::Error> {
+    let projects = sqlx::query!(
+        r#"
+        SELECT id, name, description, picture, banner, is_recruiting, email, modality,
+        address, professor, website, facebook, instagram, linkedin, twitter, category_id
+        FROM project
+        "#
+    )
+    .fetch_all(pool)
+    .await?
+    .into_iter()
+    .map(|project| ExistingProject {
+        id: project.id,
+        name: project.name,
+        description: project.description,
+        modality: project.modality,
+        professor: project.professor,
+        email: project.email,
+        website: project.website.unwrap_or_default(),
+        facebook: project.facebook.unwrap_or_default(),
+        instagram: project.instagram.unwrap_or_default(),
+        linkedin: project.linkedin.unwrap_or_default(),
+        twitter: project.twitter.unwrap_or_default(),
+        address: project.address,
+        banner: project.banner.unwrap_or_default(),
+        picture: project.picture.unwrap_or_default(),
+        category_id: project.category_id,
+        is_recruiting: project.is_recruiting,
+    })
+    .collect();
+
+    Ok(projects)
+}
