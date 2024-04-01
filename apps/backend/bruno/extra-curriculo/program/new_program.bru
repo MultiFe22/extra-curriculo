@@ -1,0 +1,21 @@
+meta {
+  name: new_program
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{api_url}}/programs
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "name": "Computer Science",
+    "institute": "Institute of Computing",
+    "department": "Computer Science",
+    "campus": "Main Campus",
+    "college": "UFRJ"
+  }
+}

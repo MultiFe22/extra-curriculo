@@ -1,8 +1,15 @@
 //! src/domain/mod.rs
+mod program;
 mod project;
 mod tag;
 mod user_email;
 mod username;
+pub use program::NewProgram;
+pub use program::ProgramCampus;
+pub use program::ProgramCollege;
+pub use program::ProgramDepartment;
+pub use program::ProgramInstitute;
+pub use program::ProgramName;
 pub use project::NewProject;
 pub use project::ProjectAddress;
 pub use project::ProjectBanner;

@@ -1,0 +1,12 @@
+mod new_program;
+mod progam_college;
+mod program_campus;
+mod program_department;
+mod program_institute;
+mod program_name;
+pub use new_program::NewProgram;
+pub use progam_college::ProgramCollege;
+pub use program_campus::ProgramCampus;
+pub use program_department::ProgramDepartment;
+pub use program_institute::ProgramInstitute;
+pub use program_name::ProgramName;

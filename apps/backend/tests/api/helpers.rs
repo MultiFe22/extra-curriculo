@@ -69,6 +69,31 @@ impl TestApp {
             .expect("Failed to execute request.")
     }
 
+    pub async fn post_program(&self, program: Value) -> reqwest::Response {
+        self.api_client
+            .post(&format!("{}/programs", &self.address))
+            .json(&program)
+            .send()
+            .await
+            .expect("Failed to execute request.")
+    }
+
+    pub async fn get_program(&self, program_id: Uuid) -> reqwest::Response {
+        self.api_client
+            .get(&format!("{}/programs/{}", &self.address, program_id))
+            .send()
+            .await
+            .expect("Failed to execute request.")
+    }
+
+    pub async fn get_all_programs(&self) -> reqwest::Response {
+        self.api_client
+            .get(&format!("{}/programs", &self.address))
+            .send()
+            .await
+            .expect("Failed to execute request.")
+    }
+  
     pub async fn get_all_projects(&self) -> reqwest::Response {
         self.api_client
             .get(&format!("{}/projects", &self.address))
