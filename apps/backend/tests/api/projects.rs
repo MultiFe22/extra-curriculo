@@ -198,12 +198,14 @@ async fn get_project_returns_a_200_for_valid_uuid() {
     });
 
     let response: reqwest::Response = app.post_project(new_project).await;
-    let project_id: Uuid = response.json().await.expect("Failed to parse the response body");
+    let project_id: Uuid = response
+        .json()
+        .await
+        .expect("Failed to parse the response body");
 
     let response = app.get_project(project_id).await;
 
     assert_eq!(response.status().as_u16(), 200);
-    
 }
 
 #[tokio::test]

@@ -213,14 +213,13 @@ pub async fn get_project(
     id: web::Path<uuid::Uuid>,
 ) -> Result<HttpResponse, GetProjectError> {
     let project_id = id.into_inner();
-    
+
     let project = find_project_by_id(&pool, project_id).await?;
 
     match project {
         Some(project) => Ok(HttpResponse::Ok().json(project)),
         None => Ok(HttpResponse::NotFound().finish()),
     }
-
 }
 
 #[derive(Debug, serde::Serialize)]
