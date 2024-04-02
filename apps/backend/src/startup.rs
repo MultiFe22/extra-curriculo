@@ -3,12 +3,15 @@ use crate::configuration::DatabaseSettings;
 use crate::configuration::Settings;
 use crate::email_client::EmailClient;
 use crate::routes::get_all_programs;
-use crate::routes::get_program;
 use crate::routes::get_all_projects;
+use crate::routes::get_all_tags;
+use crate::routes::get_program;
 use crate::routes::get_project;
+use crate::routes::get_tag;
 use crate::routes::health_check;
 use crate::routes::post_program;
 use crate::routes::post_project;
+use crate::routes::post_tag;
 use actix_session::storage::RedisSessionStore;
 use actix_session::SessionMiddleware;
 use actix_web::cookie::Key;
@@ -58,6 +61,9 @@ async fn run(
             .route("/programs", web::post().to(post_program))
             .route("/programs/{id}", web::get().to(get_program))
             .route("/programs", web::get().to(get_all_programs))
+            .route("/tags", web::post().to(post_tag))
+            .route("/tags", web::get().to(get_all_tags))
+            .route("/tags/{id}", web::get().to(get_tag))
             // .route("/subscriptions", web::post().to(subscribe))
             // .route("/subscriptions/confirm", web::get().to(confirm))
             // .route("/newsletters", web::post().to(publish_newsletter))

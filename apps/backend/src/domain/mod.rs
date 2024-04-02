@@ -26,6 +26,7 @@ pub use project::ProjectProfessor;
 pub use project::ProjectTimestamp;
 pub use project::ProjectTwitter;
 pub use project::ProjectWebsite;
+pub use tag::NewTag;
 pub use tag::TagName;
 pub use user_email::UserEmail;
 pub use username::UserName;
