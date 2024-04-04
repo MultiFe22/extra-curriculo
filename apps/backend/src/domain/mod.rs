@@ -1,9 +1,12 @@
 //! src/domain/mod.rs
+mod category;
 mod program;
 mod project;
 mod tag;
 mod user_email;
 mod username;
+pub use category::CategoryName;
+pub use category::NewCategory;
 pub use program::NewProgram;
 pub use program::ProgramCampus;
 pub use program::ProgramCollege;
@@ -23,9 +26,9 @@ pub use project::ProjectModality;
 pub use project::ProjectName;
 pub use project::ProjectPicture;
 pub use project::ProjectProfessor;
-pub use project::ProjectTimestamp;
 pub use project::ProjectTwitter;
 pub use project::ProjectWebsite;
+pub use tag::NewTag;
 pub use tag::TagName;
 pub use user_email::UserEmail;
 pub use username::UserName;

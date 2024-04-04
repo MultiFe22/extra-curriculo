@@ -3,7 +3,7 @@ use uuid::Uuid;
 use crate::helpers::spawn_app;
 
 #[tokio::test]
-async fn post_program_returns_a_200_for_valid_json_data() {
+async fn post_program_returns_a_201_for_valid_json_data() {
     let app = spawn_app().await;
 
     let new_program = serde_json::json!({
@@ -16,7 +16,7 @@ async fn post_program_returns_a_200_for_valid_json_data() {
 
     let response = app.post_program(new_program).await;
 
-    assert_eq!(response.status().as_u16(), 200);
+    assert_eq!(response.status().as_u16(), 201);
 }
 
 #[tokio::test]
@@ -278,13 +278,6 @@ async fn get_all_programs_returns_a_404_when_no_programs_exist() {
         response.status().as_u16(),
         404,
         "Expected a 404 status for no programs available"
-    );
-
-    // Optionally, verify the response body is empty
-    let body = response.text().await.expect("Failed to read response body");
-    assert!(
-        body.is_empty(),
-        "Expected an empty response body for no programs available"
     );
 }
 

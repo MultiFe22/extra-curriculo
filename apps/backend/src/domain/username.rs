@@ -27,7 +27,12 @@ impl UserName {
         ];
 
         let contains_forbidden_characters = s.chars().any(|g| forbidden_characters.contains(&g));
-        if is_empty_or_whitespace || is_too_long || contains_forbidden_characters {
+        let starts_or_ends_with_whitespace = s.starts_with(' ') || s.ends_with(' ');
+        if is_empty_or_whitespace
+            || is_too_long
+            || contains_forbidden_characters
+            || starts_or_ends_with_whitespace
+        {
             Err(format!("{} is not a valid subscriber name.", s))
         } else {
             Ok(Self(s))
@@ -60,6 +65,17 @@ mod tests {
         let name = " ".to_string();
         assert_err!(UserName::parse(name));
     }
+
+    #[test]
+    fn string_starting_or_ending_with_whitespace_is_rejected() {
+        let name = " Ursula Le Guin".to_string();
+        let name2 = "Ursula Le Guin ".to_string();
+        let name3 = " Ursula Le Guin ".to_string();
+        assert_err!(UserName::parse(name));
+        assert_err!(UserName::parse(name2));
+        assert_err!(UserName::parse(name3));
+    }
+
     #[test]
     fn empty_string_is_rejected() {
         let name = "".to_string();

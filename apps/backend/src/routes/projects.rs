@@ -139,7 +139,7 @@ pub async fn post_project(
         .commit()
         .await
         .context("Failed to commit SQL transaction to store a new subscriber.")?;
-    Ok(HttpResponse::Ok().json(project_id))
+    Ok(HttpResponse::Created().json(project_id))
 }
 
 #[tracing::instrument(
@@ -218,7 +218,7 @@ pub async fn get_project(
 
     match project {
         Some(project) => Ok(HttpResponse::Ok().json(project)),
-        None => Ok(HttpResponse::NotFound().finish()),
+        None => Err(GetProjectError::NotFound),
     }
 }
 
@@ -294,7 +294,7 @@ pub async fn get_all_projects(pool: web::Data<PgPool>) -> Result<HttpResponse, G
     let projects = find_all_projects(&pool).await?;
 
     if projects.is_empty() {
-        Ok(HttpResponse::NotFound().finish())
+        Err(GetProjectError::NotFound)
     } else {
         Ok(HttpResponse::Ok().json(projects))
     }

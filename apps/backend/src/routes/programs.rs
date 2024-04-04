@@ -83,18 +83,15 @@ pub async fn post_program(
         .context("Failed to acquire a Postgres connection from the Pool.")?;
     let program_id = insert_program(&mut transaction, &new_program)
         .await
-        .context("Failed to insert new subscriber in the database.")?;
+        .context("Failed to insert new program in the database.")?;
     transaction
         .commit()
         .await
-        .context("Failed to commit SQL transaction to store a new subscriber.")?;
-    Ok(HttpResponse::Ok().json(program_id))
+        .context("Failed to commit SQL transaction to store a new program.")?;
+    Ok(HttpResponse::Created().json(program_id))
 }
 
-#[tracing::instrument(
-    name = "Saving new program in the database",
-    skip(new_program, transaction)
-)]
+#[tracing::instrument(name = "Saving new program in the database", skip(transaction))]
 pub async fn insert_program(
     transaction: &mut Transaction<'_, Postgres>,
     new_program: &NewProgram,
@@ -154,7 +151,7 @@ pub async fn get_program(
 
     match program {
         Some(program) => Ok(HttpResponse::Ok().json(program)),
-        None => Ok(HttpResponse::NotFound().finish()),
+        None => Err(GetProgramError::NotFound),
     }
 }
 
@@ -209,7 +206,7 @@ pub async fn get_all_programs(pool: web::Data<PgPool>) -> Result<HttpResponse, G
     let programs = find_all_programs(&pool).await?;
 
     if programs.is_empty() {
-        Ok(HttpResponse::NotFound().finish())
+        Err(GetProgramError::NotFound)
     } else {
         Ok(HttpResponse::Ok().json(programs))
     }

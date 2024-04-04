@@ -93,10 +93,60 @@ impl TestApp {
             .await
             .expect("Failed to execute request.")
     }
-  
+
     pub async fn get_all_projects(&self) -> reqwest::Response {
         self.api_client
             .get(&format!("{}/projects", &self.address))
+            .send()
+            .await
+            .expect("Failed to execute request.")
+    }
+
+    pub async fn post_tag(&self, tag: Value) -> reqwest::Response {
+        self.api_client
+            .post(&format!("{}/tags", &self.address))
+            .json(&tag)
+            .send()
+            .await
+            .expect("Failed to execute request.")
+    }
+
+    pub async fn get_all_tags(&self) -> reqwest::Response {
+        self.api_client
+            .get(&format!("{}/tags", &self.address))
+            .send()
+            .await
+            .expect("Failed to execute request.")
+    }
+
+    pub async fn get_tag(&self, tag_id: Uuid) -> reqwest::Response {
+        self.api_client
+            .get(&format!("{}/tags/{}", &self.address, tag_id))
+            .send()
+            .await
+            .expect("Failed to execute request.")
+    }
+
+    pub async fn post_category(&self, category: Value) -> reqwest::Response {
+        self.api_client
+            .post(&format!("{}/categories", &self.address))
+            .json(&category)
+            .send()
+            .await
+            .expect("Failed to execute request.")
+    }
+
+    pub async fn get_all_categories(&self) -> reqwest::Response {
+        self.api_client
+            .get(&format!("{}/categories", &self.address))
+            .send()
+            .await
+            .expect("Failed to execute request.")
+    }
+
+    pub async fn get_category(&self, category_id: Uuid) -> reqwest::Response {
+        self.api_client
+            .get(&format!("{}/categories/{}", &self.address, category_id))
             .send()
             .await
             .expect("Failed to execute request.")

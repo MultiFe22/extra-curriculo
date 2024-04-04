@@ -14,9 +14,9 @@ impl ProjectProfessor {
     /// Returns an `Ok(ProjectProfessor)` if the input is valid, or an `Err` with a message otherwise.
     pub fn parse(s: String) -> Result<ProjectProfessor, String> {
         let grapheme_count = s.graphemes(true).count();
-
-        if s.is_empty() {
-            Err("The name cannot be empty.".to_string())
+        let starts_or_ends_with_whitespace = s.starts_with(' ') || s.ends_with(' ');
+        if s.is_empty() || starts_or_ends_with_whitespace {
+            Err("The name cannot be empty or start/end with a whitespace.".to_string())
         } else if grapheme_count > 100 {
             Err("The name must not exceed 100 graphemes.".to_string())
         } else if !s
@@ -46,6 +46,7 @@ impl AsRef<str> for ProjectProfessor {
 mod tests {
     use super::*;
 
+    use claims::assert_err;
     use fake::faker::name::en::NameWithTitle;
     use fake::Fake;
 
@@ -67,6 +68,16 @@ mod tests {
     #[test]
     fn name_empty_is_rejected() {
         assert!(ProjectProfessor::parse("".to_string()).is_err());
+    }
+
+    #[test]
+    fn string_starting_or_ending_with_whitespace_is_rejected() {
+        let name = " Dr. John-Doe".to_string();
+        let name2 = "Dr. John-Doe ".to_string();
+        let name3 = " Dr. John-Doe ".to_string();
+        assert_err!(ProjectProfessor::parse(name));
+        assert_err!(ProjectProfessor::parse(name2));
+        assert_err!(ProjectProfessor::parse(name3));
     }
 
     #[test]

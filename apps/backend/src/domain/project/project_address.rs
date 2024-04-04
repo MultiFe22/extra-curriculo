@@ -12,9 +12,9 @@ impl ProjectAddress {
     /// Returns an `Ok(ProjectAddress)` if the input is valid, or an `Err` with a message otherwise.
     pub fn parse(s: String) -> Result<ProjectAddress, String> {
         let grapheme_count = s.graphemes(true).count();
-
-        if grapheme_count < 5 {
-            Err("The address must be at least 5 graphemes long.".to_string())
+        let starts_or_ends_with_whitespace = s.starts_with(' ') || s.ends_with(' ');
+        if grapheme_count < 5 || starts_or_ends_with_whitespace {
+            Err(format!("{} is not a valid project address.", s))
         } else {
             Ok(Self(s))
         }
@@ -36,6 +36,7 @@ impl AsRef<str> for ProjectAddress {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use claims::assert_err;
     use fake::faker::address::en::SecondaryAddress;
     use fake::Fake;
 
@@ -58,6 +59,16 @@ mod tests {
     fn parse_short_address_is_rejected() {
         let address = "123".to_string(); // Shorter than 5 graphemes
         assert!(ProjectAddress::parse(address).is_err());
+    }
+
+    #[test]
+    fn string_starting_or_ending_with_whitespace_is_rejected() {
+        let name = " Avenue".to_string();
+        let name2 = "Avenue ".to_string();
+        let name3 = " Avenue ".to_string();
+        assert_err!(ProjectAddress::parse(name));
+        assert_err!(ProjectAddress::parse(name2));
+        assert_err!(ProjectAddress::parse(name3));
     }
 
     #[test]
