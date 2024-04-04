@@ -23,7 +23,6 @@ pub use project::ProjectModality;
 pub use project::ProjectName;
 pub use project::ProjectPicture;
 pub use project::ProjectProfessor;
-pub use project::ProjectTimestamp;
 pub use project::ProjectTwitter;
 pub use project::ProjectWebsite;
 pub use tag::NewTag;
