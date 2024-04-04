@@ -13,9 +13,9 @@ impl ProjectModality {
     /// Returns an `Ok(ProjectModality)` if the input is valid, or an `Err` with a message otherwise.
     pub fn parse(s: String) -> Result<ProjectModality, String> {
         let grapheme_count = s.graphemes(true).count();
-
-        if s.is_empty() {
-            Err("The modality name cannot be empty.".to_string())
+        let starts_or_ends_with_whitespace = s.starts_with(' ') || s.ends_with(' ');
+        if s.is_empty() || starts_or_ends_with_whitespace {
+            Err("The modality name cannot be empty or start/end with a whitespace.".to_string())
         } else if grapheme_count > 30 {
             Err("The modality name must not exceed 30 graphemes.".to_string())
         } else {
@@ -38,6 +38,8 @@ impl AsRef<str> for ProjectModality {
 
 #[cfg(test)]
 mod tests {
+    use claims::assert_err;
+
     use super::*;
 
     #[test]
@@ -50,6 +52,16 @@ mod tests {
     fn parse_long_string_is_rejected() {
         let modality = "too long".repeat(4); // Using a string that might visually appear shorter due to combining characters
         assert!(ProjectModality::parse(modality).is_err());
+    }
+
+    #[test]
+    fn string_starting_or_ending_with_whitespace_is_rejected() {
+        let name = " Hybrid".to_string();
+        let name2 = "Hybrid ".to_string();
+        let name3 = " Hybrid ".to_string();
+        assert_err!(ProjectModality::parse(name));
+        assert_err!(ProjectModality::parse(name2));
+        assert_err!(ProjectModality::parse(name3));
     }
 
     #[test]

@@ -14,8 +14,8 @@ impl ProjectName {
     pub fn parse(s: String) -> Result<ProjectName, String> {
         let is_empty_or_whitespace = s.trim().is_empty();
         let is_too_long = s.graphemes(true).count() > 60; // Adjusted maximum length to 60
-
-        if is_empty_or_whitespace || is_too_long {
+        let starts_or_ends_with_whitespace = s.starts_with(' ') || s.ends_with(' ');
+        if is_empty_or_whitespace || is_too_long || starts_or_ends_with_whitespace {
             Err(format!("{} is not a valid project name.", s))
         } else {
             Ok(Self(s))
@@ -50,6 +50,16 @@ mod tests {
     fn whitespace_only_names_are_rejected() {
         let name = " ".to_string();
         assert_err!(ProjectName::parse(name));
+    }
+
+    #[test]
+    fn string_starting_or_ending_with_whitespace_is_rejected() {
+        let name = " NextGen_Project2024".to_string();
+        let name2 = "NextGen_Project2024 ".to_string();
+        let name3 = " NextGen_Project2024 ".to_string();
+        assert_err!(ProjectName::parse(name));
+        assert_err!(ProjectName::parse(name2));
+        assert_err!(ProjectName::parse(name3));
     }
 
     #[test]
