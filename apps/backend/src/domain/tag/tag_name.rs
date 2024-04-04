@@ -13,7 +13,8 @@ impl TagName {
         let forbidden_characters = ['/', '(', ')', '"', '<', '>', '\\', '{', '}'];
         let contains_forbidden_characters = s.chars().any(|g| forbidden_characters.contains(&g));
 
-        if is_empty_or_whitespace || is_too_long || contains_forbidden_characters {
+        let starts_or_ends_with_whitespace = s.starts_with(' ') || s.ends_with(' ');
+        if is_empty_or_whitespace || is_too_long || contains_forbidden_characters || starts_or_ends_with_whitespace {
             Err(format!("{} is not a valid tag name.", s))
         } else {
             Ok(Self(s))
@@ -48,6 +49,16 @@ mod tests {
     fn whitespace_only_names_are_rejected() {
         let name = " ".to_string();
         assert_err!(TagName::parse(name));
+    }
+
+    #[test]
+    fn string_starting_or_ending_with_whitespace_is_rejected() {
+        let name = " Programming".to_string();
+        let name2 = "Programming ".to_string();
+        let name3 = " Programming ".to_string();
+        assert_err!(TagName::parse(name));
+        assert_err!(TagName::parse(name2));
+        assert_err!(TagName::parse(name3));
     }
 
     #[test]
