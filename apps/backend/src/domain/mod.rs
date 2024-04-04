@@ -1,9 +1,12 @@
 //! src/domain/mod.rs
+mod category;
 mod program;
 mod project;
 mod tag;
 mod user_email;
 mod username;
+pub use category::CategoryName;
+pub use category::NewCategory;
 pub use program::NewProgram;
 pub use program::ProgramCampus;
 pub use program::ProgramCollege;

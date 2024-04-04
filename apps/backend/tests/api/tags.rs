@@ -58,6 +58,21 @@ async fn post_tag_returns_a_400_when_data_is_missing() {
 }
 
 #[tokio::test]
+async fn post_tag_fails_if_inserting_duplicate_tag() {
+    let app = spawn_app().await;
+
+    let new_tag = serde_json::json!({
+        "name": "Computer Science",
+    });
+
+    app.post_tag(new_tag.clone()).await;
+
+    let response = app.post_tag(new_tag).await;
+
+    assert_eq!(response.status().as_u16(), 500);
+}
+
+#[tokio::test]
 async fn post_tag_fails_if_there_is_a_fatal_database_error() {
     let app = spawn_app().await;
 
