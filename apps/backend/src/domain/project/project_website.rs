@@ -6,13 +6,11 @@ pub struct ProjectWebsite(String);
 impl ProjectWebsite {
     /// Attempts to create a `ProjectWebsite` from a given string.
     ///
-    /// The input string is validated as a URL. If the input is an empty string, it returns an error.
+    /// The input string is validated as a URL. If the input is an empty string, it returns Ok, because it isn't mandatory.
     /// Returns `Ok(ProjectWebsite)` if the URL is valid.
     /// Returns `Err` with validation errors if the URL is not valid.
     pub fn parse(s: String) -> Result<ProjectWebsite, String> {
-        if s.is_empty() {
-            Err("URL cannot be empty.".to_string())
-        } else if validate_url(&s) {
+        if s.is_empty() || validate_url(&s){
             Ok(ProjectWebsite(s))
         } else {
             Err(format!("{} is not a valid URL", s))
@@ -37,9 +35,9 @@ mod tests {
     use super::*;
 
     #[test]
-    fn empty_url_is_rejected() {
+    fn empty_url_is_accepted() {
         let result = ProjectWebsite::parse("".to_string());
-        assert!(result.is_err());
+        assert!(result.is_ok());
     }
 
     #[test]

@@ -6,13 +6,13 @@ pub struct ProjectLinkedin(String);
 impl ProjectLinkedin {
     /// Attempts to create a `ProjectLinkedin` from a given string.
     ///
-    /// If the input is an empty string, it returns an error.
     /// If the input is a non-empty string, it validates it as a URL and checks if the domain is linkedin.com.
+    /// If the URL is empty, it returns `Ok` with the `ProjectLinkedin`. Because it is not mandatory.
     /// Returns `Ok` with the `ProjectLinkedin` if the URL is valid and belongs to LinkedIn.
     /// Returns `Err` with validation errors if the URL is not valid or does not belong to LinkedIn.
     pub fn parse(s: String) -> Result<ProjectLinkedin, String> {
         if s.is_empty() {
-            Err("URL cannot be empty.".to_string())
+            return Ok(ProjectLinkedin(s));
         } else if validate_url(&s) {
             let url = url::Url::parse(&s).map_err(|_| format!("{} is not a valid URL", s))?;
             let domain = url.domain().unwrap_or("");
@@ -46,9 +46,9 @@ mod tests {
     use super::*;
 
     #[test]
-    fn empty_url_is_rejected() {
+    fn empty_url_is_accepted() {
         let result = ProjectLinkedin::parse("".to_string());
-        assert!(result.is_err());
+        assert!(result.is_ok());
     }
 
     #[test]
