@@ -14,7 +14,7 @@ impl ProjectTwitter {
         if s.is_empty() {
             return Ok(Self(s));
         }
-        
+
         if !s.starts_with('@') {
             Err("Twitter handle must start with '@'.".to_string())
         } else if s.len() < 2 || s.len() > 16 {
@@ -76,5 +76,4 @@ mod tests {
     fn empty_handle_is_accepted() {
         assert!(ProjectTwitter::parse("".to_string()).is_ok());
     }
-    
 }

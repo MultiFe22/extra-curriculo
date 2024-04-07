@@ -10,7 +10,7 @@ impl ProjectWebsite {
     /// Returns `Ok(ProjectWebsite)` if the URL is valid.
     /// Returns `Err` with validation errors if the URL is not valid.
     pub fn parse(s: String) -> Result<ProjectWebsite, String> {
-        if s.is_empty() || validate_url(&s){
+        if s.is_empty() || validate_url(&s) {
             Ok(ProjectWebsite(s))
         } else {
             Err(format!("{} is not a valid URL", s))
