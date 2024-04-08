@@ -8,11 +8,16 @@ impl ProjectInstagram {
     /// - Must start with a letter.
     /// - Can only contain letters, numbers, periods (.), and underscores (_).
     /// - Length must be between 1 and 30 characters.
+    /// - An empty string is considered valid. Because it means the project has no Instagram handle.
     ///
     /// Returns an `Ok(ProjectInstagram)` if the input is valid, or an `Err` with a message otherwise.
     pub fn parse(s: String) -> Result<ProjectInstagram, String> {
-        if s.is_empty() || s.len() > 30 {
-            return Err("Instagram handle must be between 1 and 30 characters long.".to_string());
+        if s.is_empty() {
+            return Ok(Self(s));
+        }
+
+        if s.len() > 30 {
+            return Err("Instagram handle must be shorter than 30 chars.".to_string());
         }
 
         if !s.starts_with(char::is_alphabetic) {
@@ -68,5 +73,10 @@ mod tests {
     #[test]
     fn handle_with_invalid_chars_is_rejected() {
         assert!(ProjectInstagram::parse("invalid!handle".to_string()).is_err());
+    }
+
+    #[test]
+    fn empty_handle_is_accepted() {
+        assert!(ProjectInstagram::parse("".to_string()).is_ok());
     }
 }

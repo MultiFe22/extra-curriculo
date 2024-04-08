@@ -8,9 +8,13 @@ impl ProjectTwitter {
     /// - Must start with `@`.
     /// - Can only contain letters, numbers, and underscores.
     /// - Length must be between 2 and 15 characters, excluding the `@`.
-    ///
+    /// - If empty it is Ok. Field not mandatory.
     /// Returns `Ok(ProjectTwitter)` if the input is valid, or an `Err` with a message otherwise.
     pub fn parse(s: String) -> Result<ProjectTwitter, String> {
+        if s.is_empty() {
+            return Ok(Self(s));
+        }
+
         if !s.starts_with('@') {
             Err("Twitter handle must start with '@'.".to_string())
         } else if s.len() < 2 || s.len() > 16 {
@@ -66,5 +70,10 @@ mod tests {
     #[test]
     fn valid_handle_is_accepted() {
         assert!(ProjectTwitter::parse("@valid_123".to_string()).is_ok());
+    }
+
+    #[test]
+    fn empty_handle_is_accepted() {
+        assert!(ProjectTwitter::parse("".to_string()).is_ok());
     }
 }
