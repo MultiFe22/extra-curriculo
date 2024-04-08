@@ -12,7 +12,7 @@ use crate::domain::{
 };
 
 #[derive(serde::Deserialize)]
-pub struct NewProjectForm {
+pub struct ProjectForm {
     address: String,
     banner: String,
     description: String,
@@ -30,9 +30,9 @@ pub struct NewProjectForm {
     is_recruiting: bool,
 }
 
-impl TryFrom<NewProjectForm> for NewProject {
+impl TryFrom<ProjectForm> for NewProject {
     type Error = String;
-    fn try_from(value: NewProjectForm) -> Result<Self, Self::Error> {
+    fn try_from(value: ProjectForm) -> Result<Self, Self::Error> {
         let address = ProjectAddress::parse(value.address)?;
         let banner = ProjectBanner::parse(value.banner)?;
         let description = ProjectDescription::parse(value.description)?;
@@ -85,6 +85,8 @@ pub fn error_chain_fmt(
 pub enum ProjectError {
     #[error("{0}")]
     ValidationError(String),
+    #[error("Project not found")]
+    NotFound,
     #[error(transparent)]
     UnexpectedError(#[from] anyhow::Error),
 }
@@ -100,6 +102,7 @@ impl ResponseError for ProjectError {
         match self {
             Self::ValidationError(_) => StatusCode::BAD_REQUEST,
             Self::UnexpectedError(_) => StatusCode::INTERNAL_SERVER_ERROR,
+            Self::NotFound => StatusCode::NOT_FOUND,
         }
     }
 }
@@ -124,7 +127,7 @@ impl ResponseError for ProjectError {
     )
 )]
 pub async fn post_project(
-    form: web::Json<NewProjectForm>,
+    form: web::Json<ProjectForm>,
     pool: web::Data<PgPool>,
 ) -> Result<HttpResponse, ProjectError> {
     let new_project = form.0.try_into().map_err(ProjectError::ValidationError)?;
@@ -178,6 +181,86 @@ pub async fn insert_project(
     .execute(transaction)
     .await?;
     Ok(project_id)
+}
+
+#[tracing::instrument(
+    name = "Updating a project",
+    skip(id, form, pool),
+    fields(
+        project_id = %id,
+        project_name = %form.name,
+        project_email = %form.email,
+        project_category_id = %form.category_id,
+        project_modality = %form.modality,
+        project_professor = %form.professor,
+        project_website = %form.website,
+        project_facebook = %form.facebook,
+        project_instagram = %form.instagram,
+        project_linkedin = %form.linkedin,
+        project_twitter = %form.twitter,
+        project_address = %form.address,
+        project_banner = %form.banner,
+        project_picture = %form.picture,
+    )
+)]
+pub async fn put_project(
+    id: web::Path<Uuid>,
+    form: web::Json<ProjectForm>,
+    pool: web::Data<PgPool>,
+) -> Result<HttpResponse, ProjectError> {
+    let project_id = id.into_inner();
+    let updated_project = form.0.try_into().map_err(ProjectError::ValidationError)?;
+    let mut transaction = pool
+        .begin()
+        .await
+        .context("Failed to acquire a Postgres connection from the Pool.")?;
+    // check if the project exists
+    let _ = find_project_by_id(&pool, project_id).await?.ok_or(ProjectError::NotFound)?;
+    update_project(&mut transaction, project_id, &updated_project)
+        .await
+        .context("Failed to update project in the database.")?;
+    transaction
+        .commit()
+        .await
+        .context("Failed to commit SQL transaction to update project.")?;
+    Ok(HttpResponse::Ok().finish())
+}
+
+#[tracing::instrument(
+    name = "Updating a project in the database",
+    skip(transaction, updated_project)
+)]
+pub async fn update_project(
+    transaction: &mut Transaction<'_, Postgres>,
+    project_id: Uuid,
+    updated_project: &NewProject,
+) -> Result<(), sqlx::Error> {
+    sqlx::query!(
+        r#"UPDATE project
+        SET name = $1, description = $2, modality = $3, professor = $4, email = $5, website = $6, facebook = $7, instagram = $8, linkedin = $9, twitter = $10, address = $11, banner = $12, picture = $13, category_id = $14, updated_at = $15, is_recruiting = $16
+        WHERE id = $17
+        "#,
+        updated_project.name.as_ref(),
+        updated_project.description.as_ref(),
+        updated_project.modality.as_ref(),
+        updated_project.professor.as_ref(),
+        updated_project.email.as_ref(),
+        updated_project.website.as_ref(),
+        updated_project.facebook.as_ref(),
+        updated_project.instagram.as_ref(),
+        updated_project.linkedin.as_ref(),
+        updated_project.twitter.as_ref(),
+        updated_project.address.as_ref(),
+        updated_project.banner.as_ref(),
+        updated_project.picture.as_ref(),
+        updated_project.category_id.as_ref(),
+        chrono::Utc::now(),
+        updated_project.is_recruiting,
+        project_id
+    )
+    .execute(transaction)
+    .await?;
+    Ok(())
 }
 
 #[derive(thiserror::Error)]

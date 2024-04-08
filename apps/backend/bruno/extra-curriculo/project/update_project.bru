@@ -1,0 +1,31 @@
+meta {
+  name: update_project
+  type: http
+  seq: 4
+}
+
+put {
+  url: {{api_url}}/projects/2855614b-cd2f-48e4-9087-7071963299b6
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "name": "Updated Project Name",
+    "description": "Updated project description! Respecing the specs.",
+    "picture": "https://example.com/images/updated-picture.jpg",
+    "banner": "https://example.com/images/updated-banner.jpg",
+    "is_recruiting": false,
+    "email": "sustainability@example.com",
+    "modality": "In-person",
+    "address": "456 Updated St, Green City, Earth",
+    "professor": "Dr. Greenleaf",
+    "instagram": "updated",
+    "facebook": "https://facebook.com/updated_project",
+    "linkedin": "https://linkedin.com/company/updated_project",
+    "twitter": "@updated",
+    "website": "https://www.updatedproject.com",
+    "category_id": "90cb0d68-9a9d-4526-ab74-9b686d50a4e2"
+  }
+}

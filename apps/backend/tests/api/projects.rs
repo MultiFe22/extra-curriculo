@@ -393,3 +393,353 @@ async fn get_all_projects_fails_if_there_is_a_fatal_database_error() {
     // Assert
     assert_eq!(response.status().as_u16(), 500);
 }
+#[tokio::test]
+async fn put_project_updates_project_with_valid_data() {
+    let app = spawn_app().await;
+
+    let new_project = serde_json::json!({
+        "name": "Environmental Sustainability Project",
+        "description": "This project aims to develop sustainable business practices to reduce environmental impact.",
+        "picture": "https://example.com/images/project-picture.jpg",
+        "banner": "https://example.com/images/project-banner.jpg",
+        "is_recruiting": true,
+        "email": "sustainability@example.com",
+        "modality": "Hybrid",
+        "address": "123 Eco Way, Green City, Earth",
+        "professor": "Dr. Greenleaf",
+        "instagram": "testing",
+        "facebook": "https://facebook.com/environment_project",
+        "linkedin": "https://linkedin.com/company/environment_project",
+        "twitter": "@testing",
+        "website": "https://www.environmentproject.com",
+        "category_id": "90cb0d68-9a9d-4526-ab74-9b686d50a4e2"
+    });
+
+    let response = app.post_project(new_project).await;
+
+    assert_eq!(response.status().as_u16(), 201);
+
+    let project_id: Uuid = response
+        .json()
+        .await
+        .expect("Failed to parse the response body");
+
+    let updated_data = serde_json::json!({
+        "name": "Updated Project Name",
+        "description": "Updated project description! Respecing the specs.",
+        "picture": "https://example.com/images/updated-picture.jpg",
+        "banner": "https://example.com/images/updated-banner.jpg",
+        "is_recruiting": false,
+        "email": "sustainability@example.com",
+        "modality": "In-person",
+        "address": "456 Updated St, Green City, Earth",
+        "professor": "Dr. Greenleaf",
+        "instagram": "updated",
+        "facebook": "https://facebook.com/updated_project",
+        "linkedin": "https://linkedin.com/company/updated_project",
+        "twitter": "@updated",
+        "website": "https://www.updatedproject.com",
+        "category_id": "90cb0d68-9a9d-4526-ab74-9b686d50a4e2"
+    });
+
+    let response = app.put_project(project_id, updated_data).await;
+
+
+    assert_eq!(response.status().as_u16(), 200);
+
+}
+
+#[tokio::test]
+async fn put_project_returns_a_400_for_invalid_data() {
+    let app = spawn_app().await;
+    
+    let new_project = serde_json::json!({
+        "name": "Environmental Sustainability Project",
+        "description": "This project aims to develop sustainable business practices to reduce environmental impact.",
+        "picture": "https://example.com/images/project-picture.jpg",
+        "banner": "https://example.com/images/project-banner.jpg",
+        "is_recruiting": true,
+        "email": "sustainability@example.com",
+        "modality": "Hybrid",
+        "address": "123 Eco Way, Green City, Earth",
+        "professor": "Dr. Greenleaf",
+        "instagram": "testing",
+        "facebook": "https://facebook.com/environment_project",
+        "linkedin": "https://linkedin.com/company/environment_project",
+        "twitter": "@testing",
+        "website": "https://www.environmentproject.com",
+        "category_id": "90cb0d68-9a9d-4526-ab74-9b686d50a4e2"
+    });
+
+    let response = app.post_project(new_project).await;
+
+    assert_eq!(response.status().as_u16(), 201);
+
+    let project_id: Uuid = response
+        .json()
+        .await
+        .expect("Failed to parse the response body");
+
+    let invalid_data = serde_json::json!({
+        "name": "Updated Project Name",
+        "description": "Updated project description",
+        "picture": "https://example/images/updated-picture.jpg",
+        "banner": "https://example",
+        "is_recruiting": false,
+        "email": "not an email",
+        "modality": "In-person",
+        "address": "456 Updated St, Green City, Earth",
+        "professor": "Dr. Greenleaf",
+        "instagram": "updated",
+        "facebook": "https://facebook.com/updated_project",
+        "linkedin": "https://linkedin.com/company/updated_project",
+        "twitter": "@updated",
+        "website": "https://www.updatedproject.com",
+        "category_id": "90cb0d68-9a9d-4526-ab74-9b686d50a4e2"
+    });
+
+    let response = app.put_project(project_id, invalid_data).await;
+
+    assert_eq!(response.status().as_u16(), 400);
+
+}
+
+#[tokio::test]
+async fn put_project_returns_a_404_for_nonexistent_project() {
+    let app = spawn_app().await;
+    let nonexistent_project_id = Uuid::new_v4();
+
+    let valid_data = serde_json::json!({
+        "name": "Updated Project Name",
+        "description": "Updated project description! Respecing the specs.",
+        "picture": "https://example.com/images/updated-picture.jpg",
+        "banner": "https://example.com/images/updated-banner.jpg",
+        "is_recruiting": false,
+        "email": "sustainability@example.com",
+        "modality": "In-person",
+        "address": "456 Updated St, Green City, Earth",
+        "professor": "Dr. Greenleaf",
+        "instagram": "updated",
+        "facebook": "https://facebook.com/updated_project",
+        "linkedin": "https://linkedin.com/company/updated_project",
+        "twitter": "@updated",
+        "website": "https://www.updatedproject.com",
+        "category_id": "90cb0d68-9a9d-4526-ab74-9b686d50a4e2"
+    });
+
+    let response = app.put_project(nonexistent_project_id, valid_data).await;
+
+    assert_eq!(response.status().as_u16(), 404);
+}
+
+#[tokio::test]
+async fn put_project_persists_changes_in_database() {
+    let app = spawn_app().await;
+    
+    let new_project = serde_json::json!({
+        "name": "Environmental Sustainability Project",
+        "description": "This project aims to develop sustainable business practices to reduce environmental impact.",
+        "picture": "https://example.com/images/project-picture.jpg",
+        "banner": "https://example.com/images/project-banner.jpg",
+        "is_recruiting": true,
+        "email": "sustainability@example.com",
+        "modality": "Hybrid",
+        "address": "123 Eco Way, Green City, Earth",
+        "professor": "Dr. Greenleaf",
+        "instagram": "testing",
+        "facebook": "https://facebook.com/environment_project",
+        "linkedin": "https://linkedin.com/company/environment_project",
+        "twitter": "@testing",
+        "website": "https://www.environmentproject.com",
+        "category_id": "90cb0d68-9a9d-4526-ab74-9b686d50a4e2"
+    });
+
+    let response = app.post_project(new_project).await;
+
+    assert_eq!(response.status().as_u16(), 201);
+
+    let project_id: Uuid = response
+        .json()
+        .await
+        .expect("Failed to parse the response body");
+
+    let updated_data = serde_json::json!({
+        "name": "Updated Project Name",
+        "description": "Updated project description! Respecing the specs.",
+        "picture": "https://example.com/images/updated-picture.jpg",
+        "banner": "https://example.com/images/updated-banner.jpg",
+        "is_recruiting": false,
+        "email": "sustainability@example.com",
+        "modality": "In-person",
+        "address": "456 Updated St, Green City, Earth",
+        "professor": "Dr. Greenleaf",
+        "instagram": "updated",
+        "facebook": "https://facebook.com/updated_project",
+        "linkedin": "https://linkedin.com/company/updated_project",
+        "twitter": "@updated",
+        "website": "https://www.updatedproject.com",
+        "category_id": "90cb0d68-9a9d-4526-ab74-9b686d50a4e2"
+    });
+
+    let response = app.put_project(project_id, updated_data).await;
+
+    assert_eq!(response.status().as_u16(), 200);
+
+    let updated_project = sqlx::query!("SELECT * FROM project WHERE id = $1", project_id)
+        .fetch_one(&app.db_pool)
+        .await
+        .expect("Failed to fetch updated project");
+
+    assert_eq!(updated_project.name, "Updated Project Name");
+    assert_eq!(updated_project.description, "Updated project description! Respecing the specs.");
+    assert_eq!(
+        updated_project.picture.unwrap_or("".to_string()),
+        "https://example.com/images/updated-picture.jpg"
+    );
+    assert_eq!(
+        updated_project.banner.unwrap_or("".to_string()),
+        "https://example.com/images/updated-banner.jpg"
+    );
+    assert_eq!(updated_project.is_recruiting, false);
+    assert_eq!(updated_project.email, "sustainability@example.com");
+    assert_eq!(updated_project.modality, "In-person");
+    assert_eq!(updated_project.address, "456 Updated St, Green City, Earth");
+    assert_eq!(updated_project.professor, "Dr. Greenleaf");
+    assert_eq!(updated_project.instagram.unwrap_or("".to_string()), "updated");
+    assert_eq!(
+        updated_project.facebook.unwrap_or("".to_string()),
+        "https://facebook.com/updated_project"
+    );
+    assert_eq!(
+        updated_project.linkedin.unwrap_or("".to_string()),
+        "https://linkedin.com/company/updated_project"
+    );
+    assert_eq!(updated_project.twitter.unwrap_or("".to_string()), "@updated");
+    assert_eq!(
+        updated_project.website.unwrap_or("".to_string()),
+        "https://www.updatedproject.com"
+    );
+    assert_eq!(
+        updated_project.category_id,
+        Uuid::parse_str("90cb0d68-9a9d-4526-ab74-9b686d50a4e2").unwrap()
+    );
+
+}
+
+#[tokio::test]
+async fn put_project_returns_a_404_for_invalid_uuid_format() {
+    let app = spawn_app().await;
+    let invalid_project_id = "not-a-valid-uuid";
+
+    let new_project = serde_json::json!({
+        "name": "Environmental Sustainability Project",
+        "description": "This project aims to develop sustainable business practices to reduce environmental impact.",
+        "picture": "https://example.com/images/project-picture.jpg",
+        "banner": "https://example.com/images/project-banner.jpg",
+        "is_recruiting": true,
+        "email": "sustainability@example.com",
+        "modality": "Hybrid",
+        "address": "123 Eco Way, Green City, Earth",
+        "professor": "Dr. Greenleaf",
+        "instagram": "testing",
+        "facebook": "https://facebook.com/environment_project",
+        "linkedin": "https://linkedin.com/company/environment_project",
+        "twitter": "@testing",
+        "website": "https://www.environmentproject.com",
+        "category_id": "90cb0d68-9a9d-4526-ab74-9b686d50a4e2"
+    });
+
+    let response: reqwest::Response = app.post_project(new_project).await;
+
+    assert!(response.status().is_success());
+
+    let updated_data = serde_json::json!({
+        "name": "Updated Project Name",
+        "description": "Updated project description",
+        "picture": "https://example.com/images/updated-picture.jpg",
+        "banner": "https://example.com/images/updated-banner.jpg",
+        "is_recruiting": false,
+        "email": "sustainability@example.com",
+        "modality": "In-person",
+        "address": "456 Updated St, Green City, Earth",
+        "professor": "Dr. Greenleaf",
+        "instagram": "updated",
+        "facebook": "https://facebook.com/updated_project",
+        "linkedin": "https://linkedin.com/company/updated_project",
+        "twitter": "@updated",
+        "website": "https://www.updatedproject.com",
+        "category_id": "90cb0d68-9a9d-4526-ab74-9b686d50a4e2"
+    });
+
+    // using reqwest to make a PUT request, build from scratch, because the app.put_project() method expects a valid Uuid
+    let response = reqwest::Client::new()
+        .put(&format!("{}/projects/{}", app.address, invalid_project_id))
+        .json(&updated_data)
+        .send()
+        .await
+        .expect("Failed to execute the request");
+
+    assert_eq!(response.status().as_u16(), 404); // IMPORTANT, TODO TO IMPLEMENT PathConfig TO DEAL WITH ERRORS IN THE DESERIALIZATION
+}
+
+#[tokio::test]
+async fn put_project_fails_if_there_is_a_fatal_database_error() {
+    let app = spawn_app().await;
+    
+    let new_project = serde_json::json!({
+        "name": "Environmental Sustainability Project",
+        "description": "This project aims to develop sustainable business practices to reduce environmental impact.",
+        "picture": "https://example.com/images/project-picture.jpg",
+        "banner": "https://example.com/images/project-banner.jpg",
+        "is_recruiting": true,
+        "email": "sustainability@example.com",
+        "modality": "Hybrid",
+        "address": "123 Eco Way, Green City, Earth",
+        "professor": "Dr. Greenleaf",
+        "instagram": "testing",
+        "facebook": "https://facebook.com/environment_project",
+        "linkedin": "https://linkedin.com/company/environment_project",
+        "twitter": "@testing",
+        "website": "https://www.environmentproject.com",
+        "category_id": "90cb0d68-9a9d-4526-ab74-9b686d50a4e2"
+    });
+
+    let response: reqwest::Response = app.post_project(new_project).await;
+
+    assert!(response.status().is_success());
+
+    let project_id: Uuid = response
+        .json()
+        .await
+        .expect("Failed to parse the response body");
+
+    // Sabotage the database
+
+    sqlx::query!("ALTER TABLE project DROP COLUMN name;")
+        .execute(&app.db_pool)
+        .await
+        .unwrap();
+
+    let updated_data = serde_json::json!({
+        "name": "Updated Project Name",
+        "description": "Updated project description! Respecing the specs.",
+        "picture": "https://example.com/images/updated-picture.jpg",
+        "banner": "https://example.com/images/updated-banner.jpg",
+        "is_recruiting": false,
+        "email": "sustainability@example.com",
+        "modality": "In-person",
+        "address": "456 Updated St, Green City, Earth",
+        "professor": "Dr. Greenleaf",
+        "instagram": "updated",
+        "facebook": "https://facebook.com/updated_project",
+        "linkedin": "https://linkedin.com/company/updated_project",
+        "twitter": "@updated",
+        "website": "https://www.updatedproject.com",
+        "category_id": "90cb0d68-9a9d-4526-ab74-9b686d50a4e2"
+    });
+
+    let response = app.put_project(project_id, updated_data).await;
+
+    assert_eq!(response.status().as_u16(), 500);
+
+}
