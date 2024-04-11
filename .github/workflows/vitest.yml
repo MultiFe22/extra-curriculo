@@ -3,8 +3,8 @@ name: Run Vitest
 on: [push, pull_request]
 
 defaults:
-    run:
-      working-directory: ./apps/frontend
+  run:
+    working-directory: ./apps/frontend
 
 jobs:
   test:
@@ -23,6 +23,7 @@ jobs:
         with:
           node-version: '${{ env.NODE_VERSION }}'
           cache: 'npm'
+          cache-dependency-path: apps/frontend/package-lock.json
 
       - name: Install dependencies
         run: npm ci
