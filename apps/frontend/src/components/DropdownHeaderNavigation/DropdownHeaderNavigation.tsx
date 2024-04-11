@@ -1,9 +1,10 @@
 import { useCallback } from "react";
 
-export const DropdownHeaderNavigation: React.FC = () => {
+export const DropdownHeaderNavigation: React.FC<{ onSobreClick?: () => void }> = ({ onSobreClick }) => {
   const onButtonContainer1Click = useCallback(() => {
-    // Please sync "Sobre" to the project
-  }, []);
+    onSobreClick?.();
+    // Original implementation
+  }, [onSobreClick]);
 
   return (
     <header className="self-stretch bg-white box-border flex flex-row items-start justify-start top-[0] z-[99] sticky max-w-full text-left text-base text-gray-600 font-text-md-regular border-b-[1px] border-solid border-gray-100">

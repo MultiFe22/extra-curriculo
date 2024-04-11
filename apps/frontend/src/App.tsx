@@ -1,4 +1,4 @@
-import Opportunities from "./screens/Opportunities"
+import Opportunities from "./pages/Opportunities"
 
 function App() {
 
