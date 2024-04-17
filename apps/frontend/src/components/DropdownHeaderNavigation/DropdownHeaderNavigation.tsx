@@ -1,4 +1,6 @@
 import { useCallback } from "react";
+import Logomark from "../../assets/Logomark";
+import Logotype from "../../assets/logotype";
 
 export const DropdownHeaderNavigation: React.FC<{ onSobreClick?: () => void }> = ({ onSobreClick }) => {
   const onButtonContainer1Click = useCallback(() => {
@@ -14,19 +16,12 @@ export const DropdownHeaderNavigation: React.FC<{ onSobreClick?: () => void }> =
             <div className="self-stretch flex flex-row items-start justify-start gap-[40px] mq450:gap-[20px]">
               <div className="w-[142px] flex flex-row items-start justify-start">
                 <div className="flex-1 flex flex-row items-start justify-start gap-[10px]">
-                  <div className="shadow-[0px_1px_3px_rgba(16,_24,_40,_0.1),_0px_1px_2px_rgba(16,_24,_40,_0.06)] flex flex-row items-start justify-start">
-                    <img
-                      className="h-8 w-8 relative rounded-lg overflow-hidden shrink-0"
-                      loading="lazy"
-                      alt=""
-                      src="/content.svg"
-                    />
+                  <div className="flex flex-row items-start justify-start">
+                    <Logomark />
                   </div>
-                  <img
-                    className="self-stretch w-[100px] relative max-h-full hidden min-h-[32px]"
-                    alt=""
-                    src="/logotype.svg"
-                  />
+                  <div className="self-stretch w-[100px] flex items-center relative max-h-full min-h-[32px]">
+                  <Logotype />
+                  </div>
                   <div className="h-8 flex-1 flex flex-col items-center justify-center">
                     <img
                       className="self-stretch h-[25.7px] relative max-w-full overflow-hidden shrink-0"
