@@ -1,0 +1,1 @@
+export {OpportunitiesContainerMobile} from './OpportunitiesContainerMobile'
