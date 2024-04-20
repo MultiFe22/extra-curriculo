@@ -4,7 +4,7 @@ import XIcon from "../../assets/XIcon";
 
 export const FiltersBar: React.FC = () => {
   return (
-    <div className="self-stretch flex flex-row items-start justify-start py-0 px-4 box-border max-w-full text-center text-sm text-slateblue font-text-md-regular">
+    <div className="self-stretch flex flex-row items-start justify-start py-0 mq375:px-4 mq768:px-8 box-border max-w-full text-center text-sm text-slateblue font-text-md-regular">
       <div className="flex-1 flex flex-col items-start justify-start gap-[12px] max-w-full">
         <div className="self-stretch flex flex-row items-start justify-start max-w-full">
           <div className="flex-1 flex flex-col items-start justify-start max-w-full">

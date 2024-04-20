@@ -7,7 +7,7 @@ export const ResponsiveHeader: React.FC = () => {
     <div className="self-stretch bg-white flex flex-row items-start justify-start pt-0 px-0 pb-10 box-border max-w-full">
       <div className="flex-1 box-border flex flex-row items-start justify-start max-w-full border-b-[1px] border-solid border-gray-100">
         <header className="flex-1 flex flex-row items-start justify-start py-4 px-0 box-border max-w-full">
-          <div className="flex-1 flex flex-row items-start justify-between py-0 pr-3 pl-4 md:pr-7 md:pl-8 box-border max-w-full gap-[20px]">
+          <div className="flex-1 flex flex-row items-start justify-between py-0 pr-3 pl-4 mq768:pr-7 mq768:pl-8 box-border max-w-full gap-[20px]">
             <div className="w-[142px] flex flex-col items-start justify-start pt-1 px-0 pb-0 box-border">
               <div className="self-stretch flex flex-row items-start justify-start">
                 <div className="flex-1 flex flex-row items-start justify-start gap-[10px]">
@@ -15,7 +15,7 @@ export const ResponsiveHeader: React.FC = () => {
                     <Logomark className="h-8 w-8 relative rounded-lg overflow-hidden shrink-0"/>
                   </div>
                   <div className="h-8 flex-1 flex flex-col items-center justify-center">
-                    <Logotype className="h-8 md:h-[25.7px] md:self-stretch md:max-w-full md:relative md:overflow-hidden flex-1 flex flex-col items-center justify-center"/>
+                    <Logotype className="h-8 mq768:h-[25.7px] mq768:self-stretch mq768:max-w-full mq768:relative mq768:overflow-hidden flex-1 flex flex-col items-center justify-center"/>
                   </div>
                 </div>
               </div>
