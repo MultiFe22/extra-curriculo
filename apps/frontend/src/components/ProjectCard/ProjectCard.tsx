@@ -11,9 +11,9 @@ export type ProjectCardType = {
 
 export const ProjectCard: React.FC<ProjectCardType> = ({ image }) => {
   return (
-    <section className="self-stretch rounded-lg flex flex-col items-center justify-start gap-[24px] min-w-[280px] text-left text-sm text-slateblue font-text-md-regular">
+    <section className="mq768:flex-1 mq375:self-stretch rounded-lg flex flex-col items-center justify-start gap-[24px] mq375:min-w-[280px] mq768:min-w-[323px] mq768:max-w-full text-left text-sm text-slateblue font-text-md-regular">
       <img
-        className="self-stretch relative rounded-lg max-w-full overflow-hidden max-h-full object-cover"
+        className="self-stretch mq768:h-60 mq768:shrink-0 relative rounded-lg max-w-full overflow-hidden max-h-full object-cover"
         loading="lazy"
         alt=""
         src={image}
@@ -24,7 +24,9 @@ export const ProjectCard: React.FC<ProjectCardType> = ({ image }) => {
             Design
           </div>
           <div className="self-stretch flex flex-col items-start justify-start gap-[12px] text-5xl text-gray-900">
-            <div className="self-stretch flex flex-row flex-wrap items-start justify-start gap-[16px]">
+            {/* review the mq450 flex-wrap later */}
+            <div className="self-stretch flex flex-row mq450:flex-wrap items-start justify-start gap-[16px]">
+              {/* REVIEW TEXT SIZE WHEN ON MOBILE VIEW */}
               <h1 className="m-0 flex-1 relative text-inherit leading-[32px] font-semibold font-inherit [display:-webkit-inline-box] overflow-hidden text-ellipsis [-webkit-line-clamp:2] [-webkit-box-orient:vertical] min-w-[197px]">
                 Observatório de Atenção Permanente ao Uso de Agrotóxicos –
                 Portal de Informações Interligadas sobre Agrotóxicos e seus
@@ -34,12 +36,8 @@ export const ProjectCard: React.FC<ProjectCardType> = ({ image }) => {
                 <ArrowUpRight className="w-6 h-6 relative overflow-hidden shrink-0" />
               </div>
             </div>
-            <div className="self-stretch h-12 relative text-base leading-[24px] text-gray-600 hidden">
-              Collaboration can make our teams stronger, and our individual
-              designs better.
-            </div>
           </div>
-          <div className="self-stretch flex flex-row flex-wrap items-start justify-start py-0 pr-[81px] pl-0 box-border gap-[10px] min-h-[54px] text-center text-xs text-gray-700">
+          <div className="self-stretch flex flex-row flex-wrap items-start justify-start py-0 mq375:pr-[81px] mq768:pr-[78px] pl-0 mq650:pr-[39px] mq650:box-border gap-[10px] min-h-[54px] text-center text-xs text-gray-700">
             <button className="cursor-pointer [border:none] p-0 bg-[transparent] flex flex-row items-start justify-start mix-blend-multiply">
               <div className="rounded-2xl bg-blue-light-50 flex flex-row items-center justify-center py-0.5 pr-2 pl-1.5 gap-[4px]">
                 <Building07 className="h-3 w-3 relative overflow-hidden shrink-0" />
