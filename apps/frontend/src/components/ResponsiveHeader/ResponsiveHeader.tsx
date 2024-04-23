@@ -4,8 +4,8 @@ import Logomark from "../../assets/Logomark";
 
 export const ResponsiveHeader: React.FC = () => {
   return (
-    <div className="self-stretch bg-white flex flex-row items-start justify-start pt-0 px-0 pb-10 box-border max-w-full">
-      <div className="flex-1 box-border flex flex-row items-start justify-start max-w-full border-b-[1px] border-solid border-gray-100">
+    <div className="self-stretch bg-gray-50 flex flex-row items-start justify-start pt-0 px-0 pb-10 box-border max-w-full">
+      <div className="flex-1 bg-white box-border flex flex-row items-start justify-start max-w-full border-b-[1px] border-solid border-gray-100">
         <header className="flex-1 flex flex-row items-start justify-start py-4 px-0 box-border max-w-full">
           <div className="flex-1 flex flex-row items-start justify-between py-0 pr-3 pl-4 mq768:pr-7 mq768:pl-8 box-border max-w-full gap-[20px]">
             <div className="w-[142px] flex flex-col items-start justify-start pt-1 px-0 pb-0 box-border">
