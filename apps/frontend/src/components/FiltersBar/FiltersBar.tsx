@@ -1,6 +1,7 @@
 import FiltersLines from "../../assets/FiltersLines";
+import PlusSquare from "../../assets/PlusSquare";
 import SearchIcon from "../../assets/SearchIcon";
-import XIcon from "../../assets/XIcon";
+// import XIcon from "../../assets/XIcon";
 
 export const FiltersBar: React.FC = () => {
   return (
@@ -30,7 +31,16 @@ export const FiltersBar: React.FC = () => {
             </div>
           </div>
         </button>
-        <div className="self-stretch flex flex-row items-start justify-start py-0 pr-[140px] pl-0 gap-[12px]">
+        <button className="self-stretch rounded-lg flex flex-row items-start justify-start text-slateblue">
+          <div className="flex-1 shadow-[0px_1px_2px_rgba(16,_24,_40,_0.05)] rounded-lg bg-brand-50 overflow-hidden flex flex-row items-center justify-center py-2.5 px-4 gap-[8px] border-[1px] border-solid border-brand-50">
+            <PlusSquare className="w-5 relative h-5 overflow-hidden shrink-0"/>
+            <div className="relative leading-[20px] font-semibold">
+              Cadastrar oportunidade
+            </div>
+          </div>
+        </button>
+
+        {/* <div className="hidden self-stretch flex flex-row items-start justify-start py-0 pr-[140px] pl-0 gap-[12px]">
           <button className="cursor-pointer [border:none] p-0 bg-[transparent] flex flex-row items-start justify-start mix-blend-multiply">
             <div className="rounded-2xl bg-brand-50 flex flex-row items-center justify-center py-0.5 pr-2 pl-2.5 gap-[4px] whitespace-nowrap">
               <div className="relative text-sm leading-[20px] font-medium font-text-md-regular text-slateblue text-center inline-block min-w-[50px]">
@@ -47,7 +57,8 @@ export const FiltersBar: React.FC = () => {
               <XIcon className="h-3 w-3 relative overflow-hidden shrink-0"/>
             </div>
           </div>
-        </div>
+        </div> */}
+        <div className="h-[1px] bg-gray-200 w-full"></div>
       </div>
     </div>
   );

@@ -48,11 +48,14 @@ export default {
       inherit: "inherit",
     },
     screens: {
+      mq1920: {
+        raw: "screen and (min-width: 769px) and (max-width: 1920px)",
+      },
       mq1425: {
         raw: "screen and (max-width: 1425px)",
       },
       mq825: {
-        raw: "screen and (max-width: 825px)",
+        raw: "screen and (min-width: 769px) and (max-width: 825px)",
       },
       mq768: {
         raw: "screen and (max-width: 768px)",

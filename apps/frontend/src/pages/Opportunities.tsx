@@ -7,7 +7,7 @@ import { ResponsiveHeader } from "../components/ResponsiveHeader";
 
 const Opportunities: React.FC = () => {
   return (
-    <div className="w-full relative bg-gray-50 overflow-hidden flex flex-col items-start justify-start gap-[24px] leading-[normal] tracking-[normal] text-left text-xs text-gray-900 font-text-md-regular">
+    <div className="w-full relative bg-gray-50 overflow-hidden flex flex-col items-start justify-start mq768:gap-[24px] mq825:gap-[48px] mq1920:gap-[96px] leading-[normal] tracking-[normal] text-left text-xs text-gray-900 font-text-md-regular">
       <ResponsiveHeader/>
       <FiltersBar/>
       <OpportunitiesContainerMobile />
