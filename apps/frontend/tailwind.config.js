@@ -49,7 +49,7 @@ export default {
     },
     screens: {
       mq1920: {
-        raw: "screen and (min-width: 769px) and (max-width: 1920px)",
+        raw: "screen and (min-width: 769px) and (max-width: 3840px)",
       },
       mq1425: {
         raw: "screen and (max-width: 1425px)",
