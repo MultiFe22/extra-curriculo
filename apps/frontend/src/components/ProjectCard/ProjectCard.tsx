@@ -7,14 +7,14 @@ import Telescope from "../../assets/Telescope";
 
 export type ProjectCardType = {
   image?: string;
+  name: string;
 };
 
-export const ProjectCard: React.FC<ProjectCardType> = ({ image }) => {
+export const ProjectCard: React.FC<ProjectCardType> = ({ image, name }) => {
   return (
     <section className="mq1920:flex-1 mq768:flex-1 mq375:self-stretch rounded-lg flex flex-col items-center mq375:min-w-[280px] mq768:min-w-[323px] justify-start gap-[24px] mq1920:min-w-[406px] mq768:max-w-full mq1920:max-w-full text-left text-sm text-slateblue font-text-md-regular">
       <img
         className="self-stretch mq768:h-60 mq1920:h-60 mq1920:shrink-0 mq768:shrink-0 relative rounded-lg max-w-full overflow-hidden mq768:max-h-full mq1920:max-w-full object-cover"
-        loading="lazy"
         alt=""
         src={image}
       />
@@ -25,9 +25,7 @@ export const ProjectCard: React.FC<ProjectCardType> = ({ image }) => {
             <div className="self-stretch flex flex-row mq450:flex-wrap items-start justify-start gap-[16px]">
               {/* REVIEW TEXT SIZE WHEN ON MOBILE VIEW */}
               <h1 className="m-0 flex-1 relative text-inherit leading-[32px] font-semibold font-inherit [display:-webkit-inline-box] mq1920:max-w-full overflow-hidden text-ellipsis [-webkit-line-clamp:2] [-webkit-box-orient:vertical] mq768:min-w-[197px] mq1920:min-w-[238px]">
-                Observatório de Atenção Permanente ao Uso de Agrotóxicos –
-                Portal de Informações Interligadas sobre Agrotóxicos e seus
-                Efeitos sobre a Saúde e Meio Ambiente
+                {name}
               </h1>
               <div className="flex flex-col items-start justify-start pt-1 px-0 pb-0">
                 <ArrowUpRight className="w-6 h-6 relative overflow-hidden shrink-0" />

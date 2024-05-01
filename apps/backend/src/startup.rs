@@ -16,6 +16,7 @@ use crate::routes::post_program;
 use crate::routes::post_project;
 use crate::routes::post_tag;
 use crate::routes::put_project;
+use actix_cors::Cors;
 use actix_session::storage::RedisSessionStore;
 use actix_session::SessionMiddleware;
 use actix_web::cookie::Key;
@@ -50,8 +51,15 @@ async fn run(
     let message_framework = FlashMessagesFramework::builder(message_store).build();
     let redis_store = RedisSessionStore::new(redis_uri.expose_secret()).await?;
     let server = HttpServer::new(move || {
+        let cors = Cors::default()
+        .allow_any_origin() // change this in production
+        .allow_any_method()// change this in production
+        .allow_any_header() // cgange this in production
+        .supports_credentials()
+        .max_age(3600);
         // Wrap the connection in a smart pointer
         App::new()
+            .wrap(cors)
             .wrap(message_framework.clone())
             .wrap(SessionMiddleware::new(
                 redis_store.clone(),
