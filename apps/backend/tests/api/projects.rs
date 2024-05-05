@@ -176,6 +176,36 @@ async fn post_project_fails_if_there_is_a_fatal_database_error() {
 }
 
 #[tokio::test]
+async fn post_project_fails_if_inserting_duplicate_project() {
+    let app = spawn_app().await;
+
+    let new_project = serde_json::json!({
+        "name": "Environmental Sustainability Project",
+        "description": "This project aims to develop sustainable business practices to reduce environmental impact.",
+        "picture": "https://example.com/images/project-picture.jpg",
+        "banner": "https://example.com/images/project-banner.jpg",
+        "is_recruiting": true,
+        "email": "sustainability@example.com",
+        "modality": "Hybrid",
+        "address": "123 Eco Way, Green City, Earth",
+        "professor": "Dr. Greenleaf",
+        "instagram": "testing",
+        "facebook": "https://facebook.com/environment_project",
+        "linkedin": "https://linkedin.com/company/environment_project",
+        "twitter": "@testing",
+        "website": "https://www.environmentproject.com",
+        "category_id": "90cb0d68-9a9d-4526-ab74-9b686d50a4e2"
+    });
+
+    app.post_project(new_project.clone()).await;
+
+    let response = app.post_project(new_project).await;
+    
+    assert_eq!(response.status().as_u16(), 500);
+}
+
+
+#[tokio::test]
 async fn get_project_returns_a_200_for_valid_uuid() {
     let app = spawn_app().await;
 
