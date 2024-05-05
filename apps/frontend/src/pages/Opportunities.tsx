@@ -36,6 +36,12 @@ async function fetchProjects(): Promise<Projects> {
   return response.json();
 }
 
+function scrollToTop() {
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth' // Optional: defines the transition animation
+  });
+}
 
 const Opportunities: React.FC = () => {
   const [page, setPage] = useState<number>(0);
@@ -47,7 +53,6 @@ const Opportunities: React.FC = () => {
     queryKey: ['projects'],
     queryFn: fetchProjects,
   });
-
 
   const handlePageChange = (pageNumber: number) => {
     if (pageNumber < 0 || pageNumber >= maxPage) {
@@ -67,6 +72,7 @@ const Opportunities: React.FC = () => {
 
   useEffect(() => {
     console.log(page);
+    scrollToTop();
   }
   , [page]);
 
