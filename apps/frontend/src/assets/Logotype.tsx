@@ -15,8 +15,8 @@ export const Logotype: React.FC<LogotypeProps> = ({ className }) => {
 <path d="M23.3861 21.9018H16.4854L22.2475 13.5175L16.6235 4.85724H23.5241L24.7317 6.85842L26.5259 10.7228L28.0095 7.23796L29.2516 4.85724H36.1522L30.5282 13.5175L36.2902 21.9018H29.3551L27.699 19.1415L26.1808 16.0363L24.8697 19.038L23.3861 21.9018Z" fill="#101828"/>
 <defs>
 <linearGradient id="paint0_linear_734_248" x1="25.0105" y1="25.8352" x2="29.0639" y2="-5.73231" gradientUnits="userSpaceOnUse">
-<stop stop-color="#53389E"/>
-<stop offset="1" stop-color="#6941C6"/>
+<stop stopColor="#53389E"/>
+<stop offset="1" stopColor="#6941C6"/>
 </linearGradient>
 </defs>
 </svg>
