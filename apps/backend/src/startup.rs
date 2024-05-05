@@ -52,11 +52,11 @@ async fn run(
     let redis_store = RedisSessionStore::new(redis_uri.expose_secret()).await?;
     let server = HttpServer::new(move || {
         let cors = Cors::default()
-        .allow_any_origin() // change this in production
-        .allow_any_method()// change this in production
-        .allow_any_header() // cgange this in production
-        .supports_credentials()
-        .max_age(3600);
+            .allow_any_origin() // change this in production
+            .allow_any_method() // change this in production
+            .allow_any_header() // cgange this in production
+            .supports_credentials()
+            .max_age(3600);
         // Wrap the connection in a smart pointer
         App::new()
             .wrap(cors)

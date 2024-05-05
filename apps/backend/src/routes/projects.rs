@@ -215,7 +215,9 @@ pub async fn put_project(
         .await
         .context("Failed to acquire a Postgres connection from the Pool.")?;
     // check if the project exists
-    let _ = find_project_by_id(&pool, project_id).await?.ok_or(ProjectError::NotFound)?;
+    let _ = find_project_by_id(&pool, project_id)
+        .await?
+        .ok_or(ProjectError::NotFound)?;
     update_project(&mut transaction, project_id, &updated_project)
         .await
         .context("Failed to update project in the database.")?;

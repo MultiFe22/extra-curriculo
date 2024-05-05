@@ -200,10 +200,9 @@ async fn post_project_fails_if_inserting_duplicate_project() {
     app.post_project(new_project.clone()).await;
 
     let response = app.post_project(new_project).await;
-    
+
     assert_eq!(response.status().as_u16(), 500);
 }
-
 
 #[tokio::test]
 async fn get_project_returns_a_200_for_valid_uuid() {
@@ -270,13 +269,19 @@ async fn get_project_returns_a_200_and_correct_fields_for_valid_uuid() {
 
     assert_eq!(response.status().as_u16(), 200);
 
-    let returned_project: serde_json::Value = response.json().await.expect("Failed to parse the response body");
+    let returned_project: serde_json::Value = response
+        .json()
+        .await
+        .expect("Failed to parse the response body");
 
     assert_eq!(returned_project["name"], new_project["name"]);
     assert_eq!(returned_project["description"], new_project["description"]);
     assert_eq!(returned_project["picture"], new_project["picture"]);
     assert_eq!(returned_project["banner"], new_project["banner"]);
-    assert_eq!(returned_project["is_recruiting"], new_project["is_recruiting"]);
+    assert_eq!(
+        returned_project["is_recruiting"],
+        new_project["is_recruiting"]
+    );
     assert_eq!(returned_project["email"], new_project["email"]);
     assert_eq!(returned_project["modality"], new_project["modality"]);
     assert_eq!(returned_project["address"], new_project["address"]);
@@ -287,7 +292,10 @@ async fn get_project_returns_a_200_and_correct_fields_for_valid_uuid() {
     assert_eq!(returned_project["twitter"], new_project["twitter"]);
     assert_eq!(returned_project["website"], new_project["website"]);
     assert_eq!(returned_project["category_id"], new_project["category_id"]);
-    assert_eq!(returned_project["tags"], "", "The project tags should be an empty string");
+    assert_eq!(
+        returned_project["tags"], "",
+        "The project tags should be an empty string"
+    );
 }
 
 #[tokio::test]
@@ -439,7 +447,10 @@ async fn get_all_projects_returns_a_200_and_correct_project_details() {
 
     // check if the project "tags" are an empty string
     for project in projects {
-        assert_eq!(project["tags"], "", "The project tags should be an empty string");
+        assert_eq!(
+            project["tags"], "",
+            "The project tags should be an empty string"
+        );
     }
 
     assert_eq!(
@@ -531,15 +542,13 @@ async fn put_project_updates_project_with_valid_data() {
 
     let response = app.put_project(project_id, updated_data).await;
 
-
     assert_eq!(response.status().as_u16(), 200);
-
 }
 
 #[tokio::test]
 async fn put_project_returns_a_400_for_invalid_data() {
     let app = spawn_app().await;
-    
+
     let new_project = serde_json::json!({
         "name": "Environmental Sustainability Project",
         "description": "This project aims to develop sustainable business practices to reduce environmental impact.",
@@ -588,7 +597,6 @@ async fn put_project_returns_a_400_for_invalid_data() {
     let response = app.put_project(project_id, invalid_data).await;
 
     assert_eq!(response.status().as_u16(), 400);
-
 }
 
 #[tokio::test]
@@ -622,7 +630,7 @@ async fn put_project_returns_a_404_for_nonexistent_project() {
 #[tokio::test]
 async fn put_project_persists_changes_in_database() {
     let app = spawn_app().await;
-    
+
     let new_project = serde_json::json!({
         "name": "Environmental Sustainability Project",
         "description": "This project aims to develop sustainable business practices to reduce environmental impact.",
@@ -678,7 +686,10 @@ async fn put_project_persists_changes_in_database() {
         .expect("Failed to fetch updated project");
 
     assert_eq!(updated_project.name, "Updated Project Name");
-    assert_eq!(updated_project.description, "Updated project description! Respecing the specs.");
+    assert_eq!(
+        updated_project.description,
+        "Updated project description! Respecing the specs."
+    );
     assert_eq!(
         updated_project.picture.unwrap_or("".to_string()),
         "https://example.com/images/updated-picture.jpg"
@@ -692,7 +703,10 @@ async fn put_project_persists_changes_in_database() {
     assert_eq!(updated_project.modality, "In-person");
     assert_eq!(updated_project.address, "456 Updated St, Green City, Earth");
     assert_eq!(updated_project.professor, "Dr. Greenleaf");
-    assert_eq!(updated_project.instagram.unwrap_or("".to_string()), "updated");
+    assert_eq!(
+        updated_project.instagram.unwrap_or("".to_string()),
+        "updated"
+    );
     assert_eq!(
         updated_project.facebook.unwrap_or("".to_string()),
         "https://facebook.com/updated_project"
@@ -701,7 +715,10 @@ async fn put_project_persists_changes_in_database() {
         updated_project.linkedin.unwrap_or("".to_string()),
         "https://linkedin.com/company/updated_project"
     );
-    assert_eq!(updated_project.twitter.unwrap_or("".to_string()), "@updated");
+    assert_eq!(
+        updated_project.twitter.unwrap_or("".to_string()),
+        "@updated"
+    );
     assert_eq!(
         updated_project.website.unwrap_or("".to_string()),
         "https://www.updatedproject.com"
@@ -710,7 +727,6 @@ async fn put_project_persists_changes_in_database() {
         updated_project.category_id,
         Uuid::parse_str("90cb0d68-9a9d-4526-ab74-9b686d50a4e2").unwrap()
     );
-
 }
 
 #[tokio::test]
@@ -772,7 +788,7 @@ async fn put_project_returns_a_404_for_invalid_uuid_format() {
 #[tokio::test]
 async fn put_project_fails_if_there_is_a_fatal_database_error() {
     let app = spawn_app().await;
-    
+
     let new_project = serde_json::json!({
         "name": "Environmental Sustainability Project",
         "description": "This project aims to develop sustainable business practices to reduce environmental impact.",
@@ -828,5 +844,4 @@ async fn put_project_fails_if_there_is_a_fatal_database_error() {
     let response = app.put_project(project_id, updated_data).await;
 
     assert_eq!(response.status().as_u16(), 500);
-
 }
