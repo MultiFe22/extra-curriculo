@@ -323,6 +323,7 @@ pub struct ExistingProject {
     pub picture: String,
     pub category_id: Uuid,
     pub is_recruiting: bool,
+    pub tags: String,
 }
 
 #[tracing::instrument(
@@ -336,10 +337,34 @@ pub async fn find_project_by_id(
 ) -> Result<Option<ExistingProject>, anyhow::Error> {
     let project = sqlx::query!(
         r#"
-        SELECT id, name, description, picture, banner, is_recruiting, email, modality,
-        address, professor, website, facebook, instagram, linkedin, twitter, category_id
-        FROM project
-        WHERE id = $1
+        SELECT 
+            p.id, 
+            p.name, 
+            p.description, 
+            p.picture, 
+            p.banner, 
+            p.is_recruiting, 
+            p.email, 
+            p.modality,
+            p.address, 
+            p.professor, 
+            p.website, 
+            p.facebook, 
+            p.instagram, 
+            p.linkedin, 
+            p.twitter, 
+            p.category_id,
+            STRING_AGG(t.name, '/') AS tags
+            FROM 
+            project p
+            LEFT JOIN 
+            project_tag pt ON p.id = pt.project_id
+            LEFT JOIN 
+            tag t ON pt.tag_id = t.id
+            WHERE 
+            p.id = $1
+            GROUP BY 
+            p.id
         "#,
         project_id
     )
@@ -369,6 +394,7 @@ pub async fn find_project_by_id(
         picture: project.picture.unwrap_or("".to_string()),
         category_id: project.category_id,
         is_recruiting: project.is_recruiting,
+        tags: project.tags.unwrap_or("".to_string()),
     }))
 }
 
@@ -387,9 +413,32 @@ pub async fn get_all_projects(pool: web::Data<PgPool>) -> Result<HttpResponse, G
 pub async fn find_all_projects(pool: &PgPool) -> Result<Vec<ExistingProject>, anyhow::Error> {
     let projects = sqlx::query!(
         r#"
-        SELECT id, name, description, picture, banner, is_recruiting, email, modality,
-        address, professor, website, facebook, instagram, linkedin, twitter, category_id
-        FROM project
+        SELECT 
+            p.id, 
+            p.name, 
+            p.description, 
+            p.picture, 
+            p.banner, 
+            p.is_recruiting, 
+            p.email, 
+            p.modality,
+            p.address, 
+            p.professor, 
+            p.website, 
+            p.facebook, 
+            p.instagram, 
+            p.linkedin, 
+            p.twitter, 
+            p.category_id,
+            STRING_AGG(t.name, '/') AS tags
+        FROM 
+            project p
+        LEFT JOIN 
+            project_tag pt ON p.id = pt.project_id
+        LEFT JOIN 
+            tag t ON pt.tag_id = t.id
+        GROUP BY 
+            p.id
         "#
     )
     .fetch_all(pool)
@@ -412,6 +461,7 @@ pub async fn find_all_projects(pool: &PgPool) -> Result<Vec<ExistingProject>, an
         picture: project.picture.unwrap_or("".to_string()),
         category_id: project.category_id,
         is_recruiting: project.is_recruiting,
+        tags: project.tags.unwrap_or("".to_string()),
     })
     .collect();
 

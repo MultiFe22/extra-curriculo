@@ -209,6 +209,58 @@ async fn get_project_returns_a_200_for_valid_uuid() {
 }
 
 #[tokio::test]
+async fn get_project_returns_a_200_and_correct_fields_for_valid_uuid() {
+    let app = spawn_app().await;
+
+    let new_project = serde_json::json!({
+        "name": "Environmental Sustainability Project",
+        "description": "This project aims to develop sustainable business practices to reduce environmental impact.",
+        "picture": "https://example.com/images/project-picture.jpg",
+        "banner": "https://example.com/images/project-banner.jpg",
+        "is_recruiting": true,
+        "email": "sustainability@example.com",
+        "modality": "Hybrid",
+        "address": "123 Eco Way, Green City, Earth",
+        "professor": "Dr. Greenleaf",
+        "instagram": "testing",
+        "facebook": "https://facebook.com/environment_project",
+        "linkedin": "https://linkedin.com/company/environment_project",
+        "twitter": "@testing",
+        "website": "https://www.environmentproject.com",
+        "category_id": "90cb0d68-9a9d-4526-ab74-9b686d50a4e2"
+    });
+
+    let response: reqwest::Response = app.post_project(new_project.clone()).await;
+    let project_id: Uuid = response
+        .json()
+        .await
+        .expect("Failed to parse the response body");
+
+    let response = app.get_project(project_id).await;
+
+    assert_eq!(response.status().as_u16(), 200);
+
+    let returned_project: serde_json::Value = response.json().await.expect("Failed to parse the response body");
+
+    assert_eq!(returned_project["name"], new_project["name"]);
+    assert_eq!(returned_project["description"], new_project["description"]);
+    assert_eq!(returned_project["picture"], new_project["picture"]);
+    assert_eq!(returned_project["banner"], new_project["banner"]);
+    assert_eq!(returned_project["is_recruiting"], new_project["is_recruiting"]);
+    assert_eq!(returned_project["email"], new_project["email"]);
+    assert_eq!(returned_project["modality"], new_project["modality"]);
+    assert_eq!(returned_project["address"], new_project["address"]);
+    assert_eq!(returned_project["professor"], new_project["professor"]);
+    assert_eq!(returned_project["instagram"], new_project["instagram"]);
+    assert_eq!(returned_project["facebook"], new_project["facebook"]);
+    assert_eq!(returned_project["linkedin"], new_project["linkedin"]);
+    assert_eq!(returned_project["twitter"], new_project["twitter"]);
+    assert_eq!(returned_project["website"], new_project["website"]);
+    assert_eq!(returned_project["category_id"], new_project["category_id"]);
+    assert_eq!(returned_project["tags"], "", "The project tags should be an empty string");
+}
+
+#[tokio::test]
 async fn get_project_returns_a_404_for_invalid_uuid() {
     let app = spawn_app().await;
 
@@ -354,6 +406,11 @@ async fn get_all_projects_returns_a_200_and_correct_project_details() {
     project_names_from_response.sort_unstable();
     let mut project_names_expected: Vec<&str> = project_names.iter().cloned().collect();
     project_names_expected.sort_unstable();
+
+    // check if the project "tags" are an empty string
+    for project in projects {
+        assert_eq!(project["tags"], "", "The project tags should be an empty string");
+    }
 
     assert_eq!(
         project_names_from_response, project_names_expected,
