@@ -17,24 +17,28 @@ export const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages,
   };
 
   const paginationRange = () => {
+    // const totalBlocks = totalPageNumbers - 2; // Total blocks when ellipses are present
+
     if (totalPages > totalPageNumbers) {
-      const startPages = range(0, 1);
-      const endPages = range(totalPages - 2, totalPages - 1);
+      const startPages = range(0, Math.min(1, totalPages - 1));
+      const endPages = range(Math.max(totalPages - 2, 2), totalPages - 1);
 
       const hasLeftSpill = currentPage > 2;
       const hasRightSpill = currentPage < totalPages - 3;
+      
+      const middleRangeStart = Math.max(2, currentPage - siblingCount);
+      const middleRangeEnd = Math.min(currentPage + siblingCount, totalPages - 2);
 
-      const offset = siblingCount + 2;
       let currentPageRange: (number | string)[];
 
       if (hasLeftSpill && !hasRightSpill) {
-        const extraPages = range(0, offset - 1);
-        currentPageRange = [...extraPages, '...', ...endPages];
+        currentPageRange = [...startPages, '...', ...range(middleRangeStart, totalPages - 1)];
       } else if (!hasLeftSpill && hasRightSpill) {
-        const extraPages = range(totalPages - offset, totalPages - 1);
-        currentPageRange = [...startPages, '...', ...extraPages];
+        currentPageRange = [...range(0, middleRangeEnd), '...', ...endPages];
+      } else if (hasLeftSpill && hasRightSpill) {
+        currentPageRange = [...startPages, '...', ...range(middleRangeStart, middleRangeEnd), '...', ...endPages];
       } else {
-        currentPageRange = [...startPages, '...', ...range(Math.max(1, currentPage - siblingCount), Math.min(totalPages - 2, currentPage + siblingCount)), '...', ...endPages];
+        currentPageRange = range(0, totalPages - 1);
       }
 
       return currentPageRange;
