@@ -85,7 +85,7 @@ const Opportunities: React.FC = () => {
         <ResponsiveWrapper minWidth="769px" tailwindClasses="w-[1696px] flex flex-col items-start justify-start gap-[32.5px] max-w-full mq950:gap-[16px]">
           <FiltersBar/>
           {isLoading ?  <div> Loading projects...</div>: <OpportunitiesContainerMobile projects={projects || []} itemsPerPage={itemsPerPage} currentPage={page} />}
-          {isLoading ? null : <Pagination currentePage={page} totalPages={maxPage} onPageChange={handlePageChange} />}
+          {isLoading ? null : <Pagination currentPage={page} totalPages={maxPage} onPageChange={handlePageChange} />}
         </ResponsiveWrapper>
       </ResponsiveWrapper>
 
