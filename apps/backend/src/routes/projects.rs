@@ -1,3 +1,5 @@
+use std::collections::HashSet;
+
 use actix_web::http::StatusCode;
 use actix_web::{web, HttpResponse, ResponseError};
 use anyhow::Context;
@@ -259,6 +261,143 @@ pub async fn update_project(
         chrono::Utc::now(),
         updated_project.is_recruiting,
         project_id
+    )
+    .execute(transaction)
+    .await?;
+    Ok(())
+}
+
+#[derive(serde::Deserialize)]
+pub struct NewProjectTags {
+    tags: Vec<Uuid>,
+}
+
+#[tracing::instrument(
+    name = "Updating project tags",
+    skip(id, new_tags, pool),
+    fields(
+        project_id = %id,
+        new_tags = ?new_tags.tags
+    )
+)]
+pub async fn put_project_tags(
+    id: web::Path<Uuid>,
+    new_tags: web::Json<NewProjectTags>,
+    pool: web::Data<PgPool>,
+) -> Result<HttpResponse, ProjectError> {
+    let project_id = id.into_inner();
+    let new_tag_ids = new_tags.into_inner().tags;
+    let mut transaction = pool
+        .begin()
+        .await
+        .context("Failed to acquire a Postgres connection from the Pool.")?;
+
+    // if new tags length is greater than 10, return a validation error
+    if new_tag_ids.len() > 10 {
+        return Err(ProjectError::ValidationError(
+            "A project can have at most 10 tags.".to_string(),
+        ));
+    }
+
+    // Fetch current tags from the database
+    let current_tags = find_current_project_tags(&project_id, &pool)
+        .await
+        .context("Failed to fetch current tags from the database while updating project tags.")?;
+
+    // transform new_tag_id into a HashSet
+    let new_tag_ids = new_tag_ids.into_iter().collect::<HashSet<Uuid>>();
+
+    // Calculate tags to delete and to add
+    let tags_to_delete = current_tags
+        .difference(&new_tag_ids)
+        .cloned()
+        .collect::<Vec<Uuid>>();
+    let tags_to_add = new_tag_ids
+        .difference(&current_tags)
+        .cloned()
+        .collect::<Vec<Uuid>>();
+
+    // Delete old tags not in the new list
+    delete_project_tags(&mut transaction, &project_id, &tags_to_delete)
+        .await
+        .context("Failed to delete old tags from the database while updating project tags.")?;
+
+    // Insert new tags
+    insert_project_tags(&mut transaction, &project_id, &tags_to_add)
+        .await
+        .context("Failed to insert new tags in the database while updating project tags.")?;
+
+    // Commit transaction
+    transaction
+        .commit()
+        .await
+        .context("Failed to commit SQL transaction to update project.")?;
+
+    Ok(HttpResponse::Ok().finish())
+}
+
+#[tracing::instrument(name = "Find current tags for a project", skip(project_id, pool))]
+async fn find_current_project_tags(
+    project_id: &Uuid,
+    pool: &PgPool,
+) -> Result<HashSet<Uuid>, anyhow::Error> {
+    let tags = sqlx::query!(
+        r#"
+        SELECT tag_id
+        FROM project_tag
+        WHERE project_id = $1
+        "#,
+        project_id
+    )
+    .fetch_all(pool)
+    .await?
+    .into_iter()
+    .map(|tag| tag.tag_id)
+    .collect();
+
+    Ok(tags)
+}
+
+#[tracing::instrument(
+    name = "Inserting new tags for a project",
+    skip(transaction, project_id, tags_to_add)
+)]
+async fn insert_project_tags(
+    transaction: &mut Transaction<'_, Postgres>,
+    project_id: &Uuid,
+    tags_to_add: &[Uuid],
+) -> Result<(), anyhow::Error> {
+    // execute it in one query
+    sqlx::query!(
+        r#"
+        INSERT INTO project_tag (project_id, tag_id)
+        SELECT $1, unnest($2::uuid[])
+        "#,
+        project_id,
+        &tags_to_add
+    )
+    .execute(transaction)
+    .await?;
+    Ok(())
+}
+
+#[tracing::instrument(
+    name = "Deleting old tags for a project",
+    skip(transaction, project_id, tags_to_delete)
+)]
+async fn delete_project_tags(
+    transaction: &mut Transaction<'_, Postgres>,
+    project_id: &Uuid,
+    tags_to_delete: &[Uuid],
+) -> Result<(), anyhow::Error> {
+    // execute it in one query
+    sqlx::query!(
+        r#"
+        DELETE FROM project_tag
+        WHERE project_id = $1 AND tag_id = ANY($2)
+        "#,
+        project_id,
+        tags_to_delete
     )
     .execute(transaction)
     .await?;

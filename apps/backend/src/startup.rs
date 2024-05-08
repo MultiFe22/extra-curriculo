@@ -16,6 +16,7 @@ use crate::routes::post_program;
 use crate::routes::post_project;
 use crate::routes::post_tag;
 use crate::routes::put_project;
+use crate::routes::put_project_tags;
 use actix_cors::Cors;
 use actix_session::storage::RedisSessionStore;
 use actix_session::SessionMiddleware;
@@ -71,6 +72,7 @@ async fn run(
             .route("/projects", web::get().to(get_all_projects))
             .route("/projects/{id}", web::get().to(get_project))
             .route("/projects/{id}", web::put().to(put_project))
+            .route("/projects/{id}/tags", web::put().to(put_project_tags))
             .route("/programs", web::post().to(post_program))
             .route("/programs/{id}", web::get().to(get_program))
             .route("/programs", web::get().to(get_all_programs))

@@ -1,0 +1,19 @@
+meta {
+  name: put_project_tags
+  type: http
+  seq: 5
+}
+
+put {
+  url: {{api_url}}/projects/6dc80479-f522-4c42-8e56-f4eb3c052445/tags
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "tags": [
+  ]
+  
+  }
+}
