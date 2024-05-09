@@ -1,3 +1,5 @@
+use std::collections::HashSet;
+
 use uuid::Uuid;
 
 use crate::helpers::spawn_app;
@@ -844,4 +846,583 @@ async fn put_project_fails_if_there_is_a_fatal_database_error() {
     let response = app.put_project(project_id, updated_data).await;
 
     assert_eq!(response.status().as_u16(), 500);
+}
+
+#[tokio::test]
+async fn put_project_tags_returns_200_for_valid_tags() {
+    let app = spawn_app().await;
+
+    let new_project = serde_json::json!({
+        "name": "Environmental Sustainability Project",
+        "description": "This project aims to develop sustainable business practices to reduce environmental impact.",
+        "picture": "https://example.com/images/project-picture.jpg",
+        "banner": "https://example.com/images/project-banner.jpg",
+        "is_recruiting": true,
+        "email": "sustainability@example.com",
+        "modality": "Hybrid",
+        "address": "123 Eco Way, Green City, Earth",
+        "professor": "Dr. Greenleaf",
+        "instagram": "testing",
+        "facebook": "https://facebook.com/environment_project",
+        "linkedin": "https://linkedin.com/company/environment_project",
+        "twitter": "@testing",
+        "website": "https://www.environmentproject.com",
+        "category_id": "90cb0d68-9a9d-4526-ab74-9b686d50a4e2"
+    });
+
+    let response = app.post_project(new_project).await;
+
+    assert_eq!(response.status().as_u16(), 201);
+
+    let project_id: Uuid = response
+        .json()
+        .await
+        .expect("Failed to parse the response body");
+
+    // create new_tags which a array or vec of strings
+    let new_tags = vec!["sustainability", "environment", "business"];
+
+    // create a vec of uuids for the tags
+    let mut tag_ids = Vec::new();
+
+    // loop through the new_tags and create them in the database
+    for tag in &new_tags {
+        let new_tag = serde_json::json!({
+            "name": tag
+        });
+
+        let response_tag = app.post_tag(new_tag).await;
+        assert_eq!(response_tag.status().as_u16(), 201);
+
+        let returned_uuid: Uuid = response_tag.json().await.expect("Failed to parse the response body");
+        tag_ids.push(returned_uuid);
+    }
+
+    // create a json with the tag_ids
+    let updated_tags = serde_json::json!({
+        "tags": tag_ids
+    });
+
+    let response = app.put_project_tags(project_id, updated_tags).await;
+
+    assert_eq!(response.status().as_u16(), 200);
+
+}
+
+#[tokio::test]
+async fn put_project_tags_returns_400_for_invalid_tags() {
+    let app = spawn_app().await;
+
+    let new_project = serde_json::json!({
+        "name": "Environmental Sustainability Project",
+        "description": "This project aims to develop sustainable business practices to reduce environmental impact.",
+        "picture": "https://example.com/images/project-picture.jpg",
+        "banner": "https://example.com/images/project-banner.jpg",
+        "is_recruiting": true,
+        "email": "sustainability@example.com",
+        "modality": "Hybrid",
+        "address": "123 Eco Way, Green City, Earth",
+        "professor": "Dr. Greenleaf",
+        "instagram": "testing",
+        "facebook": "https://facebook.com/environment_project",
+        "linkedin": "https://linkedin.com/company/environment_project",
+        "twitter": "@testing",
+        "website": "https://www.environmentproject.com",
+        "category_id": "90cb0d68-9a9d-4526-ab74-9b686d50a4e2"
+    });
+
+    let response = app.post_project(new_project).await;
+
+    assert_eq!(response.status().as_u16(), 201);
+
+    let project_id: Uuid = response
+        .json()
+        .await
+        .expect("Failed to parse the response body");
+
+    // create new_tags which a array or vec of strings
+
+    // try to put_project_tags with an invalid tag_id
+    let updated_tags = serde_json::json!({
+        "tags": ["not-a-valid-uuid"]
+    });
+
+    let response = app.put_project_tags(project_id, updated_tags).await;
+
+    assert_eq!(response.status().as_u16(), 400);
+    
+}
+
+#[tokio::test]
+async fn put_project_tags_returns_404_for_nonexistent_project() {
+    let app = spawn_app().await;
+    let nonexistent_project_id = Uuid::new_v4();
+
+    // create a valid tag
+    let new_tag = serde_json::json!({
+        "name": "sustainability"
+    });
+
+    let response_tag = app.post_tag(new_tag).await;
+
+    assert_eq!(response_tag.status().as_u16(), 201);
+
+    let returned_uuid: Uuid = response_tag.json().await.expect("Failed to parse the response body");
+
+    // create a json with the tag_ids
+
+    let updated_tags = serde_json::json!({
+        "tags": [returned_uuid]
+    });
+    
+    let response = app.put_project_tags(nonexistent_project_id, updated_tags).await;
+
+    assert_eq!(response.status().as_u16(), 404);
+}
+
+#[tokio::test]
+async fn put_project_tags_persists_changes_in_database() {
+    let app = spawn_app().await;
+
+    // create a valid project
+    let new_project = serde_json::json!({
+        "name": "Environmental Sustainability Project",
+        "description": "This project aims to develop sustainable business practices to reduce environmental impact.",
+        "picture": "https://example.com/images/project-picture.jpg",
+        "banner": "https://example.com/images/project-banner.jpg",
+        "is_recruiting": true,
+        "email": "sustainability@example.com",
+        "modality": "Hybrid",
+        "address": "123 Eco Way, Green City, Earth",
+        "professor": "Dr. Greenleaf",
+        "instagram": "testing",
+        "facebook": "https://facebook.com/environment_project",
+        "linkedin": "https://linkedin.com/company/environment_project",
+        "twitter": "@testing",
+        "website": "https://www.environmentproject.com",
+        "category_id": "90cb0d68-9a9d-4526-ab74-9b686d50a4e2"
+    });
+
+    let response = app.post_project(new_project).await;
+
+    assert_eq!(response.status().as_u16(), 201);
+
+    let project_id: Uuid = response
+        .json()
+        .await
+        .expect("Failed to parse the response body");
+
+    // create a many tags
+    let new_tags = vec!["sustainability", "environment", "business"];
+
+    // create a vec of uuids for the tags
+
+    let mut tag_ids = Vec::new();
+
+    // loop through the new_tags and create them in the database
+    for tag in &new_tags {
+        let new_tag = serde_json::json!({
+            "name": tag
+        });
+
+        let response_tag = app.post_tag(new_tag).await;
+        assert_eq!(response_tag.status().as_u16(), 201);
+
+        let returned_uuid: Uuid = response_tag.json().await.expect("Failed to parse the response body");
+        tag_ids.push(returned_uuid);
+    }
+
+    // create a json with the tag_ids
+    let updated_tags = serde_json::json!({
+        "tags": tag_ids
+    });
+
+    let response = app.put_project_tags(project_id, updated_tags).await;
+
+    assert_eq!(response.status().as_u16(), 200);
+
+    // check if the tags were added to the project
+    let project_tags = app.get_project_tags(project_id).await;
+
+    let tags: Vec<serde_json::Value> = project_tags
+        .json()
+        .await
+        .expect("Failed to parse the response body");
+
+    assert_eq!(tags.len(), 3);
+    
+    // // compare the uuids of the tags by transforming the two vector into hashsets, the output is a json that has only one array inside
+
+    let tag_ids_from_response: HashSet<Uuid> = tags
+        .iter()
+        .map(|t| Uuid::parse_str(t.as_str().unwrap()).unwrap())
+        .collect();
+
+    let tag_ids_expected: HashSet<Uuid> = tag_ids.iter().cloned().collect();
+    
+    assert_eq!(tag_ids_from_response, tag_ids_expected);
+
+}
+
+#[tokio::test]
+async fn put_project_deletes_and_adds_tags() {
+    let app = spawn_app().await;
+
+    // create a valid project
+    let new_project = serde_json::json!({
+        "name": "Environmental Sustainability Project",
+        "description": "This project aims to develop sustainable business practices to reduce environmental impact.",
+        "picture": "https://example.com/images/project-picture.jpg",
+        "banner": "https://example.com/images/project-banner.jpg",
+        "is_recruiting": true,
+        "email": "sustainability@example.com",
+        "modality": "Hybrid",
+        "address": "123 Eco Way, Green City, Earth",
+        "professor": "Dr. Greenleaf",
+        "instagram": "testing",
+        "facebook": "https://facebook.com/environment_project",
+        "linkedin": "https://linkedin.com/company/environment_project",
+        "twitter": "@testing",
+        "website": "https://www.environmentproject.com",
+        "category_id": "90cb0d68-9a9d-4526-ab74-9b686d50a4e2"
+    });
+
+    let response = app.post_project(new_project).await;
+
+    assert_eq!(response.status().as_u16(), 201);
+
+    let project_id: Uuid = response
+        .json()
+        .await
+        .expect("Failed to parse the response body");
+
+    // create a many tags
+    let new_tags = vec!["sustainability", "environment", "business"];
+
+    // create a vec of uuids for the tags
+    
+    let mut tag_ids = Vec::new();
+
+    // loop through the new_tags and create them in the database
+    for tag in &new_tags {
+        let new_tag = serde_json::json!({
+            "name": tag
+        });
+
+        let response_tag = app.post_tag(new_tag).await;
+        assert_eq!(response_tag.status().as_u16(), 201);
+
+        let returned_uuid: Uuid = response_tag.json().await.expect("Failed to parse the response body");
+        tag_ids.push(returned_uuid);
+    }
+
+    // create a json with the tag_ids
+    
+    let updated_tags = serde_json::json!({
+        "tags": tag_ids
+    });
+
+    let response = app.put_project_tags(project_id, updated_tags).await;
+
+    assert_eq!(response.status().as_u16(), 200);
+
+    // check if the tags were added to the project
+
+    let project_tags = app.get_project_tags(project_id).await;
+
+    let tags: Vec<serde_json::Value> = project_tags
+        .json()
+        .await
+        .expect("Failed to parse the response body");
+
+    assert_eq!(tags.len(), 3);
+
+    // create a new set given the current tags, remove the first tag and add two new tags
+    let mut new_tag_ids = tag_ids.clone();
+    new_tag_ids.remove(0);
+
+    let new_tags = vec!["sustainable", "new"];
+
+    for tag in &new_tags {
+        let new_tag = serde_json::json!({
+            "name": tag
+        });
+
+        let response_tag = app.post_tag(new_tag).await;
+        assert_eq!(response_tag.status().as_u16(), 201);
+
+        let returned_uuid: Uuid = response_tag.json().await.expect("Failed to parse the response body");
+        new_tag_ids.push(returned_uuid);
+    }
+
+    // create a json with the new_tag_ids
+    let updated_tags = serde_json::json!({
+        "tags": new_tag_ids
+    });
+
+    let response = app.put_project_tags(project_id, updated_tags).await;
+
+    assert_eq!(response.status().as_u16(), 200);
+
+    // check if the tags were added to the project
+
+    let project_tags = app.get_project_tags(project_id).await;
+
+    let tags: Vec<serde_json::Value> = project_tags
+        .json()
+        .await
+        .expect("Failed to parse the response body");
+
+    assert_eq!(tags.len(), 4);
+
+    // compare the uuids of the tags by transforming the two vector into hashsets, the output is a json that has only one array inside
+
+    let tag_ids_from_response: HashSet<Uuid> = tags
+        .iter()
+        .map(|t| Uuid::parse_str(t.as_str().unwrap()).unwrap())
+        .collect();
+
+    let tag_ids_expected: HashSet<Uuid> = new_tag_ids.iter().cloned().collect();
+
+    assert_eq!(tag_ids_from_response, tag_ids_expected);
+}
+
+#[tokio::test]
+async fn put_project_tags_fails_if_there_is_a_fatal_database_error() {
+    let app = spawn_app().await;
+
+    // create a valid project
+    let new_project = serde_json::json!({
+        "name": "Environmental Sustainability Project",
+        "description": "This project aims to develop sustainable business practices to reduce environmental impact.",
+        "picture": "https://example.com/images/project-picture.jpg",
+        "banner": "https://example.com/images/project-banner.jpg",
+        "is_recruiting": true,
+        "email": "sustainability@example.com",
+        "modality": "Hybrid",
+        "address": "123 Eco Way, Green City, Earth",
+        "professor": "Dr. Greenleaf",
+        "instagram": "testing",
+        "facebook": "https://facebook.com/environment_project",
+        "linkedin": "https://linkedin.com/company/environment_project",
+        "twitter": "@testing",
+        "website": "https://www.environmentproject.com",
+        "category_id": "90cb0d68-9a9d-4526-ab74-9b686d50a4e2"
+    });
+
+    let response = app.post_project(new_project).await;
+
+    assert_eq!(response.status().as_u16(), 201);
+
+    let project_id: Uuid = response
+        .json()
+        .await
+        .expect("Failed to parse the response body");
+
+    // create a many tags
+    let new_tags = vec!["sustainability", "environment", "business"];
+
+    // create a vec of uuids for the tags
+
+    let mut tag_ids = Vec::new();
+
+    // loop through the new_tags and create them in the database
+
+    for tag in &new_tags {
+        let new_tag = serde_json::json!({
+            "name": tag
+        });
+
+        let response_tag = app.post_tag(new_tag).await;
+        assert_eq!(response_tag.status().as_u16(), 201);
+
+        let returned_uuid: Uuid = response_tag.json().await.expect("Failed to parse the response body");
+        tag_ids.push(returned_uuid);
+    }
+
+    // create a json with the tag_ids
+
+    let updated_tags = serde_json::json!({
+        "tags": tag_ids
+    });
+    
+    // sabotage the database
+    sqlx::query!("ALTER TABLE project_tag DROP COLUMN project_id;")
+        .execute(&app.db_pool)
+        .await
+        .unwrap();
+
+    let response = app.put_project_tags(project_id, updated_tags).await;
+
+    assert_eq!(response.status().as_u16(), 500);
+}
+
+#[tokio::test]
+async fn put_project_tags_delete_all_tags() {
+    let app = spawn_app().await;
+
+    // create a valid project
+    let new_project = serde_json::json!({
+        "name": "Environmental Sustainability Project",
+        "description": "This project aims to develop sustainable business practices to reduce environmental impact.",
+        "picture": "https://example.com/images/project-picture.jpg",
+        "banner": "https://example.com/images/project-banner.jpg",
+        "is_recruiting": true,
+        "email": "sustainability@example.com",
+        "modality": "Hybrid",
+        "address": "123 Eco Way, Green City, Earth",
+        "professor": "Dr. Greenleaf",
+        "instagram": "testing",
+        "facebook": "https://facebook.com/environment_project",
+        "linkedin": "https://linkedin.com/company/environment_project",
+        "twitter": "@testing",
+        "website": "https://www.environmentproject.com",
+        "category_id": "90cb0d68-9a9d-4526-ab74-9b686d50a4e2"
+    });
+
+    let response = app.post_project(new_project).await;
+
+    assert_eq!(response.status().as_u16(), 201);
+
+    let project_id: Uuid = response
+        .json()
+        .await
+        .expect("Failed to parse the response body");
+
+    // create a many tags
+
+    let new_tags = vec!["sustainability", "environment", "business"];
+
+    // create a vec of uuids for the tags
+
+    let mut tag_ids = Vec::new();
+
+    // loop through the new_tags and create them in the database
+
+    for tag in &new_tags {
+        let new_tag = serde_json::json!({
+            "name": tag
+        });
+
+        let response_tag = app.post_tag(new_tag).await;
+        assert_eq!(response_tag.status().as_u16(), 201);
+
+        let returned_uuid: Uuid = response_tag.json().await.expect("Failed to parse the response body");
+        tag_ids.push(returned_uuid);
+    }
+
+    // create a json with the tag_ids
+
+    let updated_tags = serde_json::json!({
+        "tags": tag_ids
+    });
+
+    let response = app.put_project_tags(project_id, updated_tags).await;
+
+    assert_eq!(response.status().as_u16(), 200);
+
+    // check if the tags were added to the project
+
+    let project_tags = app.get_project_tags(project_id).await;
+
+    let tags: Vec<serde_json::Value> = project_tags
+        .json()
+        .await
+        .expect("Failed to parse the response body");
+
+    assert_eq!(tags.len(), 3);
+
+    // create a json with an empty array of tags
+
+    let updated_tags = serde_json::json!({
+        "tags": []
+    });
+
+    let response = app.put_project_tags(project_id, updated_tags).await;
+
+    assert_eq!(response.status().as_u16(), 200);
+
+    // check if the tags were deleted to the project
+
+    let project_tags = app.get_project_tags(project_id).await;
+
+    let tags: Vec<serde_json::Value> = project_tags
+        .json()
+        .await
+        .expect("Failed to parse the response body");
+
+    assert_eq!(tags.len(), 0);
+
+}
+
+#[tokio::test]
+async fn get_project_tags_returns_200_for_valid_project() {
+    let app = spawn_app().await;
+
+    // create a valid project
+    let new_project = serde_json::json!({
+        "name": "Environmental Sustainability Project",
+        "description": "This project aims to develop sustainable business practices to reduce environmental impact.",
+        "picture": "https://example.com/images/project-picture.jpg",
+        "banner": "https://example.com/images/project-banner.jpg",
+        "is_recruiting": true,
+        "email": "sustainability@example.com",
+        "modality": "Hybrid",
+        "address": "123 Eco Way, Green City, Earth",
+        "professor": "Dr. Greenleaf",
+        "instagram": "testing",
+        "facebook": "https://facebook.com/environment_project",
+        "linkedin": "https://linkedin.com/company/environment_project",
+        "twitter": "@testing",
+        "website": "https://www.environmentproject.com",
+        "category_id": "90cb0d68-9a9d-4526-ab74-9b686d50a4e2"
+    });
+
+    let response = app.post_project(new_project).await;
+
+    assert_eq!(response.status().as_u16(), 201);
+
+    let project_id: Uuid = response
+        .json()
+        .await
+        .expect("Failed to parse the response body");
+
+    // query the project tags to find zero tags
+    let project_tags = app.get_project_tags(project_id).await;
+
+    assert_eq!(project_tags.status().as_u16(), 200);
+    // assert the response is an empty array
+    let tags: Vec<serde_json::Value> = project_tags
+        .json()
+        .await
+        .expect("Failed to parse the response body");
+
+    assert_eq!(tags.len(), 0);
+}
+
+#[tokio::test]
+async fn get_project_tags_returns_404_for_nonexistent_project() {
+    let app = spawn_app().await;
+    let nonexistent_project_id = Uuid::new_v4();
+
+    let project_tags = app.get_project_tags(nonexistent_project_id).await;
+
+    assert_eq!(project_tags.status().as_u16(), 404);
+}
+
+#[tokio::test]
+async fn get_project_tags_fails_if_there_is_a_fatal_database_error() {
+    let app = spawn_app().await;
+
+    // sabotage the database
+    sqlx::query!("ALTER TABLE project_tag DROP COLUMN project_id;")
+        .execute(&app.db_pool)
+        .await
+        .unwrap();
+
+    // get the project tags
+    let project_tags = app.get_project_tags(Uuid::new_v4()).await;
+
+    assert_eq!(project_tags.status().as_u16(), 500);
+
 }

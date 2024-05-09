@@ -298,9 +298,13 @@ pub async fn put_project_tags(
             "A project can have at most 10 tags.".to_string(),
         ));
     }
+    
+    let _ = find_project_by_id(&pool, project_id)
+        .await?
+        .ok_or(ProjectError::NotFound)?;
 
     // Fetch current tags from the database
-    let current_tags = find_current_project_tags(&project_id, &pool)
+    let current_tags = find_project_tags(&project_id, &pool)
         .await
         .context("Failed to fetch current tags from the database while updating project tags.")?;
 
@@ -337,7 +341,7 @@ pub async fn put_project_tags(
 }
 
 #[tracing::instrument(name = "Find current tags for a project", skip(project_id, pool))]
-async fn find_current_project_tags(
+async fn find_project_tags(
     project_id: &Uuid,
     pool: &PgPool,
 ) -> Result<HashSet<Uuid>, anyhow::Error> {
@@ -607,4 +611,27 @@ pub async fn find_all_projects(pool: &PgPool) -> Result<Vec<ExistingProject>, an
     .collect();
 
     Ok(projects)
+}
+
+#[tracing::instrument(
+    name = "Get project tags",
+    skip(pool, id),
+    fields(project_id = %id)
+)]
+pub async fn get_project_tags(
+    pool: web::Data<PgPool>,
+    id: web::Path<Uuid>,
+) -> Result<HttpResponse, GetProjectError> {
+    let project_id = id.into_inner();
+
+    let _ = find_project_by_id(&pool, project_id)
+        .await?
+        .ok_or(GetProjectError::NotFound)?;
+
+    let tags = find_project_tags(&project_id, &pool).await?;
+
+    // transform the tags into a Vec of uuids
+    let tags = tags.into_iter().collect::<Vec<Uuid>>();
+
+    Ok(HttpResponse::Ok().json(tags))
 }

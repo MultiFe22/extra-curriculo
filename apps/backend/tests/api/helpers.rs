@@ -86,6 +86,15 @@ impl TestApp {
             .expect("Failed to execute request.")
     }
 
+    pub async fn put_project_tags(&self, project_id: Uuid, tags: Value) -> reqwest::Response {
+        self.api_client
+            .put(&format!("{}/projects/{}/tags", &self.address, project_id))
+            .json(&tags)
+            .send()
+            .await
+            .expect("Failed to execute request.")
+    }
+
     pub async fn post_program(&self, program: Value) -> reqwest::Response {
         self.api_client
             .post(&format!("{}/programs", &self.address))
@@ -161,6 +170,13 @@ impl TestApp {
             .expect("Failed to execute request.")
     }
 
+    pub async fn get_project_tags(&self, project_id: Uuid) -> reqwest::Response {
+        self.api_client
+            .get(&format!("{}/projects/{}/tags", &self.address, project_id))
+            .send()
+            .await
+            .expect("Failed to execute request.")
+    }
     // pub async fn post_newsletters(&self, body: serde_json::Value) -> reqwest::Response {
     //     self.api_client
     //         .post(&format!("{}/newsletters", &self.address))

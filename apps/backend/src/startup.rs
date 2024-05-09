@@ -9,6 +9,7 @@ use crate::routes::get_all_tags;
 use crate::routes::get_category;
 use crate::routes::get_program;
 use crate::routes::get_project;
+use crate::routes::get_project_tags;
 use crate::routes::get_tag;
 use crate::routes::health_check;
 use crate::routes::post_category;
@@ -73,6 +74,7 @@ async fn run(
             .route("/projects/{id}", web::get().to(get_project))
             .route("/projects/{id}", web::put().to(put_project))
             .route("/projects/{id}/tags", web::put().to(put_project_tags))
+            .route("/projects/{id}/tags", web::get().to(get_project_tags))
             .route("/programs", web::post().to(post_program))
             .route("/programs/{id}", web::get().to(get_program))
             .route("/programs", web::get().to(get_all_programs))
