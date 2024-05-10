@@ -1,9 +1,21 @@
+import { useEffect, useState } from "react";
 import FiltersLines from "../../assets/FiltersLines";
 import PlusSquare from "../../assets/PlusSquare";
 import SearchIcon from "../../assets/SearchIcon";
 // import XIcon from "../../assets/XIcon";
 
 export const FiltersBar: React.FC = () => {
+  const [searchTerm, setSearchTerm] = useState<string>('');
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value);
+  }
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    console.log(searchTerm);
+  }
+
   return (
     <div className="self-stretch mq1920:h-[68px] mq1920:rounded-xl flex mq1920:flex-col mq768:flex-row items-start justify-start mq1920:py-3 mq1920:px-0 mq768:py-0 mq375:px-4 mq768:px-8 box-border max-w-full mq1920:gap-[12px] mq768:text-center mq768:text-sm text-slateblue font-text-md-regular">
       <div className="mq1920:self-stretch mq768:flex-1 flex mq1920:flex-row mq768:flex-col items-start mq1920:justify-between mq768:justify-start mq768:gap-[12px] mq1920:gap-[20px] max-w-full">
@@ -13,14 +25,23 @@ export const FiltersBar: React.FC = () => {
             <div className="flex-1 flex flex-col items-start justify-start max-w-full">
               <div className="self-stretch flex flex-col items-start justify-start">
                 <div className="self-stretch rounded-lg bg-white shadow-[0px_1px_2px_rgba(16,_24,_40,_0.05)] flex flex-row items-center justify-start py-2 px-[13px] border-[1px] border-solid border-gray-300">
-                  <div className="mq768:flex-grow mq1920:flex-1 flex flex-row items-center justify-start mq1920:box-border py-0 pl-0 gap-[8px] mq1920:max-w-full">
-                    <SearchIcon className="h-5 w-5 relative overflow-hidden shrink-0"/>
+                  <form onSubmit={handleSubmit} className="mq768:flex-grow mq1920:flex-1 flex flex-row items-center justify-start mq1920:box-border py-0 pl-0 gap-[8px] mq1920:max-w-full">
+                    <button
+                        type="submit"
+                        className="flex items-center justify-center h-5 w-5 bg-transparent border-none outline-none cursor-pointer p-0"
+                        style={{ margin: '0', padding: '0', border: 'none' }} // Adjusted styling
+                        aria-label="Submit search"
+                    >
+                        <SearchIcon className="h-5 w-5 relative overflow-hidden shrink-0" />
+                    </button>                      
                     <input
-                      className="mq768:w-[calc(100%_-_255px)] mq1920:w-[calc(100%_-_312px)] [border:none] [outline:none] font-text-md-regular text-base bg-[transparent] h-6 flex-1 relative leading-[24px] text-gray-500 text-left inline-block min-w-[31px] p-0"
-                      placeholder="Buscar"
-                      type="text"
-                    />
-                  </div>
+                        className="mq768:w-[calc(100%_-_255px)] mq1920:w-[calc(100%_-_312px)] [border:none] [outline:none] font-text-md-regular text-base bg-[transparent] h-6 flex-1 relative leading-[24px] text-gray-500 text-left inline-block min-w-[31px] p-0"
+                        placeholder="Buscar"
+                        type="text"
+                        value={searchTerm}
+                        onChange={handleInputChange}
+                      />
+                  </form>
                 </div>
               </div>
             </div>
