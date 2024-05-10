@@ -469,6 +469,7 @@ pub struct ExistingProject {
     pub category_id: Uuid,
     pub is_recruiting: bool,
     pub tags: Vec<String>,
+    pub category_name: String,
 }
 
 #[tracing::instrument(
@@ -499,17 +500,20 @@ pub async fn find_project_by_id(
             p.linkedin, 
             p.twitter, 
             p.category_id,
+            c.name AS category_name,
             STRING_AGG(t.name, '/') AS tags
-            FROM 
+        FROM 
             project p
-            LEFT JOIN 
+        LEFT JOIN 
             project_tag pt ON p.id = pt.project_id
-            LEFT JOIN 
+        LEFT JOIN 
             tag t ON pt.tag_id = t.id
-            WHERE 
+        LEFT JOIN
+            category c ON p.category_id = c.id
+        WHERE 
             p.id = $1
-            GROUP BY 
-            p.id
+        GROUP BY 
+            p.id, c.name
         "#,
         project_id
     )
@@ -546,6 +550,7 @@ pub async fn find_project_by_id(
         category_id: project.category_id,
         is_recruiting: project.is_recruiting,
         tags,
+        category_name: project.category_name,
     }))
 }
 
@@ -581,6 +586,7 @@ pub async fn find_all_projects(pool: &PgPool) -> Result<Vec<ExistingProject>, an
             p.linkedin, 
             p.twitter, 
             p.category_id,
+            c.name AS category_name,
             STRING_AGG(t.name, '/') AS tags
         FROM 
             project p
@@ -588,8 +594,10 @@ pub async fn find_all_projects(pool: &PgPool) -> Result<Vec<ExistingProject>, an
             project_tag pt ON p.id = pt.project_id
         LEFT JOIN 
             tag t ON pt.tag_id = t.id
+        LEFT JOIN
+            category c ON p.category_id = c.id
         GROUP BY 
-            p.id
+            p.id, c.name
         "#
     )
     .fetch_all(pool)
@@ -616,6 +624,7 @@ pub async fn find_all_projects(pool: &PgPool) -> Result<Vec<ExistingProject>, an
             || Vec::new(),
             |tags| tags.split('/').map(|tag| tag.to_string()).collect(),
         ),
+        category_name: project.category_name,
     })
     .collect();
 
