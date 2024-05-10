@@ -13,7 +13,7 @@ export const FiltersBar: React.FC = () => {
             <div className="flex-1 flex flex-col items-start justify-start max-w-full">
               <div className="self-stretch flex flex-col items-start justify-start">
                 <div className="self-stretch rounded-lg bg-white shadow-[0px_1px_2px_rgba(16,_24,_40,_0.05)] flex flex-row items-center justify-start py-2 px-[13px] border-[1px] border-solid border-gray-300">
-                <div className="mq768:flex-grow mq1920:flex-1 flex flex-row items-center justify-start mq1920:box-border mq1920:pr-[292px] py-0 pl-0 gap-[8px] mq1920:max-w-full">
+                  <div className="mq768:flex-grow mq1920:flex-1 flex flex-row items-center justify-start mq1920:box-border py-0 pl-0 gap-[8px] mq1920:max-w-full">
                     <SearchIcon className="h-5 w-5 relative overflow-hidden shrink-0"/>
                     <input
                       className="mq768:w-[calc(100%_-_255px)] mq1920:w-[calc(100%_-_312px)] [border:none] [outline:none] font-text-md-regular text-base bg-[transparent] h-6 flex-1 relative leading-[24px] text-gray-500 text-left inline-block min-w-[31px] p-0"
