@@ -48,6 +48,8 @@ function scrollToTop() {
 const Opportunities: React.FC = () => {
   const [page, setPage] = useState<number>(0);
   const [maxPage, setMaxPage] = useState<number>(1);
+  const [filteredProjects, setFilteredProjects] = useState<Projects>([]);
+  const [search, setSearch] = useState<string>('');
   const itemsPerPage = 12;
 
   // Ensure that the query key and fetch function are passed as part of an options object
@@ -63,14 +65,25 @@ const Opportunities: React.FC = () => {
     setPage(pageNumber);
   };
 
-
   useEffect(() => {
-    if (projects) {
-      setMaxPage(Math.ceil(projects.length / itemsPerPage));
-    }
     console.log(projects);
   }
   , [projects]);
+
+  useEffect(() => {
+    if (projects) {
+      if (search === '') {
+        setMaxPage(Math.ceil(projects.length / itemsPerPage));
+        setFilteredProjects([...projects]);
+      } else {
+        const filtered = projects.filter((project) => project.name.toLowerCase().includes(search.toLowerCase()));
+        setFilteredProjects(filtered);
+        setMaxPage(Math.ceil(filtered.length / itemsPerPage));
+      }
+    }
+    setPage(0);
+  }
+  , [projects, search]);
 
   useEffect(() => {
     console.log(page);
@@ -85,12 +98,11 @@ const Opportunities: React.FC = () => {
       <ResponsiveHeader/>
       <ResponsiveWrapper minWidth="769px" tailwindClasses="self-stretch flex flex-row items-start justify-center py-0 px-5 box-border max-w-full">
         <ResponsiveWrapper minWidth="769px" tailwindClasses="w-[1696px] flex flex-col items-start justify-start gap-[32.5px] max-w-full mq950:gap-[16px]">
-          <FiltersBar/>
-          {isLoading ?  <div> Loading projects...</div>: <OpportunitiesContainerMobile projects={projects || []} itemsPerPage={itemsPerPage} currentPage={page} />}
+          <FiltersBar searchChange={setSearch}/>
+          {isLoading ?  <div> Loading projects...</div>: <OpportunitiesContainerMobile projects={filteredProjects || []} itemsPerPage={itemsPerPage} currentPage={page} />}
           {isLoading ? null : <Pagination currentPage={page} totalPages={maxPage} onPageChange={handlePageChange} />}
         </ResponsiveWrapper>
       </ResponsiveWrapper>
-
       <Footer />
     </div>
 

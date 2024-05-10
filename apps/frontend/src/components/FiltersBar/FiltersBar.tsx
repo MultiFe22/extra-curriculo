@@ -1,10 +1,14 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import FiltersLines from "../../assets/FiltersLines";
 import PlusSquare from "../../assets/PlusSquare";
 import SearchIcon from "../../assets/SearchIcon";
 // import XIcon from "../../assets/XIcon";
 
-export const FiltersBar: React.FC = () => {
+interface FiltersBarProps {
+  searchChange: (searchTerm: string) => void;
+}
+
+export const FiltersBar: React.FC<FiltersBarProps> = ({ searchChange }) => {
   const [searchTerm, setSearchTerm] = useState<string>('');
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -14,6 +18,7 @@ export const FiltersBar: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log(searchTerm);
+    searchChange(searchTerm);
   }
 
   return (
