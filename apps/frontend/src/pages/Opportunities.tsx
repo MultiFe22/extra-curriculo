@@ -24,7 +24,7 @@ export interface Project {
   picture: string;
   category_id: string;
   is_recruiting: boolean;
-  tags: string;
+  tags: string[];
 }
 
 export type Projects = Project[];

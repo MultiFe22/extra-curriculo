@@ -295,8 +295,9 @@ async fn get_project_returns_a_200_and_correct_fields_for_valid_uuid() {
     assert_eq!(returned_project["website"], new_project["website"]);
     assert_eq!(returned_project["category_id"], new_project["category_id"]);
     assert_eq!(
-        returned_project["tags"], "",
-        "The project tags should be an empty string"
+        returned_project["tags"],
+        serde_json::json!([]),
+        "The project tags should be an empty array"
     );
 }
 
@@ -447,11 +448,12 @@ async fn get_all_projects_returns_a_200_and_correct_project_details() {
     let mut project_names_expected: Vec<&str> = project_names.iter().cloned().collect();
     project_names_expected.sort_unstable();
 
-    // check if the project "tags" are an empty string
+    // check if the project "tags" are an empty array
     for project in projects {
         assert_eq!(
-            project["tags"], "",
-            "The project tags should be an empty string"
+            project["tags"],
+            serde_json::json!([]),
+            "The project tags should be an empty array"
         );
     }
 
@@ -894,7 +896,10 @@ async fn put_project_tags_returns_200_for_valid_tags() {
         let response_tag = app.post_tag(new_tag).await;
         assert_eq!(response_tag.status().as_u16(), 201);
 
-        let returned_uuid: Uuid = response_tag.json().await.expect("Failed to parse the response body");
+        let returned_uuid: Uuid = response_tag
+            .json()
+            .await
+            .expect("Failed to parse the response body");
         tag_ids.push(returned_uuid);
     }
 
@@ -906,7 +911,6 @@ async fn put_project_tags_returns_200_for_valid_tags() {
     let response = app.put_project_tags(project_id, updated_tags).await;
 
     assert_eq!(response.status().as_u16(), 200);
-
 }
 
 #[tokio::test]
@@ -950,7 +954,6 @@ async fn put_project_tags_returns_400_for_invalid_tags() {
     let response = app.put_project_tags(project_id, updated_tags).await;
 
     assert_eq!(response.status().as_u16(), 400);
-    
 }
 
 #[tokio::test]
@@ -967,15 +970,20 @@ async fn put_project_tags_returns_404_for_nonexistent_project() {
 
     assert_eq!(response_tag.status().as_u16(), 201);
 
-    let returned_uuid: Uuid = response_tag.json().await.expect("Failed to parse the response body");
+    let returned_uuid: Uuid = response_tag
+        .json()
+        .await
+        .expect("Failed to parse the response body");
 
     // create a json with the tag_ids
 
     let updated_tags = serde_json::json!({
         "tags": [returned_uuid]
     });
-    
-    let response = app.put_project_tags(nonexistent_project_id, updated_tags).await;
+
+    let response = app
+        .put_project_tags(nonexistent_project_id, updated_tags)
+        .await;
 
     assert_eq!(response.status().as_u16(), 404);
 }
@@ -1028,7 +1036,10 @@ async fn put_project_tags_persists_changes_in_database() {
         let response_tag = app.post_tag(new_tag).await;
         assert_eq!(response_tag.status().as_u16(), 201);
 
-        let returned_uuid: Uuid = response_tag.json().await.expect("Failed to parse the response body");
+        let returned_uuid: Uuid = response_tag
+            .json()
+            .await
+            .expect("Failed to parse the response body");
         tag_ids.push(returned_uuid);
     }
 
@@ -1050,7 +1061,7 @@ async fn put_project_tags_persists_changes_in_database() {
         .expect("Failed to parse the response body");
 
     assert_eq!(tags.len(), 3);
-    
+
     // // compare the uuids of the tags by transforming the two vector into hashsets, the output is a json that has only one array inside
 
     let tag_ids_from_response: HashSet<Uuid> = tags
@@ -1059,9 +1070,8 @@ async fn put_project_tags_persists_changes_in_database() {
         .collect();
 
     let tag_ids_expected: HashSet<Uuid> = tag_ids.iter().cloned().collect();
-    
-    assert_eq!(tag_ids_from_response, tag_ids_expected);
 
+    assert_eq!(tag_ids_from_response, tag_ids_expected);
 }
 
 #[tokio::test]
@@ -1100,7 +1110,7 @@ async fn put_project_deletes_and_adds_tags() {
     let new_tags = vec!["sustainability", "environment", "business"];
 
     // create a vec of uuids for the tags
-    
+
     let mut tag_ids = Vec::new();
 
     // loop through the new_tags and create them in the database
@@ -1112,12 +1122,15 @@ async fn put_project_deletes_and_adds_tags() {
         let response_tag = app.post_tag(new_tag).await;
         assert_eq!(response_tag.status().as_u16(), 201);
 
-        let returned_uuid: Uuid = response_tag.json().await.expect("Failed to parse the response body");
+        let returned_uuid: Uuid = response_tag
+            .json()
+            .await
+            .expect("Failed to parse the response body");
         tag_ids.push(returned_uuid);
     }
 
     // create a json with the tag_ids
-    
+
     let updated_tags = serde_json::json!({
         "tags": tag_ids
     });
@@ -1151,7 +1164,10 @@ async fn put_project_deletes_and_adds_tags() {
         let response_tag = app.post_tag(new_tag).await;
         assert_eq!(response_tag.status().as_u16(), 201);
 
-        let returned_uuid: Uuid = response_tag.json().await.expect("Failed to parse the response body");
+        let returned_uuid: Uuid = response_tag
+            .json()
+            .await
+            .expect("Failed to parse the response body");
         new_tag_ids.push(returned_uuid);
     }
 
@@ -1236,7 +1252,10 @@ async fn put_project_tags_fails_if_there_is_a_fatal_database_error() {
         let response_tag = app.post_tag(new_tag).await;
         assert_eq!(response_tag.status().as_u16(), 201);
 
-        let returned_uuid: Uuid = response_tag.json().await.expect("Failed to parse the response body");
+        let returned_uuid: Uuid = response_tag
+            .json()
+            .await
+            .expect("Failed to parse the response body");
         tag_ids.push(returned_uuid);
     }
 
@@ -1245,7 +1264,7 @@ async fn put_project_tags_fails_if_there_is_a_fatal_database_error() {
     let updated_tags = serde_json::json!({
         "tags": tag_ids
     });
-    
+
     // sabotage the database
     sqlx::query!("ALTER TABLE project_tag DROP COLUMN project_id;")
         .execute(&app.db_pool)
@@ -1307,7 +1326,10 @@ async fn put_project_tags_delete_all_tags() {
         let response_tag = app.post_tag(new_tag).await;
         assert_eq!(response_tag.status().as_u16(), 201);
 
-        let returned_uuid: Uuid = response_tag.json().await.expect("Failed to parse the response body");
+        let returned_uuid: Uuid = response_tag
+            .json()
+            .await
+            .expect("Failed to parse the response body");
         tag_ids.push(returned_uuid);
     }
 
@@ -1352,7 +1374,6 @@ async fn put_project_tags_delete_all_tags() {
         .expect("Failed to parse the response body");
 
     assert_eq!(tags.len(), 0);
-
 }
 
 #[tokio::test]
@@ -1424,5 +1445,4 @@ async fn get_project_tags_fails_if_there_is_a_fatal_database_error() {
     let project_tags = app.get_project_tags(Uuid::new_v4()).await;
 
     assert_eq!(project_tags.status().as_u16(), 500);
-
 }

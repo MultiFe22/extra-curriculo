@@ -298,7 +298,7 @@ pub async fn put_project_tags(
             "A project can have at most 10 tags.".to_string(),
         ));
     }
-    
+
     let _ = find_project_by_id(&pool, project_id)
         .await?
         .ok_or(ProjectError::NotFound)?;
@@ -468,7 +468,7 @@ pub struct ExistingProject {
     pub picture: String,
     pub category_id: Uuid,
     pub is_recruiting: bool,
-    pub tags: String,
+    pub tags: Vec<String>,
 }
 
 #[tracing::instrument(
@@ -522,6 +522,12 @@ pub async fn find_project_by_id(
         None => return Ok(None),
     };
 
+    // parse the tags string into a Vec<String>
+    let tags: Vec<String> = project
+        .tags
+        .map(|tags| tags.split('/').map(|tag| tag.to_string()).collect())
+        .unwrap_or_else(Vec::new);
+
     Ok(Some(ExistingProject {
         id: project.id,
         name: project.name,
@@ -539,7 +545,7 @@ pub async fn find_project_by_id(
         picture: project.picture.unwrap_or("".to_string()),
         category_id: project.category_id,
         is_recruiting: project.is_recruiting,
-        tags: project.tags.unwrap_or("".to_string()),
+        tags,
     }))
 }
 
@@ -606,7 +612,10 @@ pub async fn find_all_projects(pool: &PgPool) -> Result<Vec<ExistingProject>, an
         picture: project.picture.unwrap_or("".to_string()),
         category_id: project.category_id,
         is_recruiting: project.is_recruiting,
-        tags: project.tags.unwrap_or("".to_string()),
+        tags: project.tags.map_or_else(
+            || Vec::new(),
+            |tags| tags.split('/').map(|tag| tag.to_string()).collect(),
+        ),
     })
     .collect();
 
