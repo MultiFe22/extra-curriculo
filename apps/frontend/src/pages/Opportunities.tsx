@@ -6,6 +6,7 @@ import { Pagination } from "../components/Pagination";
 import { ResponsiveHeader } from "../components/ResponsiveHeader";
 import { ResponsiveWrapper } from "../components/ResponsiveWrapper";
 import { useEffect, useState } from "react";
+import { FilterModal } from "../components/FilterModal";
 
 export interface Project {
   id: string;
@@ -95,7 +96,7 @@ const Opportunities: React.FC = () => {
 
   return (
     <div className="w-full relative bg-gray-50 flex flex-col items-start justify-start mq1425:gap-[48px] mq768:gap-[24px] mq1920:gap-[96px] leading-[normal] tracking-[normal] text-left text-xs text-gray-900 font-text-md-regular">
-      <ResponsiveHeader/>
+      {/* <ResponsiveHeader/>
       <ResponsiveWrapper minWidth="769px" tailwindClasses="self-stretch flex flex-row items-start justify-center py-0 px-5 box-border max-w-full">
         <ResponsiveWrapper minWidth="769px" tailwindClasses="w-[1696px] flex flex-col items-start justify-start gap-[32.5px] max-w-full mq950:gap-[16px]">
           <FiltersBar searchChange={setSearch}/>
@@ -103,7 +104,9 @@ const Opportunities: React.FC = () => {
           {isLoading ? null : <Pagination currentPage={page} totalPages={maxPage} onPageChange={handlePageChange} />}
         </ResponsiveWrapper>
       </ResponsiveWrapper>
-      <Footer />
+      <Footer /> */}
+
+      <FilterModal />
     </div>
 
   );
