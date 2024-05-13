@@ -1,4 +1,3 @@
-import Divider from "../../assets/Divider";
 import XIcon from "../../assets/XIcon";
 
 export const ModalHeader: React.FC = () => {
@@ -15,13 +14,9 @@ export const ModalHeader: React.FC = () => {
               Filtros
             </h2>
           </div>
-          <div style={{ width: 24 }}></div> {/* Placeholder for keeping the header balanced */}
+          <div style={{ width: 40 }}></div> {/* Placeholder for keeping the header balanced */}
         </div>
-        <div className="h-px bg-white flex flex-row items-start justify-start relative max-w-full shrink-0">
-          <div className="w-[1920px] !m-[0] absolute h-full top-[0px] bottom-[0px] left-[calc(50%_-_640px)] flex flex-col items-start justify-start py-0 px-8 box-border">
-            <Divider className="w-full" />
-          </div>
-        </div>
+        <div className="h-px w-screen bg-[#EAECF0] -ml-6 flex flex-row items-start justify-start relative max-w-screen shrink-0"/>
       </header>
     );
   };

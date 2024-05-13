@@ -1,6 +1,5 @@
 import Atom01 from "../../assets/Atom01"
 import Building07 from "../../assets/Building07"
-import Divider from "../../assets/Divider";
 import Globe04 from "../../assets/Globe04"
 import Trophy from "../../assets/Trophy"
 
@@ -47,11 +46,8 @@ export const CategoryFilter: React.FC = () => {
             </div>
           </button>
         </div>
-        <div className="self-stretch bg-white flex flex-row items-start justify-center py-0 px-0 box-border max-w-full">
-          <div className="w-[1280px] flex flex-col items-start justify-start py-0 px-8 box-border max-w-[392%] shrink-0">
-              <Divider className="w-full" />
-          </div>
-        </div>
+        <div className="h-px w-full bg-[#EAECF0] flex flex-row items-start justify-start relative max-w-full shrink-0"/>
+
       </div>
     </section>
   );
