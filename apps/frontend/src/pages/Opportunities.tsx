@@ -116,10 +116,11 @@ const Opportunities: React.FC = () => {
       <Footer />
       {isModalOpen ? <Backdrop /> : null}
       {isModalOpen && (
-        <div className="fixed overflow-auto mq1920:inset-x-48 mq1920:inset-y-36  mq768:top-7 mq768:left-0 mq768:right-0 mq768:bottom-0 z-50">
-          <FilterModal handleOpenClose={handleModalOpenClose}/>
+        <div className="fixed overflow-auto mq1920:inset-x-48 mq1920:inset-y-36 mq768:top-7 mq768:left-0 mq768:right-0 mq768:bottom-0 z-50 animate-slideUp">
+          <FilterModal handleOpenClose={handleModalOpenClose} />
         </div>
       )}
+
 
     </div>
 
