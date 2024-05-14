@@ -12,7 +12,7 @@ export const CategoryFilter: React.FC = () => {
             Categoria
           </h3>
         </div>
-        <div className="self-stretch flex flex-row flex-wrap items-start justify-start py-0 pr-[27px] pl-0 box-border gap-[16px] min-h-[152px]">
+        <div className="self-stretch flex flex-row flex-wrap items-start justify-start py-0 pr-[27px] pl-0 box-border gap-[16px] ">
           <button className="cursor-pointer [border:none] p-0 bg-[transparent] rounded-lg flex flex-row items-start justify-start">
             <div className="shadow-[0px_1px_2px_rgba(16,_24,_40,_0.05)] rounded-lg bg-white overflow-hidden flex flex-row items-center justify-center py-2 px-[15px] gap-[8px] whitespace-nowrap border-[1px] border-solid border-gray-300">
               <Trophy className="h-5 w-5 relative overflow-hidden shrink-0 min-h-[20px] stroke-[#344054]"/>

@@ -16,7 +16,7 @@ export const ModalHeader: React.FC = () => {
           </div>
           <div style={{ width: 40 }}></div> {/* Placeholder for keeping the header balanced */}
         </div>
-        <div className="h-px w-screen bg-[#EAECF0] -ml-6 flex flex-row items-start justify-start relative max-w-screen shrink-0"/>
+        <div className="h-px bg-[#EAECF0] w-[calc(100%+1.5rem)] -ml-6 flex flex-row items-start justify-start relative max-w-screen shrink-0"/>
       </header>
     );
   };
