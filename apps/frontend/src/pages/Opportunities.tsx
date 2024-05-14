@@ -54,6 +54,7 @@ const Opportunities: React.FC = () => {
   const [maxPage, setMaxPage] = useState<number>(1);
   const [filteredProjects, setFilteredProjects] = useState<Projects>([]);
   const [search, setSearch] = useState<string>('');
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const itemsPerPage = 12;
 
   // Ensure that the query key and fetch function are passed as part of an options object
@@ -68,6 +69,10 @@ const Opportunities: React.FC = () => {
     }
     setPage(pageNumber);
   };
+
+  const handleModalOpenClose = (action: boolean) => {
+    setIsModalOpen(action);
+  }
 
   useEffect(() => {
     console.log(projects);
@@ -103,16 +108,18 @@ const Opportunities: React.FC = () => {
       <ResponsiveHeader/>
       <ResponsiveWrapper minWidth="769px" tailwindClasses="self-stretch flex flex-row items-start justify-center py-0 px-5 box-border max-w-full">
         <ResponsiveWrapper minWidth="769px" tailwindClasses="w-[1696px] flex flex-col items-start justify-start gap-[32.5px] max-w-full mq950:gap-[16px]">
-          <FiltersBar searchChange={setSearch}/>
+          <FiltersBar handleOpenClose={handleModalOpenClose} searchChange={setSearch}/>
           {isLoading ?  <div> Loading projects...</div>: <OpportunitiesContainerMobile projects={filteredProjects || []} itemsPerPage={itemsPerPage} currentPage={page} />}
           {isLoading ? null : <Pagination currentPage={page} totalPages={maxPage} onPageChange={handlePageChange} />}
         </ResponsiveWrapper>
       </ResponsiveWrapper>
       <Footer />
-      <Backdrop />
-      <div className="fixed overflow-auto mq1920:inset-x-48 mq1920:inset-y-36  mq768:top-7 mq768:left-0 mq768:right-0 mq768:bottom-0 z-50">
-        <FilterModal />
-      </div>
+      {isModalOpen ? <Backdrop /> : null}
+      {isModalOpen && (
+        <div className="fixed overflow-auto mq1920:inset-x-48 mq1920:inset-y-36  mq768:top-7 mq768:left-0 mq768:right-0 mq768:bottom-0 z-50">
+          <FilterModal handleOpenClose={handleModalOpenClose}/>
+        </div>
+      )}
 
     </div>
 

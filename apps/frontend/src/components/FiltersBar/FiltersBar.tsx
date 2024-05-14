@@ -6,9 +6,10 @@ import SearchIcon from "../../assets/SearchIcon";
 
 interface FiltersBarProps {
   searchChange: (searchTerm: string) => void;
+  handleOpenClose: (modalOpen: boolean) => void;
 }
 
-export const FiltersBar: React.FC<FiltersBarProps> = ({ searchChange }) => {
+export const FiltersBar: React.FC<FiltersBarProps> = ({ searchChange, handleOpenClose }) => {
   const [searchTerm, setSearchTerm] = useState<string>('');
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -52,7 +53,7 @@ export const FiltersBar: React.FC<FiltersBarProps> = ({ searchChange }) => {
             </div>
           </div>
           <div className="mq768:flex-1 flex mq768:flex-col mq768:self-stretch mq768:max-w-full mq1920:flex-col mq1920:items-start mq1920:justify-start mq1920:pt-0.5 mq1920:px-0 mq1920:pb-0">
-            <button className="cursor-pointer [border:none] p-0 bg-[transparent] mq768:self-stretch rounded-lg flex flex-row items-start justify-start mq768:max-w-full">
+            <button onClick={() => handleOpenClose(true)} className="cursor-pointer [border:none] p-0 bg-[transparent] mq768:self-stretch rounded-lg flex flex-row items-start justify-start mq768:max-w-full">
               <div className="mq768:flex-1 rounded-lg bg-white shadow-[0px_1px_2px_rgba(16,_24,_40,_0.05)] mq768:box-border overflow-hidden flex flex-row items-start justify-center py-2 mq768:px-5 mq1920:px-[15px] gap-[8px] mq768:whitespace-nowrap mq768:max-w-full border-[1px] border-solid border-gray-300">
                 <FiltersLines className="h-5 w-5 relative overflow-hidden shrink-0 min-h-[20px]" />
                 <div className="relative text-sm leading-[20px] font-semibold font-text-md-regular text-gray-700 text-left inline-block mq768:min-w-[83px] mq1920:min-w-[43px]">
