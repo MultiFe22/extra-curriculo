@@ -37,6 +37,13 @@ export interface Category {
   name: string;
 }
 
+export interface Tag {
+  id: string;
+  name: string;
+}
+
+export type Tags = Tag[];
+
 export type Categories = Category[];
 
 export type Projects = Project[];
@@ -55,6 +62,14 @@ async function fetchCategories(): Promise<Categories> {
     throw new Error('Failed to fetch categories');
   }
   
+  return response.json();
+}
+
+async function fetchTags(): Promise<Tags> {
+  const response = await fetch('http://127.0.0.1:8000/tags');
+  if (!response.ok) {
+    throw new Error('Failed to fetch tags');
+  }
   return response.json();
 }
 
@@ -82,6 +97,11 @@ const Opportunities: React.FC = () => {
   const { data: categories, error: errorCategories, isLoading: isCategoriesLoading  } = useQuery<Categories, Error>({
     queryKey: ['categories'],
     queryFn: fetchCategories,
+  });
+
+  const { data: tags, error: errorTags, isLoading: isTagsLoading } = useQuery<Tags, Error>({
+    queryKey: ['tags'],
+    queryFn: fetchTags,
   });
 
   const handlePageChange = (pageNumber: number) => {
@@ -125,10 +145,11 @@ const Opportunities: React.FC = () => {
   useEffect(() => {
     console.log(categories);
     console.log(isCategoriesLoading)
+    console.log(isTagsLoading)
   }
   , [categories]);
 
-  if (errorProjects instanceof Error || errorCategories instanceof Error) return <div>Error</div>;
+  if (errorProjects instanceof Error || errorCategories instanceof Error || errorTags instanceof Error) return <div>Error</div>;
 
   return (
     <div className="w-full relative bg-gray-50 flex flex-col items-start justify-start mq1425:gap-[48px] mq768:gap-[24px] mq1920:gap-[96px] leading-[normal] tracking-[normal] text-left text-xs text-gray-900 font-text-md-regular">
@@ -144,7 +165,7 @@ const Opportunities: React.FC = () => {
       {isModalOpen ? <Backdrop /> : null}
       {isModalOpen && (
         <div className="fixed overflow-auto mq1920:inset-x-48 mq1920:inset-y-36 mq768:top-7 mq768:left-0 mq768:right-0 mq768:bottom-0 z-50 animate-slideUp">
-          <FilterModal handleOpenClose={handleModalOpenClose} categories={categories || []} modalities={["Presencial", "Híbrido", "Remoto"]}/>
+          <FilterModal handleOpenClose={handleModalOpenClose} categories={categories || []} modalities={["Presencial", "Híbrido", "Remoto"]} tags={tags || []}/>
         </div>
       )}
 
