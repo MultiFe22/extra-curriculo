@@ -65,7 +65,7 @@ export const FiltersBar: React.FC<FiltersBarProps> = ({ searchChange, handleOpen
 
         </div>
       
-        <button className="cursor-pointer mq768:self-stretch rounded-lg flex flex-row items-start justify-start text-slateblue">
+        <button className="cursor-pointer bg-transparent mq768:self-stretch rounded-lg flex flex-row items-start justify-start text-slateblue">
           <div className="mq768:flex-1 shadow-[0px_1px_2px_rgba(16,_24,_40,_0.05)] rounded-lg bg-brand-50 overflow-hidden flex flex-row items-center justify-center mq768:py-2.5 mq768:px-4 mq1920:py-2 mq1920:px-[15px] mq1920:whitespace-nowrap gap-[8px] border-[1px] border-solid border-brand-50">
             <PlusSquare className="w-5 relative h-5 overflow-hidden shrink-0 mq1920: min-h-[20px]"/>
             <div className="relative leading-[20px] mq1920:text-sm font-semibold mq1920:font-text-md-regular mq1920:text-left">
