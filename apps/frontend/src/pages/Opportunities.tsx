@@ -32,6 +32,13 @@ export interface Project {
   category_name: string;
 }
 
+export interface Category {
+  id: string;
+  name: string;
+}
+
+export type Categories = Category[];
+
 export type Projects = Project[];
 
 async function fetchProjects(): Promise<Projects> {
@@ -39,6 +46,15 @@ async function fetchProjects(): Promise<Projects> {
   if (!response.ok) {
     throw new Error('Failed to fetch projects');
   }
+  return response.json();
+}
+
+async function fetchCategories(): Promise<Categories> {
+  const response = await fetch('http://127.0.0.1:8000/categories');
+  if (!response.ok) {
+    throw new Error('Failed to fetch categories');
+  }
+  
   return response.json();
 }
 
@@ -58,9 +74,14 @@ const Opportunities: React.FC = () => {
   const itemsPerPage = 12;
 
   // Ensure that the query key and fetch function are passed as part of an options object
-  const { data: projects, error, isLoading } = useQuery<Projects, Error>({
+  const { data: projects, error: errorProjects, isLoading: isProjectsLoading } = useQuery<Projects, Error>({
     queryKey: ['projects'],
     queryFn: fetchProjects,
+  });
+
+  const { data: categories, error: errorCategories, isLoading: isCategoriesLoading  } = useQuery<Categories, Error>({
+    queryKey: ['categories'],
+    queryFn: fetchCategories,
   });
 
   const handlePageChange = (pageNumber: number) => {
@@ -72,6 +93,7 @@ const Opportunities: React.FC = () => {
 
   const handleModalOpenClose = (action: boolean) => {
     setIsModalOpen(action);
+    document.body.style.overflow = action ? 'hidden' : 'auto';
   }
 
   useEffect(() => {
@@ -100,8 +122,13 @@ const Opportunities: React.FC = () => {
   }
   , [page]);
 
-  if (error instanceof Error) return <div>Error: {error.message}</div>;
-  document.body.style.overflow = 'hidden';
+  useEffect(() => {
+    console.log(categories);
+    console.log(isCategoriesLoading)
+  }
+  , [categories]);
+
+  if (errorProjects instanceof Error || errorCategories instanceof Error) return <div>Error</div>;
 
   return (
     <div className="w-full relative bg-gray-50 flex flex-col items-start justify-start mq1425:gap-[48px] mq768:gap-[24px] mq1920:gap-[96px] leading-[normal] tracking-[normal] text-left text-xs text-gray-900 font-text-md-regular">
@@ -109,15 +136,15 @@ const Opportunities: React.FC = () => {
       <ResponsiveWrapper minWidth="769px" tailwindClasses="self-stretch flex flex-row items-start justify-center py-0 px-5 box-border max-w-full">
         <ResponsiveWrapper minWidth="769px" tailwindClasses="w-[1696px] flex flex-col items-start justify-start gap-[32.5px] max-w-full mq950:gap-[16px]">
           <FiltersBar handleOpenClose={handleModalOpenClose} searchChange={setSearch}/>
-          {isLoading ?  <div> Loading projects...</div>: <OpportunitiesContainerMobile projects={filteredProjects || []} itemsPerPage={itemsPerPage} currentPage={page} />}
-          {isLoading ? null : <Pagination currentPage={page} totalPages={maxPage} onPageChange={handlePageChange} />}
+          {isProjectsLoading ?  <div> Loading projects...</div>: <OpportunitiesContainerMobile projects={filteredProjects || []} itemsPerPage={itemsPerPage} currentPage={page} />}
+          {isProjectsLoading ? null : <Pagination currentPage={page} totalPages={maxPage} onPageChange={handlePageChange} />}
         </ResponsiveWrapper>
       </ResponsiveWrapper>
       <Footer />
       {isModalOpen ? <Backdrop /> : null}
       {isModalOpen && (
         <div className="fixed overflow-auto mq1920:inset-x-48 mq1920:inset-y-36 mq768:top-7 mq768:left-0 mq768:right-0 mq768:bottom-0 z-50 animate-slideUp">
-          <FilterModal handleOpenClose={handleModalOpenClose} />
+          <FilterModal handleOpenClose={handleModalOpenClose} categories={categories || []} modalities={["Presencial", "Híbrido", "Remoto"]}/>
         </div>
       )}
 

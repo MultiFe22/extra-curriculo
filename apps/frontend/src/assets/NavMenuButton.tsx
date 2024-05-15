@@ -1,9 +1,6 @@
-interface NavMenuButtonProps {
-    className?: string;  // Optional string for Tailwind CSS classes
-}
+import { SvgProps } from "./svgInterface";
 
-
-export const NavMenuButton: React.FC<NavMenuButtonProps> = ({ className }) => {
+export const NavMenuButton: React.FC<SvgProps> = ({ className }) => {
     return (
 
 <svg className={`${className}`} width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">

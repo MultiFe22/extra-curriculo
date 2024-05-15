@@ -1,9 +1,6 @@
-interface LogotypeProps {
-    className?: string;  // Optional string for Tailwind CSS classes
-  }
-  
+import { SvgProps } from "./svgInterface";
 
-export const Logotype: React.FC<LogotypeProps> = ({ className }) => {
+export const Logotype: React.FC<SvgProps> = ({ className }) => {
     return (
 <svg className={`${className}`} width="100" height="26" viewBox="0 0 100 26" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M9.12982 22.2468C3.26429 22.2468 0.0209961 18.555 0.0209961 13.3795C0.0209961 8.20404 3.3333 4.51221 8.54327 4.51221C14.3743 4.51221 16.893 8.41106 16.893 12.5169C16.893 13.345 16.824 14.6216 16.7205 15.0357H5.78302C6.16255 16.6918 7.50818 17.2784 9.23333 17.2784C10.924 17.2784 12.1661 16.7953 12.8217 15.3117L16.5825 18.9C15.2714 20.5907 13.0287 22.2468 9.12982 22.2468ZM8.57777 9.13563C6.88712 9.13563 5.81752 10.0327 5.67951 11.8269H11.338C11.2345 10.1017 10.4409 9.13563 8.57777 9.13563Z" fill="#101828"/>

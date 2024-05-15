@@ -15,18 +15,19 @@ export type ProjectCardType = {
 
 interface TagButtonProps {
   name: string;
-  color: string;
+  txtColor: string;
+  bgColor: string;
   Icon?: React.ReactNode;
 }
 
-const TagButton: React.FC<TagButtonProps> = ({ name, color, Icon }) => {
+const TagButton: React.FC<TagButtonProps> = ({ name, txtColor, bgColor, Icon }) => {
   const minW = name.length * 6;
   
   return (
     <button className="cursor-pointer [border:none] p-0 bg-[transparent] flex flex-row items-start justify-start mix-blend-multiply">
-      <div className={`rounded-2xl bg-${color}-50 flex flex-row items-center justify-center py-0.5 pr-2 pl-1.5 gap-[4px]`}>
+      <div style={{ backgroundColor: bgColor }} className={`rounded-2xl flex flex-row items-center justify-center py-0.5 pr-2 pl-1.5 gap-[4px]`}>
         {Icon}
-        <div className={`relative text-xs leading-[18px] font-medium font-text-md-regular text-${color}-700 text-center inline-block min-w-[${minW}px]`}>
+        <div style={{color: txtColor}} className={`relative text-xs leading-[18px] font-medium font-text-md-regular text-center inline-block min-w-[${minW}px]`}>
           {name}
         </div>
       </div>
@@ -35,8 +36,8 @@ const TagButton: React.FC<TagButtonProps> = ({ name, color, Icon }) => {
 };
 
 export const ProjectCard: React.FC<ProjectCardType> = ({ image, name, tags, category, modality }) => {
-  const tagColors = ["blue-light", "pink", "orange", "blue-gray", "purple", "gray"];
-  
+  const tagBgColors = ["#f0f9ff", "#fdf2fa", "#fff6ed", "#f8f9fc", "#f4f3ff", "#f9fafb", "#f7fee7", "#fef2f2", "#fefce8", "#ecfeff"];
+  const tagTxtColor = ["#026aa2", "#c11574", "#c4320a", "#363e72", "#5925dc", "#344154", "#4ade80", "#b91c1c", "#b45309", "#0ea5e9"];
   return (
     <section className="mq1920:flex-1 mq768:flex-1 mq375:self-stretch rounded-lg flex flex-col items-center mq375:min-w-[280px] mq768:min-w-[323px] justify-start gap-[24px] mq1920:min-w-[406px] mq768:max-w-full mq1920:max-w-full text-left text-sm text-slateblue font-text-md-regular">
       <img
@@ -59,10 +60,10 @@ export const ProjectCard: React.FC<ProjectCardType> = ({ image, name, tags, cate
             </div>
           </div>
           <div className="self-stretch flex flex-row flex-wrap items-start justify-start py-0 mq375:pr-[81px] mq768:pr-[78px] pl-0 mq650:pr-[39px] mq1920:pr-[47px] mq650:box-border gap-[10px] min-h-[54px] text-center text-xs text-gray-700">
-            <TagButton name={modality} color="pink" Icon={<Building07 className="h-3 w-3 relative overflow-hidden shrink-0 stroke-[#EE46BC]" />} />
-            <TagButton name={category} color="blue-light" Icon={<Atom01 className="h-3 w-3 relative overflow-hidden shrink-0 stroke-[#0BA5EC]" />} />
+            <TagButton name={modality} bgColor={tagBgColors[1]} txtColor={tagTxtColor[1]} Icon={<Building07 className="h-3 w-3 relative overflow-hidden shrink-0 stroke-[#EE46BC]" />} />
+            <TagButton name={category} bgColor={tagBgColors[0]} txtColor={tagTxtColor[0]} Icon={<Atom01 className="h-3 w-3 relative overflow-hidden shrink-0 stroke-[#0BA5EC]" />} />
             {tags.map((tag, index) => (
-              <TagButton key={index} name={tag} color={tagColors[index%tagColors.length]} />
+              <TagButton key={index} name={tag} txtColor={tagTxtColor[index%tagTxtColor.length]} bgColor={tagBgColors[index%tagTxtColor.length]}  />
             ))}
           </div>
         </div>

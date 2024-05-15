@@ -1,7 +1,6 @@
-interface LogomarkProps {
-    className?: string;  // Optional string for Tailwind CSS classes
-}
-export const Logomark: React.FC<LogomarkProps> = ({ className }) => {
+import { SvgProps } from "./svgInterface";
+
+export const Logomark: React.FC<SvgProps> = ({ className }) => {
     return (
 <svg className={`${className}`} width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
 <rect width="32" height="32" rx="8" fill="#6941C6"/>

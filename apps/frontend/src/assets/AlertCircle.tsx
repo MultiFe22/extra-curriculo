@@ -1,8 +1,6 @@
-interface AlertCircleProps {
-    className?: string;  // Optional string for Tailwind CSS classes
-}
+import { SvgProps } from "./svgInterface";
 
-export const AlertCircle: React.FC<AlertCircleProps> = ({ className }) => {
+export const AlertCircle: React.FC<SvgProps> = ({ className }) => {
     return (
         <svg className={`${className}`} width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
         <g clipPath="url(#clip0_894_4140)">
