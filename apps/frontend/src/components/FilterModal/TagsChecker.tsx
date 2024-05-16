@@ -22,7 +22,7 @@ export const TagsChecker: React.FC<TagsCheckerProps> = ({ tags }) => {
                 <div className="tags-container self-stretch grid mq768:grid-cols-1 mq1920:grid-cols-2 gap-x-36 gap-y-4 text-sm text-gray-700">
                     {tagsToShow.map((tag, index) => (
                         <div key={index} className="tag-item flex flex-row items-start justify-start gap-[8px]">
-                            <input className="m-0 h-[18px] w-4" type="checkbox" />
+                            <input className="m-0 h-[18px] w-4 accent-brand-600" type="checkbox" />
                             <div className="relative leading-[20px] font-medium inline-block">
                                 {tag}
                             </div>
