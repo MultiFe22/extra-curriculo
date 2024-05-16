@@ -15,7 +15,7 @@ export const ModalHeader: React.FC<ModalHeaderProps> = ({
           className="cursor-pointer rounded-lg bg-white flex flex-row items-start justify-start"
         >
           <div className="rounded-lg overflow-hidden flex flex-row items-center justify-center p-2">
-            <XIcon className="h-5 w-5 relative overflow-hidden shrink-0" />
+            <XIcon className="h-5 w-5 relative overflow-hidden shrink-0 stroke-gray-600" />
           </div>
         </button>
         <div className="flex flex-col items-start justify-start pt-0.5 px-0 pb-0">

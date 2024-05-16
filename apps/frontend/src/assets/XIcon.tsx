@@ -12,7 +12,7 @@ export const XIcon: React.FC<SvgProps> = ({ className }) => {
     >
       <path
         d="M9 3L3 9M3 3L9 9"
-        stroke="#9E77ED"
+        stroke={className ? undefined : "#9E77ED"}
         strokeWidth="1.5"
         strokeLinecap="round"
         strokeLinejoin="round"
