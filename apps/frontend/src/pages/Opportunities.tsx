@@ -84,7 +84,8 @@ const Opportunities: React.FC = () => {
   const modalities = ["Presencial", "Híbrido", "Remoto"];
   const [page, setPage] = useState<number>(0);
   const [maxPage, setMaxPage] = useState<number>(1);
-  const [filteredProjects, setFilteredProjects] = useState<Projects>([]);
+  const [nameFilteredProjects, setNameFilteredProjects] = useState<Projects>([]);
+  const [modalFilteredProjects, setModalFilteredProjects] = useState<Projects>([]);
   const [search, setSearch] = useState<string>("");
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const itemsPerPage = 12;
@@ -182,6 +183,59 @@ const Opportunities: React.FC = () => {
   }, [tags]);
 
   useEffect(() => {
+    // loop through nameFilteredProjects and filter by selected categories, modalities and tags
+    const filteredProjects = nameFilteredProjects.filter((project) => {
+      // loop through each saved type of filter, check if all of them are false
+      
+      const selectedCategoriesArray = Object.keys(savedSelectedCategories).filter(
+        (key) => savedSelectedCategories[key],
+      );
+
+      const selectedModalitiesArray = Object.keys(savedSelectedModalities).filter(
+        (key) => savedSelectedModalities[key],
+      );
+
+      const selectedTagsArray = Object.keys(savedSelectedTags).filter(
+        (key) => savedSelectedTags[key],
+      );
+
+      if (
+        selectedCategoriesArray.length === 0 &&
+        selectedModalitiesArray.length === 0 &&
+        selectedTagsArray.length === 0
+      ) {
+        return true;
+      }
+
+      let categoryMatch = selectedCategoriesArray.length === 0 ? true : false;
+
+      let modalityMatch = selectedModalitiesArray.length === 0 ? true : false;
+
+      let tagMatch = selectedTagsArray.length === 0 ? true : false;
+
+      if (selectedCategoriesArray.length > 0) {
+        categoryMatch = selectedCategoriesArray.includes(project.category_name);
+      }
+
+      if (selectedModalitiesArray.length > 0) {
+        modalityMatch = selectedModalitiesArray.includes(project.modality);
+      }
+
+      if (selectedTagsArray.length > 0) {
+        tagMatch = selectedTagsArray.some((tag) =>
+          project.tags.includes(tag),
+        );
+      }
+
+      return categoryMatch && modalityMatch && tagMatch;
+
+    }
+    );
+    setModalFilteredProjects(filteredProjects);
+  }
+  , [savedSelectedCategories, savedSelectedModalities, savedSelectedTags, nameFilteredProjects]);
+
+  useEffect(() => {
     console.log(selectedCategories);
   }, [selectedCategories]);
 
@@ -223,12 +277,12 @@ const Opportunities: React.FC = () => {
     if (projects) {
       if (search === "") {
         setMaxPage(Math.ceil(projects.length / itemsPerPage));
-        setFilteredProjects([...projects]);
+        setNameFilteredProjects([...projects]);
       } else {
         const filtered = projects.filter((project) =>
           project.name.toLowerCase().includes(search.toLowerCase()),
         );
-        setFilteredProjects(filtered);
+        setNameFilteredProjects(filtered);
         setMaxPage(Math.ceil(filtered.length / itemsPerPage));
       }
     }
@@ -276,7 +330,7 @@ const Opportunities: React.FC = () => {
             <div> Loading projects...</div>
           ) : (
             <OpportunitiesContainerMobile
-              projects={filteredProjects || []}
+              projects={modalFilteredProjects || []}
               itemsPerPage={itemsPerPage}
               currentPage={page}
             />
