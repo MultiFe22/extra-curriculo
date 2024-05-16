@@ -8,8 +8,7 @@ export const ModalActions: React.FC<ModalActionsProps> = ({
   handleOpenClose,
 }) => {
   const handleRemoveFilters = () => {
-    clearAllFilters();
-    handleOpenClose(false, true);
+    clearAllFilters(); // this is triggering the filters and it only closes the modal through the useEffect
   };
 
   const handleApplyFilters = () => {

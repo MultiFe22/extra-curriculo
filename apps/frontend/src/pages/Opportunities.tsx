@@ -84,10 +84,15 @@ const Opportunities: React.FC = () => {
   const modalities = ["Presencial", "Híbrido", "Remoto"];
   const [page, setPage] = useState<number>(0);
   const [maxPage, setMaxPage] = useState<number>(1);
-  const [nameFilteredProjects, setNameFilteredProjects] = useState<Projects>([]);
-  const [modalFilteredProjects, setModalFilteredProjects] = useState<Projects>([]);
+  const [nameFilteredProjects, setNameFilteredProjects] = useState<Projects>(
+    [],
+  );
+  const [modalFilteredProjects, setModalFilteredProjects] = useState<Projects>(
+    [],
+  );
   const [search, setSearch] = useState<string>("");
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [filtersCleared, setFiltersCleared] = useState(false);
   const itemsPerPage = 12;
 
   // Ensure that the query key and fetch function are passed as part of an options object
@@ -156,6 +161,8 @@ const Opportunities: React.FC = () => {
         {},
       ),
     );
+
+    setFiltersCleared(true);
   }
 
   useEffect(() => {
@@ -186,14 +193,14 @@ const Opportunities: React.FC = () => {
     // loop through nameFilteredProjects and filter by selected categories, modalities and tags
     const filteredProjects = nameFilteredProjects.filter((project) => {
       // loop through each saved type of filter, check if all of them are false
-      
-      const selectedCategoriesArray = Object.keys(savedSelectedCategories).filter(
-        (key) => savedSelectedCategories[key],
-      );
 
-      const selectedModalitiesArray = Object.keys(savedSelectedModalities).filter(
-        (key) => savedSelectedModalities[key],
-      );
+      const selectedCategoriesArray = Object.keys(
+        savedSelectedCategories,
+      ).filter((key) => savedSelectedCategories[key]);
+
+      const selectedModalitiesArray = Object.keys(
+        savedSelectedModalities,
+      ).filter((key) => savedSelectedModalities[key]);
 
       const selectedTagsArray = Object.keys(savedSelectedTags).filter(
         (key) => savedSelectedTags[key],
@@ -222,18 +229,19 @@ const Opportunities: React.FC = () => {
       }
 
       if (selectedTagsArray.length > 0) {
-        tagMatch = selectedTagsArray.some((tag) =>
-          project.tags.includes(tag),
-        );
+        tagMatch = selectedTagsArray.some((tag) => project.tags.includes(tag));
       }
 
       return categoryMatch && modalityMatch && tagMatch;
-
-    }
-    );
+    });
     setModalFilteredProjects(filteredProjects);
-  }
-  , [savedSelectedCategories, savedSelectedModalities, savedSelectedTags, nameFilteredProjects]);
+    setMaxPage(Math.ceil(filteredProjects.length / itemsPerPage));
+  }, [
+    savedSelectedCategories,
+    savedSelectedModalities,
+    savedSelectedTags,
+    nameFilteredProjects,
+  ]);
 
   useEffect(() => {
     console.log(selectedCategories);
@@ -268,6 +276,15 @@ const Opportunities: React.FC = () => {
       setSavedSelectedTags({ ...selectedTags });
     }
   };
+
+  // this should happen when the filters are cleared through the modal
+  useEffect(() => {
+    if (filtersCleared) {
+      handleModalOpenClose(false, true);
+      setFiltersCleared(false); // reset the flag
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filtersCleared]);
 
   useEffect(() => {
     console.log(projects);
