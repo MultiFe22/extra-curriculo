@@ -14,8 +14,12 @@ interface FilterModalProps {
   setSelectedModalities: (
     value: React.SetStateAction<Record<string, boolean>>,
   ) => void;
+  setSelectedTags: (
+    value: React.SetStateAction<Record<string, boolean>>,
+  ) => void;
   selectedCategories: Record<string, boolean>;
   selectedModalities: Record<string, boolean>;
+  selectedTags: Record<string, boolean>;
   tags: Tags;
 }
 
@@ -26,8 +30,10 @@ export const FilterModal: React.FC<FilterModalProps> = ({
   tags,
   setSelectedCategories,
   setSelectedModalities,
+  setSelectedTags,
   selectedCategories,
   selectedModalities,
+  selectedTags,
 }) => {
   // transform the categories into options
   const options = categories.map((category) => category.name);
@@ -47,7 +53,11 @@ export const FilterModal: React.FC<FilterModalProps> = ({
         setSelectedOptions={setSelectedModalities}
         selectedOptions={selectedModalities}
       />
-      <TagsChecker tags={tagsOptions} />
+      <TagsChecker
+        tags={tagsOptions}
+        setSelectedTags={setSelectedTags}
+        selectedTags={selectedTags}
+      />
       <ModalActions />
     </div>
   );

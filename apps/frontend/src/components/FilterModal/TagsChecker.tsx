@@ -2,9 +2,17 @@ import { useState } from "react";
 
 interface TagsCheckerProps {
   tags: string[];
+  setSelectedTags: (
+    value: React.SetStateAction<Record<string, boolean>>,
+  ) => void;
+  selectedTags: Record<string, boolean>;
 }
 
-export const TagsChecker: React.FC<TagsCheckerProps> = ({ tags }) => {
+export const TagsChecker: React.FC<TagsCheckerProps> = ({
+  tags,
+  setSelectedTags,
+  selectedTags,
+}) => {
   const [showAll, setShowAll] = useState(false);
 
   const handleShowMore = () => {
@@ -28,6 +36,13 @@ export const TagsChecker: React.FC<TagsCheckerProps> = ({ tags }) => {
               <input
                 className="m-0 h-[18px] w-4 accent-brand-600"
                 type="checkbox"
+                checked={!!selectedTags[tag]}
+                onChange={() =>
+                  setSelectedTags((prev) => ({
+                    ...prev,
+                    [tag]: !prev[tag],
+                  }))
+                }
               />
               <div className="relative leading-[20px] font-medium inline-block">
                 {tag}

@@ -125,6 +125,8 @@ const Opportunities: React.FC = () => {
     Record<string, boolean>
   >({});
 
+  const [selectedTags, setSelectedTags] = useState<Record<string, boolean>>({});
+
   useEffect(() => {
     if (categories) {
       const options = categories.map((category) => category.name);
@@ -135,9 +137,25 @@ const Opportunities: React.FC = () => {
   }, [categories]);
 
   useEffect(() => {
+    if (tags) {
+      const options = tags.map((tag) => tag.name);
+      setSelectedTags(
+        options.reduce((acc, option) => ({ ...acc, [option]: false }), {}),
+      );
+    }
+  }, [tags]);
+
+  useEffect(() => {
     console.log(selectedCategories);
+  }, [selectedCategories]);
+
+  useEffect(() => {
     console.log(selectedModalities);
-  }, [selectedCategories, selectedModalities]);
+  }, [selectedModalities]);
+
+  useEffect(() => {
+    console.log(selectedTags);
+  }, [selectedTags]);
 
   const handlePageChange = (pageNumber: number) => {
     if (pageNumber < 0 || pageNumber >= maxPage) {
@@ -182,6 +200,8 @@ const Opportunities: React.FC = () => {
     console.log(isTagsLoading);
   }, [categories, isCategoriesLoading, isTagsLoading]);
 
+  const isLoading = isCategoriesLoading || isTagsLoading;
+
   if (
     errorProjects instanceof Error ||
     errorCategories instanceof Error ||
@@ -200,10 +220,12 @@ const Opportunities: React.FC = () => {
           minWidth="769px"
           tailwindClasses="w-[1696px] flex flex-col items-start justify-start gap-[32.5px] max-w-full mq950:gap-[16px]"
         >
-          <FiltersBar
-            handleOpenClose={handleModalOpenClose}
-            searchChange={setSearch}
-          />
+          {!isLoading && (
+            <FiltersBar
+              handleOpenClose={handleModalOpenClose}
+              searchChange={setSearch}
+            />
+          )}
           {isProjectsLoading ? (
             <div> Loading projects...</div>
           ) : (
@@ -233,8 +255,10 @@ const Opportunities: React.FC = () => {
             tags={tags || []}
             selectedCategories={selectedCategories}
             selectedModalities={selectedModalities}
+            selectedTags={selectedTags}
             setSelectedCategories={setSelectedCategories}
             setSelectedModalities={setSelectedModalities}
+            setSelectedTags={setSelectedTags}
           />
         </div>
       )}
