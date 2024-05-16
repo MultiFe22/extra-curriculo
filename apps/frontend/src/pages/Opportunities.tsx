@@ -274,6 +274,7 @@ const Opportunities: React.FC = () => {
       setSavedSelectedCategories({ ...selectedCategories });
       setSavedSelectedModalities({ ...selectedModalities });
       setSavedSelectedTags({ ...selectedTags });
+      setPage(0);
     }
   };
 
