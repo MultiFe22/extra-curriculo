@@ -5,7 +5,7 @@ import { ModalHeader } from "./ModalHeader";
 import { TagsChecker } from "./TagsChecker";
 
 interface FilterModalProps {
-  handleOpenClose: (action: boolean) => void;
+  handleOpenClose: (action: boolean, apply: boolean) => void;
   categories: Categories;
   modalities: string[];
   setSelectedCategories: (
@@ -21,6 +21,7 @@ interface FilterModalProps {
   selectedModalities: Record<string, boolean>;
   selectedTags: Record<string, boolean>;
   tags: Tags;
+  clearAllFilters: () => void;
 }
 
 export const FilterModal: React.FC<FilterModalProps> = ({
@@ -34,6 +35,7 @@ export const FilterModal: React.FC<FilterModalProps> = ({
   selectedCategories,
   selectedModalities,
   selectedTags,
+  clearAllFilters,
 }) => {
   // transform the categories into options
   const options = categories.map((category) => category.name);
@@ -58,7 +60,10 @@ export const FilterModal: React.FC<FilterModalProps> = ({
         setSelectedTags={setSelectedTags}
         selectedTags={selectedTags}
       />
-      <ModalActions />
+      <ModalActions
+        clearAllFilters={clearAllFilters}
+        handleOpenClose={handleOpenClose}
+      />
     </div>
   );
 };

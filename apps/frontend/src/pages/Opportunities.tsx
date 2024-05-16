@@ -127,10 +127,43 @@ const Opportunities: React.FC = () => {
 
   const [selectedTags, setSelectedTags] = useState<Record<string, boolean>>({});
 
+  const [savedSelectedCategories, setSavedSelectedCategories] = useState<
+    Record<string, boolean>
+  >({});
+
+  const [savedSelectedModalities, setSavedSelectedModalities] = useState<
+    Record<string, boolean>
+  >(modalities.reduce((acc, modality) => ({ ...acc, [modality]: false }), {}));
+
+  const [savedSelectedTags, setSavedSelectedTags] = useState<
+    Record<string, boolean>
+  >({});
+
+  function clearAllFilters() {
+    setSelectedCategories(
+      Object.keys(selectedCategories).reduce(
+        (acc, key) => ({ ...acc, [key]: false }),
+        {},
+      ),
+    );
+    setSelectedModalities(
+      modalities.reduce((acc, modality) => ({ ...acc, [modality]: false }), {}),
+    );
+    setSelectedTags(
+      Object.keys(selectedTags).reduce(
+        (acc, key) => ({ ...acc, [key]: false }),
+        {},
+      ),
+    );
+  }
+
   useEffect(() => {
     if (categories) {
       const options = categories.map((category) => category.name);
       setSelectedCategories(
+        options.reduce((acc, option) => ({ ...acc, [option]: false }), {}),
+      );
+      setSavedSelectedCategories(
         options.reduce((acc, option) => ({ ...acc, [option]: false }), {}),
       );
     }
@@ -140,6 +173,9 @@ const Opportunities: React.FC = () => {
     if (tags) {
       const options = tags.map((tag) => tag.name);
       setSelectedTags(
+        options.reduce((acc, option) => ({ ...acc, [option]: false }), {}),
+      );
+      setSavedSelectedTags(
         options.reduce((acc, option) => ({ ...acc, [option]: false }), {}),
       );
     }
@@ -164,9 +200,19 @@ const Opportunities: React.FC = () => {
     setPage(pageNumber);
   };
 
-  const handleModalOpenClose = (action: boolean) => {
+  const handleModalOpenClose = (action: boolean, apply: boolean) => {
     setIsModalOpen(action);
     document.body.style.overflow = action ? "hidden" : "auto";
+    if (action) return;
+    if (!apply) {
+      setSelectedCategories({ ...savedSelectedCategories });
+      setSelectedModalities({ ...savedSelectedModalities });
+      setSelectedTags({ ...savedSelectedTags });
+    } else {
+      setSavedSelectedCategories({ ...selectedCategories });
+      setSavedSelectedModalities({ ...selectedModalities });
+      setSavedSelectedTags({ ...selectedTags });
+    }
   };
 
   useEffect(() => {
@@ -259,6 +305,7 @@ const Opportunities: React.FC = () => {
             setSelectedCategories={setSelectedCategories}
             setSelectedModalities={setSelectedModalities}
             setSelectedTags={setSelectedTags}
+            clearAllFilters={clearAllFilters}
           />
         </div>
       )}
