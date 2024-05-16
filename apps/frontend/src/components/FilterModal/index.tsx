@@ -1,1 +1,1 @@
-export {FilterModal} from './FilterModal'
+export { FilterModal } from "./FilterModal";

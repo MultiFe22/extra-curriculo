@@ -1,1 +1,1 @@
-export {ResponsiveWrapper} from './ResponsiveWrapper'
+export { ResponsiveWrapper } from "./ResponsiveWrapper";

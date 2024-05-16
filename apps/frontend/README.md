@@ -1,6 +1,7 @@
 # Installation of the frontend
 
 ## Prerequisites
+
 - Node.js
 - nvm
 - npm

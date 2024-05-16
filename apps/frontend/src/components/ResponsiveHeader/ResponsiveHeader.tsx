@@ -12,10 +12,10 @@ export const ResponsiveHeader: React.FC = () => {
               <div className="mq768:self-stretch mq1920:w-[142px] flex flex-row items-start justify-start">
                 <div className="flex-1 flex flex-row items-start justify-start gap-[10px]">
                   <div className="flex flex-row items-start justify-start">
-                    <Logomark className="h-8 w-8 relative rounded-lg overflow-hidden shrink-0"/>
+                    <Logomark className="h-8 w-8 relative rounded-lg overflow-hidden shrink-0" />
                   </div>
                   <div className="h-8 flex-1 flex flex-col items-center justify-center">
-                    <Logotype className="h-[25.7px] self-stretch max-w-full relative overflow-hidden shrink-0"/>
+                    <Logotype className="h-[25.7px] self-stretch max-w-full relative overflow-hidden shrink-0" />
                   </div>
                 </div>
               </div>
@@ -50,9 +50,8 @@ export const ResponsiveHeader: React.FC = () => {
             </div>
 
             <div className="mq1920:hidden rounded-lg overflow-hidden flex flex-row items-center justify-center p-2">
-              <NavMenuButton className="h-6 w-6 relative overflow-hidden shrink-0"/>
+              <NavMenuButton className="h-6 w-6 relative overflow-hidden shrink-0" />
             </div>
-            
           </div>
           <div className="mq768:hidden flex flex-row items-center justify-start gap-[12px]">
             <div className="rounded-lg flex flex-row items-start justify-start">
@@ -80,6 +79,5 @@ export const ResponsiveHeader: React.FC = () => {
         </header>
       </div>
     </div>
-
   );
 };
