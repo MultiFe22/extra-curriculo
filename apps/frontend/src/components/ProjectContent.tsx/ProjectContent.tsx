@@ -1,7 +1,26 @@
+import remarkGfm from "remark-gfm";
 import Avatar from "../../assets/Avatar";
 import Mail01 from "../../assets/Mail01";
 
+import ReactMarkdown from "react-markdown";
+
 export const ProjectContent: React.FC = () => {
+  const markdownContent =
+    "### Como se inscrever\n" +
+    "Pharetra morbi libero id aliquam elit massa integer tellus. Quis felis aliquam ullamcorper porttitor. Pulvinar ullamcorper sit dictumst ut eget a, elementum eu. Maecenas est morbi mattis id in ac pellentesque ac.\n\n" +
+    "---\n\n" +
+    "### Papéis\n" +
+    "Sagittis et eu at elementum, quis in. Proin praesent volutpat egestas sociis sit lorem nunc nunc sit. Eget diam curabitur mi ac. Auctor rutrum lacus malesuada massa ornare et. Vulputate consectetur ac ultrices at diam dui eget fringilla tincidunt.\n\n" +
+    "1. Lectus id duis vitae porttitor enim [gravida morbi](#).\n" +
+    "2. Eu turpis [posuere semper feugiat](#) volutpat elit, ultrices suspendisse. Auctor vel in vitae placerat.\n" +
+    "3. Suspendisse maecenas ac [donec scelerisque](#) diam sed est duis purus.\n\n" +
+    "---\n\n" +
+    "### Requisitos\n" +
+    "Pharetra morbi libero id aliquam elit massa integer tellus.\n\n" +
+    "---\n\n" +
+    "### Atribuições\n" +
+    "Pharetra morbi libero id aliquam elit massa integer tellus.\n";
+
   return (
     <section className="self-stretch bg-white flex flex-col items-center justify-start pt-0 px-0 pb-16 box-border max-w-full text-left text-xl text-gray-900 font-text-md-regular">
       <div className="self-stretch flex flex-col items-start justify-start py-0 px-4 box-border max-w-full">
@@ -17,70 +36,12 @@ export const ProjectContent: React.FC = () => {
               </div>
               <div className="h-px w-full bg-[#EAECF0] flex flex-col items-start justify-start relative max-w-full shrink-0" />
             </div>
-            <div className="self-stretch flex flex-col items-start justify-start gap-[12px]">
-              <h3 className="m-0 self-stretch relative text-inherit leading-[30px] font-semibold font-inherit">
-                Como se inscrever
-              </h3>
-              <div className="self-stretch relative text-lg leading-[28px] text-gray-600">
-                Pharetra morbi libero id aliquam elit massa integer tellus. Quis
-                felis aliquam ullamcorper porttitor. Pulvinar ullamcorper sit
-                dictumst ut eget a, elementum eu. Maecenas est morbi mattis id
-                in ac pellentesque ac.
-              </div>
-            </div>
-            <div className="self-stretch flex flex-col items-start justify-start gap-[12px]">
-              <h3 className="m-0 self-stretch relative text-inherit leading-[30px] font-semibold font-inherit">
-                Papéis
-              </h3>
-              <div className="self-stretch relative text-lg leading-[28px] text-gray-600">
-                <p className="[margin-block-start:0] [margin-block-end:18px]">
-                  Sagittis et eu at elementum, quis in. Proin praesent volutpat
-                  egestas sociis sit lorem nunc nunc sit. Eget diam curabitur mi
-                  ac. Auctor rutrum lacus malesuada massa ornare et. Vulputate
-                  consectetur ac ultrices at diam dui eget fringilla tincidunt.
-                </p>
-                <ol className="m-0 font-inherit text-inherit pl-6">
-                  <li className="mb-0">
-                    {`Lectus id duis vitae porttitor enim `}
-                    <span className="[text-decoration:underline]">
-                      gravida morbi
-                    </span>
-                    .
-                  </li>
-                  <li className="mb-0">
-                    {`Eu turpis `}
-                    <span className="[text-decoration:underline]">
-                      posuere semper feugiat
-                    </span>{" "}
-                    volutpat elit, ultrices suspendisse. Auctor vel in vitae
-                    placerat.
-                  </li>
-                  <li>
-                    {`Suspendisse maecenas ac `}
-                    <span className="[text-decoration:underline]">
-                      donec scelerisque
-                    </span>{" "}
-                    diam sed est duis purus.
-                  </li>
-                </ol>
-              </div>
-            </div>
-            <div className="self-stretch flex flex-col items-start justify-start gap-[12px]">
-              <h3 className="m-0 self-stretch relative text-inherit leading-[30px] font-semibold font-inherit">
-                Requisitos
-              </h3>
-              <div className="self-stretch relative text-lg leading-[28px] text-gray-600">
-                Pharetra morbi libero id aliquam elit massa integer tellus.
-              </div>
-            </div>
-            <div className="self-stretch flex flex-col items-start justify-start gap-[12px]">
-              <h3 className="m-0 self-stretch relative text-inherit leading-[30px] font-semibold font-inherit">
-                Atriuições
-              </h3>
-              <div className="self-stretch relative text-lg leading-[28px] text-gray-600">
-                Pharetra morbi libero id aliquam elit massa integer tellus.
-              </div>
-            </div>
+            <ReactMarkdown
+              children={markdownContent}
+              remarkPlugins={[remarkGfm]}
+              className="text-lg text-gray-600"
+            />
+
             <div className="self-stretch flex flex-col items-start justify-start gap-[12px] text-sm text-gray-600">
               <img
                 className="self-stretch relative max-w-full overflow-hidden max-h-full object-cover"
