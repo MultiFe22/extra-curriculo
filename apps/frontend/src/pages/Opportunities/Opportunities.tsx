@@ -1,12 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
-import { FiltersBar } from "../components/FiltersBar";
-import { Footer } from "../components/Footer";
-import { OpportunitiesContainerMobile } from "../components/OpportunitiesContainerMobile";
-import { Pagination } from "../components/Pagination";
-import { ResponsiveHeader } from "../components/ResponsiveHeader";
-import { ResponsiveWrapper } from "../components/ResponsiveWrapper";
+import { FiltersBar } from "../../components/FiltersBar";
+import { Footer } from "../../components/Footer";
+import { OpportunitiesContainerMobile } from "../../components/OpportunitiesContainerMobile";
+import { Pagination } from "../../components/Pagination";
+import { ResponsiveHeader } from "../../components/ResponsiveHeader";
+import { ResponsiveWrapper } from "../../components/ResponsiveWrapper";
 import { useEffect, useState } from "react";
-import { FilterModal } from "../components/FilterModal";
+import { FilterModal } from "../../components/FilterModal";
 
 const Backdrop: React.FC = () => (
   <div className="fixed inset-0 bg-black bg-opacity-50 z-40"></div>

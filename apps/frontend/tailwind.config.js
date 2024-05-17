@@ -24,8 +24,10 @@ export default {
         "orange-50": "#fff6ed",
         "orange-700": "#c4320a",
         "pink-50": "#fdf2fa",
+        "pink-500": "#EE46BC",
         "pink-700": "#c11574",
         "blue-light-50": "#f0f9ff",
+        "blue-light-500": "#0BA5EC",
         "blue-light-700": "#026aa2",
         slateblue: "#6941c6",
         "gray-25": "#fcfcfd",
@@ -53,6 +55,7 @@ export default {
       "5xl": "24px",
       lgi: "19px",
       "11xl": "30px",
+      "17xl": "36px",
       inherit: "inherit",
     },
     screens: {

@@ -1,4 +1,4 @@
-import { Projects } from "../../pages/Opportunities";
+import { Projects } from "../../pages/Opportunities/Opportunities";
 import { ProjectCard } from "../ProjectCard";
 
 interface OpportunitiesContainerMobileProps {

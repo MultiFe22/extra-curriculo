@@ -1,4 +1,4 @@
-import { Categories, Tags } from "../../pages/Opportunities";
+import { Categories, Tags } from "../../pages/Opportunities/Opportunities";
 import { BigButtonFilter } from "./BigButtonFilter";
 import { ModalActions } from "./ModalActions";
 import { ModalHeader } from "./ModalHeader";
