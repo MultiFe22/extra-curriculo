@@ -119,7 +119,7 @@ export const ProjectHeader: React.FC = () => {
             </div>
           </div>
           <div className="h-px w-full bg-[#EAECF0] flex flex-row items-start justify-start relative max-w-full shrink-0" />
-          <div className="self-stretch flex flex-row items-start justify-center py-0 pr-[43px] pl-0 gap-[12px]">
+          <div className="self-stretch flex flex-row items-start justify-left py-0 pr-[43px] pl-0 gap-[12px]">
             <div className="rounded-lg flex flex-row items-start justify-start">
               <div className="w-10 shadow-[0px_1px_2px_rgba(16,_24,_40,_0.05)] rounded-lg bg-white box-border overflow-hidden shrink-0 flex flex-row items-center justify-center py-2 px-[9px] border-[1px] border-solid border-gray-300">
                 <CopyIcon className="h-5 w-5 relative overflow-hidden shrink-0 stroke-[#344054]" />
