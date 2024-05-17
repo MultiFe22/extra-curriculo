@@ -45,7 +45,6 @@ export const ProjectContent: React.FC = () => {
             <div className="self-stretch flex flex-col items-start justify-start gap-[12px] text-sm text-gray-600">
               <img
                 className="self-stretch relative max-w-full overflow-hidden max-h-full object-cover"
-                loading="lazy"
                 alt=""
                 src="https://source.unsplash.com/a8JHGzB7h4A"
               />
