@@ -22,20 +22,10 @@ export const ProjectContent: React.FC = () => {
     "Pharetra morbi libero id aliquam elit massa integer tellus.\n";
 
   return (
-    <section className="self-stretch bg-white flex flex-col items-center justify-start pt-0 px-0 pb-16 box-border max-w-full text-left text-xl text-gray-900 font-text-md-regular">
+    <section className="self-stretch bg-gray-50 flex flex-col items-center justify-start pt-0 px-0 pb-16 box-border max-w-full text-left text-xl text-gray-900 font-text-md-regular">
       <div className="self-stretch flex flex-col items-start justify-start py-0 px-4 box-border max-w-full">
         <div className="self-stretch flex flex-col items-start justify-start max-w-full">
           <div className="self-stretch flex flex-col items-start justify-start gap-[48px] max-w-full">
-            <div className="self-stretch flex flex-col items-start justify-start gap-[32px] text-lg text-gray-600">
-              <div className="self-stretch relative leading-[28px]">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec
-                ullamcorper mattis lorem non. Ultrices praesent amet ipsum justo
-                massa. Eu dolor aliquet risus gravida nunc at feugiat consequat
-                purus. Non massa enim vitae duis mattis. Vel in ultricies vel
-                fringilla.
-              </div>
-              <div className="h-px w-full bg-[#EAECF0] flex flex-col items-start justify-start relative max-w-full shrink-0" />
-            </div>
             <ReactMarkdown
               children={markdownContent}
               remarkPlugins={[remarkGfm]}
