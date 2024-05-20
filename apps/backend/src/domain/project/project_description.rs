@@ -13,7 +13,7 @@ impl ProjectDescription {
 
         if grapheme_len < 30 {
             Err(format!("The description is too short. It must be at least 30 graphemes long, but it was {} graphemes.", grapheme_len))
-        } else if grapheme_len > 500 {
+        } else if grapheme_len > 1500 {
             Err(format!("The description is too long. It must be no more than 500 graphemes long, but it was {} graphemes.", grapheme_len))
         } else if is_all_whitespace {
             Err("The description cannot consist solely of whitespace.".to_string())
@@ -42,7 +42,7 @@ mod tests {
 
     #[test]
     fn description_too_long_is_rejected() {
-        let desc = "長".repeat(501); // Each "長" is a single grapheme
+        let desc = "長".repeat(1501); // Each "長" is a single grapheme
         assert_err!(ProjectDescription::parse(desc));
     }
 
