@@ -1,3 +1,4 @@
+import { Footer } from "../../components/Footer";
 import { ProjectContent } from "../../components/ProjectContent.tsx";
 import { ProjectHeader } from "../../components/ProjectHeader";
 import { ResponsiveHeader } from "../../components/ResponsiveHeader";
@@ -8,6 +9,7 @@ export const Project: React.FC = () => {
       <ResponsiveHeader />
       <ProjectHeader />
       <ProjectContent />
+      <Footer />
     </div>
   );
 };
