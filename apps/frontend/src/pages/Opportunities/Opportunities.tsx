@@ -11,7 +11,7 @@ import { FilterModal } from "../../components/FilterModal";
 const Backdrop: React.FC = () => (
   <div className="fixed inset-0 bg-black bg-opacity-50 z-40"></div>
 );
-export interface Project {
+export interface ProjectDTO {
   id: string;
   name: string;
   description: string;
@@ -30,6 +30,7 @@ export interface Project {
   is_recruiting: boolean;
   tags: string[];
   category_name: string;
+  updated_at: string;
 }
 
 export interface Category {
@@ -46,7 +47,7 @@ export type Tags = Tag[];
 
 export type Categories = Category[];
 
-export type Projects = Project[];
+export type Projects = ProjectDTO[];
 
 async function fetchProjects(): Promise<Projects> {
   const response = await fetch("http://127.0.0.1:8000/projects");

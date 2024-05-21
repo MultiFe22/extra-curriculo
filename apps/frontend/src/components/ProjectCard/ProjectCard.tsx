@@ -46,6 +46,31 @@ const TagButton: React.FC<TagButtonProps> = ({
   );
 };
 
+const tagBgColors = [
+  "#f0f9ff",
+  "#fdf2fa",
+  "#fff6ed",
+  "#f8f9fc",
+  "#f4f3ff",
+  "#f9fafb",
+  "#f7fee7",
+  "#fef2f2",
+  "#fefce8",
+  "#ecfeff",
+];
+const tagTxtColor = [
+  "#026aa2",
+  "#c11574",
+  "#c4320a",
+  "#363e72",
+  "#5925dc",
+  "#344154",
+  "#4ade80",
+  "#b91c1c",
+  "#b45309",
+  "#0ea5e9",
+];
+
 export const ProjectCard: React.FC<ProjectCardType> = ({
   image,
   name,
@@ -53,30 +78,6 @@ export const ProjectCard: React.FC<ProjectCardType> = ({
   category,
   modality,
 }) => {
-  const tagBgColors = [
-    "#f0f9ff",
-    "#fdf2fa",
-    "#fff6ed",
-    "#f8f9fc",
-    "#f4f3ff",
-    "#f9fafb",
-    "#f7fee7",
-    "#fef2f2",
-    "#fefce8",
-    "#ecfeff",
-  ];
-  const tagTxtColor = [
-    "#026aa2",
-    "#c11574",
-    "#c4320a",
-    "#363e72",
-    "#5925dc",
-    "#344154",
-    "#4ade80",
-    "#b91c1c",
-    "#b45309",
-    "#0ea5e9",
-  ];
   return (
     <section className="mq1920:flex-1 mq768:flex-1 mq375:self-stretch rounded-lg flex flex-col items-center mq375:min-w-[280px] mq768:min-w-[323px] justify-start gap-[24px] mq1920:min-w-[406px] mq768:max-w-full mq1920:max-w-full text-left text-sm text-slateblue font-text-md-regular">
       <img

@@ -10,7 +10,7 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" Component={Opportunities} />
-          <Route path="/project" Component={Project} />
+          <Route path="/project/:id" Component={Project} />
         </Routes>
       </Router>
     </QueryClientProvider>

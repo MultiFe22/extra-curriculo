@@ -470,6 +470,7 @@ pub struct ExistingProject {
     pub is_recruiting: bool,
     pub tags: Vec<String>,
     pub category_name: String,
+    pub updated_at: String,
 }
 
 #[tracing::instrument(
@@ -500,6 +501,7 @@ pub async fn find_project_by_id(
             p.linkedin, 
             p.twitter, 
             p.category_id,
+            p.updated_at,
             c.name AS category_name,
             STRING_AGG(t.name, '/') AS tags
         FROM 
@@ -551,6 +553,7 @@ pub async fn find_project_by_id(
         is_recruiting: project.is_recruiting,
         tags,
         category_name: project.category_name,
+        updated_at: project.updated_at.timestamp_millis().to_string(),
     }))
 }
 
@@ -586,6 +589,7 @@ pub async fn find_all_projects(pool: &PgPool) -> Result<Vec<ExistingProject>, an
             p.linkedin, 
             p.twitter, 
             p.category_id,
+            p.updated_at,
             c.name AS category_name,
             STRING_AGG(t.name, '/') AS tags
         FROM 
@@ -625,6 +629,7 @@ pub async fn find_all_projects(pool: &PgPool) -> Result<Vec<ExistingProject>, an
             |tags| tags.split('/').map(|tag| tag.to_string()).collect(),
         ),
         category_name: project.category_name,
+        updated_at: project.updated_at.timestamp_millis().to_string(),
     })
     .collect();
 

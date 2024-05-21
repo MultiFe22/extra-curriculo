@@ -36,4 +36,3 @@ export const ResponsiveWrapper: React.FC<Props> = ({
 
   return <>{children}</>;
 };
-

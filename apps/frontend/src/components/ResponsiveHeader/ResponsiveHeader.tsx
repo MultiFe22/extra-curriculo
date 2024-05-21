@@ -61,13 +61,6 @@ export const ResponsiveHeader: React.FC = () => {
                 </div>
               </div>
             </div>
-            <div className="rounded-lg hidden flex-row items-start justify-start text-gray-700">
-              <div className="rounded-lg bg-white shadow-[0px_1px_2px_rgba(16,_24,_40,_0.05)] overflow-hidden flex flex-row items-center justify-center py-2 px-[17px] whitespace-nowrap border-[1px] border-solid border-gray-300">
-                <div className="relative leading-[24px] font-semibold">
-                  Book demo
-                </div>
-              </div>
-            </div>
             <div className="rounded-lg flex flex-row items-start justify-start text-white">
               <div className="rounded-lg bg-brand-600 shadow-[0px_1px_2px_rgba(16,_24,_40,_0.05)] overflow-hidden flex flex-row items-center justify-center py-2 px-[17px] whitespace-nowrap border-[1px] border-solid border-brand-600">
                 <div className="relative leading-[24px] font-semibold inline-block min-w-[86px]">
