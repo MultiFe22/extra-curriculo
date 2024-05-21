@@ -47,7 +47,7 @@ export const Project: React.FC = () => {
       >
         <ResponsiveHeader />
         {project && <ProjectHeader project={project} />}
-        <ProjectContent />
+        {project && <ProjectContent project={project}/>}
       </ResponsiveWrapper>
       <Footer />
     </div>

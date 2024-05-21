@@ -3,31 +3,20 @@ import Avatar from "../../assets/Avatar";
 import Mail01 from "../../assets/Mail01";
 
 import ReactMarkdown from "react-markdown";
+import { ProjectDTO } from "../../pages/Opportunities/Opportunities";
 
-export const ProjectContent: React.FC = () => {
-  const markdownContent =
-    "### Como se inscrever\n" +
-    "Pharetra morbi libero id aliquam elit massa integer tellus. Quis felis aliquam ullamcorper porttitor. Pulvinar ullamcorper sit dictumst ut eget a, elementum eu. Maecenas est morbi mattis id in ac pellentesque ac.\n\n" +
-    "---\n\n" +
-    "### Papéis\n" +
-    "Sagittis et eu at elementum, quis in. Proin praesent volutpat egestas sociis sit lorem nunc nunc sit. Eget diam curabitur mi ac. Auctor rutrum lacus malesuada massa ornare et. Vulputate consectetur ac ultrices at diam dui eget fringilla tincidunt.\n\n" +
-    "1. Lectus id duis vitae porttitor enim [gravida morbi](#).\n" +
-    "2. Eu turpis [posuere semper feugiat](#) volutpat elit, ultrices suspendisse. Auctor vel in vitae placerat.\n" +
-    "3. Suspendisse maecenas ac [donec scelerisque](#) diam sed est duis purus.\n\n" +
-    "---\n\n" +
-    "### Requisitos\n" +
-    "Pharetra morbi libero id aliquam elit massa integer tellus.\n\n" +
-    "---\n\n" +
-    "### Atribuições\n" +
-    "Pharetra morbi libero id aliquam elit massa integer tellus.\n";
+interface ProjectContentProps {
+  project: ProjectDTO;
+}
 
+export const ProjectContent: React.FC<ProjectContentProps> = ({ project }) => {
   return (
     <section className="self-stretch bg-gray-50 flex flex-col items-center justify-start mq768:pt-0 mq768:px-0 mq768:pb-16 mq1920:py-24 mq1920:px-20 box-border max-w-full text-left mq768:text-xl mq1920:text-5xl text-gray-900 font-text-md-regular">
       <div className="self-stretch flex flex-col mq768:items-start mq1920:items-center justify-start py-0 mq768:px-4 mq1920:px-8 box-border max-w-full">
         <div className="self-stretch flex mq768:flex-col mq1920:flex-row items-start justify-start max-w-full mq1920:gap-[64px]">
           <div className="mq768:self-stretch mq1920:flex-1 flex flex-col items-start justify-start gap-[48px] max-w-full">
             <ReactMarkdown
-              children={markdownContent}
+              children={project.description}
               remarkPlugins={[remarkGfm]}
               className="text-lg text-gray-600"
             />
@@ -49,7 +38,7 @@ export const ProjectContent: React.FC = () => {
                     <Avatar className="h-12 w-12 relative rounded-181xl min-h-[48px]" />
                     <div className="flex flex-col items-start justify-start">
                       <div className="relative leading-[24px] font-semibold">
-                        Verônica Pinheiro Viana
+                        {project.professor}
                       </div>
                       <div className="relative leading-[24px] text-gray-600 inline-block min-w-[96px]">
                         Responsável
@@ -72,8 +61,7 @@ export const ProjectContent: React.FC = () => {
                   Endereço
                 </div>
                 <div className="self-stretch relative leading-[24px]">
-                  R. Antônio Barros de Castro, 119 - Cidade Universitária, Rio
-                  de Janeiro - RJ, 21941-853
+                  {project.address}
                 </div>
               </div>
               <div className="h-px w-full bg-[#EAECF0] flex flex-col items-start justify-start relative max-w-full shrink-0" />
@@ -85,7 +73,7 @@ export const ProjectContent: React.FC = () => {
                   <div className="shadow-[0px_1px_2px_rgba(16,_24,_40,_0.05)] rounded-lg bg-white overflow-hidden flex flex-row items-center justify-center py-2 px-[17px] gap-[8px] border-[1px] border-solid border-gray-300">
                     <Mail01 className="h-5 w-5 relative overflow-hidden shrink-0 stroke-[#344054]" />
                     <div className="relative leading-[24px] font-semibold whitespace-nowrap">
-                      contato@email.com
+                      {project.email}
                     </div>
                   </div>
                 </div>
@@ -103,7 +91,7 @@ export const ProjectContent: React.FC = () => {
                   <Avatar className="h-12 w-12 relative rounded-181xl" />
                   <div className="flex flex-col items-start justify-start">
                     <div className="relative leading-[24px] font-semibold">
-                      Verônica Pinheiro Viana
+                      {project.professor}
                     </div>
                     <div className="relative leading-[24px] text-gray-600 inline-block min-w-[96px]">
                       Responsável
@@ -126,8 +114,7 @@ export const ProjectContent: React.FC = () => {
                 Endereço
               </div>
               <div className="self-stretch relative leading-[24px]">
-                R. Antônio Barros de Castro, 119 - Cidade Universitária, Rio de
-                Janeiro - RJ, 21941-853
+                {project.address}
               </div>
             </div>
             <div className="h-px w-full bg-[#EAECF0] flex flex-col items-start justify-start relative max-w-full shrink-0" />
@@ -139,7 +126,7 @@ export const ProjectContent: React.FC = () => {
                 <div className="shadow-[0px_1px_2px_rgba(16,_24,_40,_0.05)] rounded-lg bg-white overflow-hidden flex flex-row items-center justify-center py-2 px-[17px] gap-[8px] border-[1px] border-solid border-gray-300">
                   <Mail01 className="h-5 w-5 relative overflow-hidden shrink-0 stroke-[#344054]" />
                   <div className="relative leading-[24px] font-semibold whitespace-nowrap">
-                    contato@email.com
+                    {project.email}
                   </div>
                 </div>
               </div>
