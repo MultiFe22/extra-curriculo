@@ -4,12 +4,14 @@ type Props = {
   children: ReactNode;
   tailwindClasses?: string; // Optional prop for additional CSS classes
   minWidth?: string; // Optional prop to set the media query dynamically
+  isMinimum: boolean; // Mandatory prop to decide if rendering in min or max cases
 };
 
 export const ResponsiveWrapper: React.FC<Props> = ({
   children,
   tailwindClasses = "",
   minWidth = "768px",
+  isMinimum,
 }) => {
   const [isLargeScreen, setIsLargeScreen] = useState<boolean>(false);
 
@@ -26,11 +28,12 @@ export const ResponsiveWrapper: React.FC<Props> = ({
     return () => {
       window.removeEventListener("resize", handleResize);
     };
-  }, [minWidth]); // Make sure to react to changes in minWidth
+  }, [minWidth]); // React to changes in minWidth
 
-  if (isLargeScreen) {
+  if ((isLargeScreen && isMinimum) || (!isLargeScreen && !isMinimum)) {
     return <div className={`${tailwindClasses}`}>{children}</div>;
   }
 
   return <>{children}</>;
 };
+

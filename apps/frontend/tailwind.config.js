@@ -56,6 +56,8 @@ export default {
       lgi: "19px",
       "11xl": "30px",
       "17xl": "36px",
+      "29xl": "48px",
+      "19xl": "38px",
       inherit: "inherit",
     },
     screens: {
