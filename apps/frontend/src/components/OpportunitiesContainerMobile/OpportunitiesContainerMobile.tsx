@@ -20,6 +20,7 @@ export const OpportunitiesContainerMobile: React.FC<
         .map((project) => (
           <ProjectCard
             key={project.id}
+            id={project.id}
             image="https://source.unsplash.com/a8JHGzB7h4A"
             name={project.name}
             tags={project.tags}

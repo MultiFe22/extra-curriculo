@@ -4,12 +4,14 @@ import Atom01 from "../../assets/Atom01";
 import Building07 from "../../assets/Building07";
 // import Globe04 from "../../assets/Globe04";
 // import Telescope from "../../assets/Telescope";
+import { useNavigate } from 'react-router-dom';
 
 export type ProjectCardType = {
   image?: string;
   name: string;
   category: string;
   modality: string;
+  id: string;
   tags: string[];
 };
 
@@ -77,9 +79,16 @@ export const ProjectCard: React.FC<ProjectCardType> = ({
   tags,
   category,
   modality,
+  id,
 }) => {
+  const navigate = useNavigate();
+
+  const handleNavigation = () => {
+    navigate(`/project/${id}`);
+  }
+
   return (
-    <section className="mq1920:flex-1 mq768:flex-1 mq375:self-stretch rounded-lg flex flex-col items-center mq375:min-w-[280px] mq768:min-w-[323px] justify-start gap-[24px] mq1920:min-w-[406px] mq768:max-w-full mq1920:max-w-full text-left text-sm text-slateblue font-text-md-regular">
+    <section onClick={handleNavigation} className="mq1920:flex-1 cursor-pointer mq768:flex-1 mq375:self-stretch rounded-lg flex flex-col items-center mq375:min-w-[280px] mq768:min-w-[323px] justify-start gap-[24px] mq1920:min-w-[406px] mq768:max-w-full mq1920:max-w-full text-left text-sm text-slateblue font-text-md-regular">
       <img
         className="self-stretch mq768:h-60 mq1920:h-60 mq1920:shrink-0 mq768:shrink-0 relative rounded-lg max-w-full overflow-hidden mq768:max-h-full mq1920:max-w-full object-cover"
         alt=""
