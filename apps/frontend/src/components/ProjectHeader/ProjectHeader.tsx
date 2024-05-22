@@ -80,7 +80,7 @@ export const ProjectHeader: React.FC<ProjectHeaderProps> = ({ project }) => {
   const year = updatedAtDate.getFullYear();
 
   return (
-    <section className="self-stretch flex flex-col mq768:items-start mq1920:items-center justify-start mq768:pt-0 mq768:px-0 mq1920:py-24 mq1920:px-20 mq768:pb-16 box-border mq768:gap-[64px] max-w-full text-left text-base text-brand-600 font-text-md-regular">
+    <section className="self-stretch flex flex-col mq768:items-start mq1920:items-center justify-start mq768:pt-0 mq768:px-0 mq1920:py-24 mq1920:px-28 mq768:pb-16 box-border mq768:gap-[64px] max-w-full text-left text-base text-brand-600 font-text-md-regular">
       <img
         className="self-stretch relative max-w-full overflow-hidden max-h-full object-cover mq1920:hidden"
         alt=""
