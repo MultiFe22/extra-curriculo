@@ -10,6 +10,14 @@ export const ResponsiveHeader: React.FC = () => {
     navigate("/");
   };
 
+  const handleLoginNav = () => {
+    navigate("/login");
+  };
+
+  const handleSignUpNav = () => {
+    navigate("/signup");
+  };
+
   return (
     <div className="self-stretch bg-gray-50 flex flex-row items-start justify-start mq768:pt-0 mq768:px-0 box-border max-w-full top-[0] z-[30] sticky mq1920:text-left mq1920:text-base mq1920:text-gray-600 mq1920:font-text-md-regular mq1920:border-b-1 mq1920:border-solid mq1920:border-gray-10">
       <div className="flex-1 bg-white mq825:pl-10 mq825:pr-10 mq825:box-border flex flex-row items-start justify-start mq1920:py-[18px] mq1920:px-20 max-w-full mq768:border-b-[1px] mq768:border-solid mq768:border-gray-100">
@@ -69,12 +77,18 @@ export const ResponsiveHeader: React.FC = () => {
           <div className="mq768:hidden flex flex-row items-center justify-start gap-[12px]">
             <div className="rounded-lg flex flex-row items-start justify-start">
               <div className="rounded-lg overflow-hidden flex flex-row items-center justify-center py-2.5 px-[18px]">
-                <div className="relative leading-[24px] font-semibold inline-block min-w-[48px]">
+                <div
+                  onClick={handleLoginNav}
+                  className="cursor-pointer relative leading-[24px] font-semibold inline-block min-w-[48px]"
+                >
                   Entrar
                 </div>
               </div>
             </div>
-            <div className="rounded-lg flex flex-row items-start justify-start text-white">
+            <div
+              onClick={handleSignUpNav}
+              className="rounded-lg cursor-pointer flex flex-row items-start justify-start text-white"
+            >
               <div className="rounded-lg bg-brand-600 shadow-[0px_1px_2px_rgba(16,_24,_40,_0.05)] overflow-hidden flex flex-row items-center justify-center py-2 px-[17px] whitespace-nowrap border-[1px] border-solid border-brand-600">
                 <div className="relative leading-[24px] font-semibold inline-block min-w-[86px]">
                   Criar conta

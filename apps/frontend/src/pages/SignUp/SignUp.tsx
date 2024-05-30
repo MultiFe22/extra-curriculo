@@ -144,29 +144,31 @@ const DesktopVersion: React.FC = () => {
           className="h-full w-full absolute !m-[0] top-[0px] right-[0px] bottom-[0px] left-[0px] max-w-full overflow-hidden max-h-full object-cover"
           loading="lazy"
           alt=""
-          src={isLogin? "login-pic.png" : "ilha-do-catalao.jpeg"}
+          src={isLogin ? "login-pic.png" : "ilha-do-catalao.jpeg"}
         />
-        {!isLogin && <div className="flex-1 flex flex-col items-start justify-start gap-[24px] max-w-full z-[1]">
-          <h1 className="m-0 self-stretch relative text-inherit tracking-[-0.02em] leading-[44px] font-medium font-inherit mq850:text-10xl mq850:leading-[35px] mq450:text-3xl mq450:leading-[26px]">
-            “Facilitamos a divulgação e busca por oportunidades
-            extracurriculares na UFRJ, conectando estudantes e corpo docente.”
-          </h1>
-          <div className="self-stretch flex flex-col items-start justify-start gap-[12px] max-w-full text-11xl">
-            <h1 className="m-0 self-stretch relative text-inherit leading-[38px] font-semibold font-inherit mq850:text-5xl mq850:leading-[30px] mq450:text-lg mq450:leading-[23px]">
-              Felipe Vidal e Iago Rafael
+        {!isLogin && (
+          <div className="flex-1 flex flex-col items-start justify-start gap-[24px] max-w-full z-[1]">
+            <h1 className="m-0 self-stretch relative text-inherit tracking-[-0.02em] leading-[44px] font-medium font-inherit mq850:text-10xl mq850:leading-[35px] mq450:text-3xl mq450:leading-[26px]">
+              “Facilitamos a divulgação e busca por oportunidades
+              extracurriculares na UFRJ, conectando estudantes e corpo docente.”
             </h1>
-            <div className="self-stretch flex flex-row items-start justify-start gap-[12px] max-w-full text-lg">
-              <div className="flex-1 flex flex-col items-start justify-start gap-[2px] max-w-full">
-                <div className="self-stretch relative leading-[28px] font-semibold">
-                  Idealizadores e Desenvolvedores
-                </div>
-                <div className="self-stretch relative text-base leading-[24px] font-medium">
-                  extra_curriculo
+            <div className="self-stretch flex flex-col items-start justify-start gap-[12px] max-w-full text-11xl">
+              <h1 className="m-0 self-stretch relative text-inherit leading-[38px] font-semibold font-inherit mq850:text-5xl mq850:leading-[30px] mq450:text-lg mq450:leading-[23px]">
+                Felipe Vidal e Iago Rafael
+              </h1>
+              <div className="self-stretch flex flex-row items-start justify-start gap-[12px] max-w-full text-lg">
+                <div className="flex-1 flex flex-col items-start justify-start gap-[2px] max-w-full">
+                  <div className="self-stretch relative leading-[28px] font-semibold">
+                    Idealizadores e Desenvolvedores
+                  </div>
+                  <div className="self-stretch relative text-base leading-[24px] font-medium">
+                    extra_curriculo
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>}
+        )}
       </div>
     </div>
   );
