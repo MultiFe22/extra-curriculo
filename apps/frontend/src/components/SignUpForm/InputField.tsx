@@ -9,11 +9,8 @@ const InputField: React.FC<InputFieldType> = ({
   contentPlaceholder,
   hintText,
 }) => {
-
   return (
-    <div
-      className="self-stretch flex flex-col items-start justify-start text-left text-sm text-gray-700 font-text-md-regular"
-    >
+    <div className="self-stretch flex flex-col items-start justify-start text-left text-sm text-gray-700 font-text-md-regular">
       <div className="self-stretch flex flex-col items-start justify-start gap-[6px]">
         <div className="self-stretch flex flex-col items-start justify-start gap-[6px]">
           <div className="relative leading-[20px] font-medium inline-block min-w-[47px]">
@@ -27,11 +24,9 @@ const InputField: React.FC<InputFieldType> = ({
             />
           </div>
         </div>
-        <div
-            className="w-80 relative leading-[20px] text-gray-600"
-          >
-            {hintText}
-          </div>
+        <div className="w-80 relative leading-[20px] text-gray-600">
+          {hintText}
+        </div>
       </div>
     </div>
   );

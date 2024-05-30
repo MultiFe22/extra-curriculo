@@ -1,19 +1,22 @@
 import Logomark from "../../assets/Logomark";
 import Logotype from "../../assets/Logotype";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
 export const FooterMain: React.FC = () => {
   const navigate = useNavigate();
 
   const handleNavigation = () => {
-    navigate('/');
+    navigate("/");
   };
 
   return (
     <>
       <div className="mq1920:hidden self-stretch flex flex-col items-start justify-start py-0 px-4 gap-[32px] text-left text-base text-gray-600 font-text-md-regular">
         <div className="self-stretch flex flex-row items-start justify-start">
-          <div onClick={handleNavigation} className="w-[162px] cursor-pointer flex flex-row items-start justify-start py-0 pr-5 pl-0 box-border">
+          <div
+            onClick={handleNavigation}
+            className="w-[162px] cursor-pointer flex flex-row items-start justify-start py-0 pr-5 pl-0 box-border"
+          >
             <div className="flex-1 flex flex-row items-start justify-start gap-[10px]">
               <div className="shadow-[0px_1px_3px_rgba(16,_24,_40,_0.1),_0px_1px_2px_rgba(16,_24,_40,_0.06)] flex flex-row items-start justify-start">
                 <Logomark className="h-8 w-8 relative rounded-lg overflow-hidden shrink-0" />
@@ -29,7 +32,10 @@ export const FooterMain: React.FC = () => {
             <div className="flex flex-row items-center justify-start">
               <div className="flex flex-row items-start justify-start">
                 <div className="flex flex-row items-center justify-center">
-                  <div onClick={handleNavigation} className="relative leading-[24px] font-semibold inline-block min-w-[117px]">
+                  <div
+                    onClick={handleNavigation}
+                    className="relative leading-[24px] font-semibold inline-block min-w-[117px]"
+                  >
                     Oportunidades
                   </div>
                 </div>
@@ -58,7 +64,10 @@ export const FooterMain: React.FC = () => {
       </div>
       <div className="mq768:hidden self-stretch flex flex-row items-start justify-start py-0 px-8 box-border max-w-full text-left text-base text-gray-600 font-text-md-regular mq950:gap-[24px]">
         <div className="flex-1 flex flex-col items-start justify-start gap-[32px] max-w-full mq950:gap-[16px]">
-          <div onClick={handleNavigation} className="w-[142px] cursor-pointer flex flex-row items-start justify-start">
+          <div
+            onClick={handleNavigation}
+            className="w-[142px] cursor-pointer flex flex-row items-start justify-start"
+          >
             <div className="flex-1 flex flex-row items-start justify-start gap-[10px]">
               <div className="shadow-[0px_1px_3px_rgba(16,_24,_40,_0.1),_0px_1px_2px_rgba(16,_24,_40,_0.06)] flex flex-row items-start justify-start">
                 <Logomark className="h-8 w-8 relative rounded-lg overflow-hidden shrink-0" />
@@ -72,7 +81,10 @@ export const FooterMain: React.FC = () => {
             <div className="flex flex-row items-center justify-start">
               <div className="flex flex-row items-start justify-start">
                 <div className="flex flex-row items-center justify-center">
-                  <div onClick={handleNavigation} className="relative leading-[24px] cursor-pointer font-semibold inline-block min-w-[117px]">
+                  <div
+                    onClick={handleNavigation}
+                    className="relative leading-[24px] cursor-pointer font-semibold inline-block min-w-[117px]"
+                  >
                     Oportunidades
                   </div>
                 </div>

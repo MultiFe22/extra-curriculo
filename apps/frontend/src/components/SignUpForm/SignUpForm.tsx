@@ -1,24 +1,14 @@
-import { FunctionComponent } from "react";
 import InputField from "./InputField";
 
-export type ContentType = {
-  className?: string;
-};
-
-const Content: FunctionComponent<ContentType> = ({ className = "" }) => {
+const SignUpForm: React.FC = () => {
   return (
-    <form
-      className={`m-0 self-stretch rounded-xl flex flex-col items-center justify-start gap-[24px] max-w-full ${className}`}
-    >
-      <div className="self-stretch flex flex-col items-start justify-start gap-[20px]">
+    <form className="m-0 self-stretch rounded-xl flex flex-col items-center justify-start gap-[24px] max-w-full">
+      <div className="self-stretch flex flex-col items-start justify-start gap-[20px] mq1920:max-w-full:">
         <InputField
           label="Nome*"
           contentPlaceholder="Preencha seu nome completo"
         />
-        <InputField
-          label="Email*"
-          contentPlaceholder="Preencha seu email"
-        />
+        <InputField label="Email*" contentPlaceholder="Preencha seu email" />
         <InputField
           label="Senha*"
           contentPlaceholder="Crie uma senha"
@@ -38,4 +28,4 @@ const Content: FunctionComponent<ContentType> = ({ className = "" }) => {
   );
 };
 
-export default Content;
+export default SignUpForm;

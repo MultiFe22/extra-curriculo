@@ -1,13 +1,13 @@
 import NavMenuButton from "../../assets/NavMenuButton";
 import Logotype from "../../assets/Logotype";
 import Logomark from "../../assets/Logomark";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
 export const ResponsiveHeader: React.FC = () => {
   const navigate = useNavigate();
-  
+
   const handleNavigation = () => {
-    navigate('/');
+    navigate("/");
   };
 
   return (
@@ -17,7 +17,10 @@ export const ResponsiveHeader: React.FC = () => {
           <div className="mq768:flex-1 mq1920:w-[379px] flex mq1920:flex-col mq768:flex-row items-start mq768:justify-between mq1920:justify-start mq1920:pt-1.5 mq1920:px-0 mq1920:pb-0 mq768:py-0 mq375:pr-3 mq375:pl-4 mq768:pr-7 mq768:pl-8 box-border max-w-full mq768:gap-[20px]">
             <div className="mq768:w-[142px] flex mq768:flex-col mq1920:flex-row items-start justify-start mq1920:gap-[40px] mq768:pt-1 mq768:px-0 mq768:pb-0 mq768:box-border">
               <div className="mq768:self-stretch mq1920:w-[142px] flex flex-row items-start justify-start">
-                <div onClick={handleNavigation} className="cursor-pointer	flex-1 flex flex-row items-start justify-start gap-[10px]">
+                <div
+                  onClick={handleNavigation}
+                  className="cursor-pointer	flex-1 flex flex-row items-start justify-start gap-[10px]"
+                >
                   <div className="flex flex-row items-start justify-start">
                     <Logomark className="h-8 w-8 relative rounded-lg overflow-hidden shrink-0" />
                   </div>
@@ -30,7 +33,10 @@ export const ResponsiveHeader: React.FC = () => {
                 <div className="flex flex-row items-center justify-start gap-[32px]">
                   <div className="flex flex-row items-start justify-start">
                     <div className="flex flex-row items-center justify-center">
-                      <b onClick={handleNavigation} className="cursor-pointer relative leading-[24px] inline-block min-w-[119px]">
+                      <b
+                        onClick={handleNavigation}
+                        className="cursor-pointer relative leading-[24px] inline-block min-w-[119px]"
+                      >
                         Oportunidades
                       </b>
                     </div>

@@ -1,11 +1,15 @@
+import { useNavigate } from "react-router-dom";
 import Logomark from "../../assets/Logomark";
 
 export const SignUpHeader: React.FC = () => {
-  return (
-    <div
-      className="self-stretch flex flex-col items-start justify-start gap-[24px] text-left text-5xl text-gray-900 font-text-md-regular"
-    >
-      <div className=" flex flex-row items-start justify-start py-0 pl-0">
+    const navigate = useNavigate();
+
+    const handleNavigation = () => {
+        navigate("/");
+    };
+    return (
+    <div className="self-stretch flex flex-col items-start justify-start gap-[24px] text-left mq768:text-5xltext-gray-900 font-text-md-regular">
+      <div onClick={handleNavigation} className="flex flex-row items-start justify-start py-0 pl-0">
         <Logomark className="h-12 w-12 relative rounded-xl  overflow-hidden shrink-0" />
       </div>
 
