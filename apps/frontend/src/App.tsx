@@ -13,6 +13,7 @@ function App() {
           <Route path="/" Component={Opportunities} />
           <Route path="/project/:id" Component={Project} />
           <Route path="/signup" Component={SignUp} />
+          <Route path="/login" Component={SignUp} />
         </Routes>
       </Router>
     </QueryClientProvider>

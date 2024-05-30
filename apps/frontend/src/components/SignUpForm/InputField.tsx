@@ -2,12 +2,14 @@ export type InputFieldType = {
   label?: string;
   contentPlaceholder?: string;
   hintText?: string;
+  isPassword?: boolean;
 };
 
 const InputField: React.FC<InputFieldType> = ({
   label,
   contentPlaceholder,
   hintText,
+  isPassword = false,
 }) => {
   return (
     <div className="self-stretch flex flex-col items-start justify-start text-left text-sm text-gray-700 font-text-md-regular">
@@ -20,7 +22,7 @@ const InputField: React.FC<InputFieldType> = ({
             <input
               className="w-full [border:none] [outline:none] bg-[transparent] h-6 flex-1 flex flex-row items-center justify-start font-text-md-regular text-base text-gray-500 min-w-[189px]"
               placeholder={contentPlaceholder}
-              type="text"
+              type={isPassword ? "password" : "text"}
             />
           </div>
         </div>
