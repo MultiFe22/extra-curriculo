@@ -66,7 +66,7 @@ const DesktopVersion: React.FC = () => {
             className="flex-1 flex flex-row items-start justify-start cursor-pointer"
           >
             <div className="flex-1 flex flex-row items-start justify-start gap-[10px]">
-              <div className="shadow-[0px_1px_3px_rgba(16,_24,_40,_0.1),_0px_1px_2px_rgba(16,_24,_40,_0.06)] flex flex-row items-start justify-start">
+              <div className="flex flex-row items-start justify-start">
                 <Logomark className="h-8 w-8 relative rounded-lg overflow-hidden shrink-0" />
               </div>
               <div className="h-8 flex-1 flex flex-col items-center justify-center">
