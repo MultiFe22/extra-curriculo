@@ -14,7 +14,7 @@ pub enum AuthError {
 }
 
 pub struct Credentials {
-    pub username: String,
+    pub email: String,
     pub password: Secret<String>,
 }
 
@@ -31,7 +31,7 @@ pub async fn validate_credentials(
             .to_string(),
     );
     if let Some((stored_user_id, stored_password_hash)) =
-        get_stored_credentials(&credentials.username, &pool).await?
+        get_stored_credentials(&credentials.email, &pool).await?
     {
         user_id = Some(stored_user_id);
         expected_password_hash = stored_password_hash;
@@ -72,18 +72,18 @@ fn verify_password_hash(
         .map_err(AuthError::InvalidCredentials)
 }
 
-#[tracing::instrument(name = "Get stored credentials", skip(username, pool))]
+#[tracing::instrument(name = "Get stored credentials", skip(email, pool))]
 async fn get_stored_credentials(
-    username: &str,
+    email: &str,
     pool: &PgPool,
 ) -> Result<Option<(uuid::Uuid, Secret<String>)>, anyhow::Error> {
     let row = sqlx::query!(
         r#"
         SELECT user_id, password_hash
         FROM users
-        WHERE username = $1
+        WHERE email = $1
         "#,
-        username,
+        email,
     )
     .fetch_optional(pool)
     .await

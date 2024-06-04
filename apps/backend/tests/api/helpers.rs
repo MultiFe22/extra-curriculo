@@ -4,6 +4,8 @@ use extracurriculo::configuration::{get_configuration, DatabaseSettings};
 use extracurriculo::startup::get_connection_pool;
 use extracurriculo::startup::Application;
 use extracurriculo::telemetry::{get_subscriber, init_subscriber};
+use fake::{faker, Fake};
+use faker::internet::en::SafeEmail;
 use once_cell::sync::Lazy;
 use serde_json::Value;
 use sqlx::{Connection, Executor, PgConnection, PgPool};
@@ -334,6 +336,7 @@ pub struct TestUser {
     pub user_id: Uuid,
     pub username: String,
     pub password: String,
+    pub email: String,
 }
 
 impl TestUser {
@@ -342,6 +345,7 @@ impl TestUser {
             user_id: Uuid::new_v4(),
             username: Uuid::new_v4().to_string(),
             password: Uuid::new_v4().to_string(),
+            email: SafeEmail().fake(),
         }
     }
 
@@ -359,11 +363,12 @@ impl TestUser {
 
         sqlx::query!(
             r#"
-            INSERT INTO users (user_id, username, password_hash)
-            VALUES ($1, $2, $3)
+            INSERT INTO users (user_id, username, email, password_hash)
+            VALUES ($1, $2, $3, $4)
             "#,
             self.user_id,
             self.username,
+            self.email,
             password_hash,
         )
         .execute(pool)

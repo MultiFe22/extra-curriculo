@@ -1,10 +1,16 @@
 mod categories;
 mod health_check;
+mod login;
+mod login_check;
+mod logout;
 mod programs;
 mod projects;
 mod tags;
 pub use categories::*;
 pub use health_check::*;
+pub use login::*;
+pub use login_check::*;
+pub use logout::*;
 pub use programs::*;
 pub use projects::*;
 pub use tags::*;

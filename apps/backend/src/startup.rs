@@ -1,3 +1,4 @@
+use crate::authentication::reject_anonymous_users;
 // use crate::authentication::reject_anonymous_users;
 use crate::configuration::DatabaseSettings;
 use crate::configuration::Settings;
@@ -12,6 +13,9 @@ use crate::routes::get_project;
 use crate::routes::get_project_tags;
 use crate::routes::get_tag;
 use crate::routes::health_check;
+use crate::routes::login;
+use crate::routes::login_check;
+use crate::routes::logout;
 use crate::routes::post_category;
 use crate::routes::post_program;
 use crate::routes::post_project;
@@ -19,14 +23,14 @@ use crate::routes::post_tag;
 use crate::routes::put_project;
 use crate::routes::put_project_tags;
 use actix_cors::Cors;
+use actix_session::config::PersistentSession;
 use actix_session::storage::RedisSessionStore;
 use actix_session::SessionMiddleware;
+use actix_web::cookie::time::Duration;
 use actix_web::cookie::Key;
 use actix_web::dev::Server;
 use actix_web::{web, App, HttpServer};
-use actix_web_flash_messages::storage::CookieMessageStore;
-use actix_web_flash_messages::FlashMessagesFramework;
-// use actix_web_lab::middleware::from_fn;
+use actix_web_lab::middleware::from_fn;
 use secrecy::ExposeSecret;
 use secrecy::Secret;
 use sqlx::postgres::PgPoolOptions;
@@ -48,25 +52,22 @@ async fn run(
     let base_url = web::Data::new(ApplicationBaseUrl(base_url));
     let email_client = web::Data::new(email_client);
     let secret_key = Key::from(hmac_secret.expose_secret().as_bytes());
-    let message_store =
-        CookieMessageStore::builder(Key::from(hmac_secret.expose_secret().as_bytes())).build();
-    let message_framework = FlashMessagesFramework::builder(message_store).build();
     let redis_store = RedisSessionStore::new(redis_uri.expose_secret()).await?;
     let server = HttpServer::new(move || {
         let cors = Cors::default()
             .allow_any_origin() // change this in production
             .allow_any_method() // change this in production
-            .allow_any_header() // cgange this in production
+            .allow_any_header() // change this in production
             .supports_credentials()
             .max_age(3600);
         // Wrap the connection in a smart pointer
         App::new()
             .wrap(cors)
-            .wrap(message_framework.clone())
-            .wrap(SessionMiddleware::new(
-                redis_store.clone(),
-                secret_key.clone(),
-            ))
+            .wrap(
+                SessionMiddleware::builder(redis_store.clone(), secret_key.clone())
+                    .session_lifecycle(PersistentSession::default().session_ttl(Duration::hours(1)))
+                    .build(),
+            )
             .wrap(TracingLogger::default())
             .route("/health_check", web::get().to(health_check))
             .route("/projects", web::post().to(post_project))
@@ -89,15 +90,17 @@ async fn run(
             // .route("/newsletters", web::post().to(publish_newsletter))
             // .route("/", web::get().to(home))
             // .route("/login", web::get().to(login_form))
-            // .route("/login", web::post().to(login))
-            // .service(
-            //     web::scope("/admin")
-            //         .wrap(from_fn(reject_anonymous_users))
-            //         .route("/dashboard", web::get().to(admin_dashboard))
-            //         .route("/password", web::get().to(change_password_form))
-            //         .route("/password", web::post().to(change_password))
-            //         .route("/logout", web::post().to(log_out)),
-            // )
+            .route("/login", web::post().to(login))
+            .route("/logout", web::post().to(logout))
+            .service(
+                web::scope("/test")
+                    .wrap(from_fn(reject_anonymous_users))
+                    // .route("/dashboard", web::get().to(admin_dashboard))
+                    // .route("/password", web::get().to(change_password_form))
+                    // .route("/password", web::post().to(change_password))
+                    // .route("/logout", web::post().to(log_out)),
+                    .route("/logincheck", web::get().to(login_check)),
+            )
             .app_data(db_pool.clone())
             .app_data(email_client.clone())
             .app_data(base_url.clone())

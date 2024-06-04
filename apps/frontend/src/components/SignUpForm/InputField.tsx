@@ -3,6 +3,8 @@ export type InputFieldType = {
   contentPlaceholder?: string;
   hintText?: string;
   isPassword?: boolean;
+  value: string;
+  setValue: (e: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
 const InputField: React.FC<InputFieldType> = ({
@@ -10,6 +12,8 @@ const InputField: React.FC<InputFieldType> = ({
   contentPlaceholder,
   hintText,
   isPassword = false,
+  value,
+  setValue,
 }) => {
   return (
     <div className="self-stretch flex flex-col items-start justify-start text-left text-sm text-gray-700 font-text-md-regular">
@@ -23,6 +27,8 @@ const InputField: React.FC<InputFieldType> = ({
               className="w-full [border:none] [outline:none] bg-[transparent] h-6 flex-1 flex flex-row items-center justify-start font-text-md-regular text-base text-gray-500 min-w-[189px]"
               placeholder={contentPlaceholder}
               type={isPassword ? "password" : "text"}
+              value={value}
+              onChange={setValue}
             />
           </div>
         </div>

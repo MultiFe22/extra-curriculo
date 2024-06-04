@@ -2,10 +2,63 @@ import NavMenuButton from "../../assets/NavMenuButton";
 import Logotype from "../../assets/Logotype";
 import Logomark from "../../assets/Logomark";
 import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import Avatar from "../../assets/Avatar";
+import LogOut from "../../assets/LogOut";
+import AvatarDropdown from "../../assets/AvatarDropdown";
+
+const isUserLoggedIn = async () => {
+  const response = await fetch("http://localhost:8000/test/logincheck", {
+    credentials: "include", // Include credentials in the request
+  });
+
+  return response.ok;
+};
+
+const DropdownMenu: React.FC = () => {
+  // clear all cookies from the browser
+  const handleLogout = async () => {
+    await fetch("http://localhost:8000/logout", {
+      method: "POST",
+      credentials: "include",
+    });
+
+    window.location.reload();
+  };
+  
+  return (
+    <div className="absolute w-[140px] mt-0 top-20 shadow-lg mr-20 border border-gray-200 rounded-lg bg-white flex flex-col text-left text-sm text-gray-800 font-medium">
+      <div className="flex flex-col items-start">
+        <div className="flex items-center gap-3 py-2.5 px-4 cursor-pointer">
+          <AvatarDropdown className="w-4 h-4 stroke-[#344054]" />
+          <div className="relative">Conta</div>
+        </div>
+        <div className="relative w-full h-px bg-gray-200" />
+        <div onClick={handleLogout} className="flex items-center gap-3 py-2.5 px-4 cursor-pointer">
+          <LogOut className="w-4 h-4 stroke-[#344054]" />
+          <div className="relative">Sair</div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default DropdownMenu;
 
 export const ResponsiveHeader: React.FC = () => {
-  const navigate = useNavigate();
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
+  useEffect(() => {
+    const checkAuthentication = async () => {
+      setIsAuthenticated(await isUserLoggedIn());
+    };
+
+    checkAuthentication();
+  }, []);
+
+  const navigate = useNavigate();
+  
   const handleNavigation = () => {
     navigate("/");
   };
@@ -17,6 +70,10 @@ export const ResponsiveHeader: React.FC = () => {
   const handleSignUpNav = () => {
     navigate("/signup");
   };
+
+  const handleAvatarClick = () => {
+    setIsMenuOpen(!isMenuOpen);
+  }
 
   return (
     <div className="self-stretch bg-gray-50 flex flex-row items-start justify-start mq768:pt-0 mq768:px-0 box-border max-w-full top-[0] z-[30] sticky mq1920:text-left mq1920:text-base mq1920:text-gray-600 mq1920:font-text-md-regular mq1920:border-b-1 mq1920:border-solid mq1920:border-gray-10">
@@ -75,26 +132,38 @@ export const ResponsiveHeader: React.FC = () => {
             </div>
           </div>
           <div className="mq768:hidden flex flex-row items-center justify-start gap-[12px]">
-            <div className="rounded-lg flex flex-row items-start justify-start">
-              <div className="rounded-lg overflow-hidden flex flex-row items-center justify-center py-2.5 px-[18px]">
-                <div
-                  onClick={handleLoginNav}
-                  className="cursor-pointer relative leading-[24px] font-semibold inline-block min-w-[48px]"
-                >
-                  Entrar
+            {!isAuthenticated && (
+              <div className="rounded-lg flex flex-row items-start justify-start">
+                <div className="rounded-lg overflow-hidden flex flex-row items-center justify-center py-2.5 px-[18px]">
+                  <div
+                    onClick={handleLoginNav}
+                    className="cursor-pointer relative leading-[24px] font-semibold inline-block min-w-[48px]"
+                  >
+                    Entrar
+                  </div>
                 </div>
               </div>
-            </div>
-            <div
-              onClick={handleSignUpNav}
-              className="rounded-lg cursor-pointer flex flex-row items-start justify-start text-white"
-            >
-              <div className="rounded-lg bg-brand-600 shadow-[0px_1px_2px_rgba(16,_24,_40,_0.05)] overflow-hidden flex flex-row items-center justify-center py-2 px-[17px] whitespace-nowrap border-[1px] border-solid border-brand-600">
-                <div className="relative leading-[24px] font-semibold inline-block min-w-[86px]">
-                  Criar conta
+            )}
+            {!isAuthenticated && (
+              <div
+                onClick={handleSignUpNav}
+                className="rounded-lg cursor-pointer flex flex-row items-start justify-start text-white"
+              >
+                <div className="rounded-lg bg-brand-600 shadow-[0px_1px_2px_rgba(16,_24,_40,_0.05)] overflow-hidden flex flex-row items-center justify-center py-2 px-[17px] whitespace-nowrap border-[1px] border-solid border-brand-600">
+                  <div className="relative leading-[24px] font-semibold inline-block min-w-[86px]">
+                    Criar conta
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
+            {isAuthenticated && (
+              <div className="rounded-lg overflow-hidden flex flex-row items-center justify-center p-2">
+                <div onClick={handleAvatarClick} className="flex items-center justify-center h-12 w-12 relative rounded-181xl">
+                  <Avatar className="h-full w-full rounded-181xl" />
+                </div>
+                {isMenuOpen && <DropdownMenu />}
+              </div>
+            )}
           </div>
         </header>
       </div>

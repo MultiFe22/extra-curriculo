@@ -50,7 +50,7 @@ export type Categories = Category[];
 export type Projects = ProjectDTO[];
 
 async function fetchProjects(): Promise<Projects> {
-  const response = await fetch("http://127.0.0.1:8000/projects");
+  const response = await fetch("http://localhost:8000/projects");
   if (!response.ok) {
     throw new Error("Failed to fetch projects");
   }
@@ -58,7 +58,7 @@ async function fetchProjects(): Promise<Projects> {
 }
 
 async function fetchCategories(): Promise<Categories> {
-  const response = await fetch("http://127.0.0.1:8000/categories");
+  const response = await fetch("http://localhost:8000/categories");
   if (!response.ok) {
     throw new Error("Failed to fetch categories");
   }
@@ -67,7 +67,7 @@ async function fetchCategories(): Promise<Categories> {
 }
 
 async function fetchTags(): Promise<Tags> {
-  const response = await fetch("http://127.0.0.1:8000/tags");
+  const response = await fetch("http://localhost:8000/tags");
   if (!response.ok) {
     throw new Error("Failed to fetch tags");
   }
