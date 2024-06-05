@@ -179,6 +179,20 @@ impl TestApp {
             .await
             .expect("Failed to execute request.")
     }
+
+    pub async fn post_login<Body>(&self, body: &Body) -> reqwest::Response
+    where
+        Body: serde::Serialize,
+    {
+        self.api_client
+            .post(&format!("{}/login", &self.address))
+            // This `reqwest` method makes sure that the body is URL-encoded
+            // and the `Content-Type` header is set accordingly.
+            .json(body)
+            .send()
+            .await
+            .expect("Failed to execute request.")
+    }
     // pub async fn post_newsletters(&self, body: serde_json::Value) -> reqwest::Response {
     //     self.api_client
     //         .post(&format!("{}/newsletters", &self.address))
@@ -210,20 +224,6 @@ impl TestApp {
     //     let html = get_link(&body["HtmlBody"].as_str().unwrap());
     //     let plain_text = get_link(&body["TextBody"].as_str().unwrap());
     //     ConfirmationLinks { html, plain_text }
-    // }
-
-    // pub async fn post_login<Body>(&self, body: &Body) -> reqwest::Response
-    // where
-    //     Body: serde::Serialize,
-    // {
-    //     self.api_client
-    //         .post(&format!("{}/login", &self.address))
-    //         // This `reqwest` method makes sure that the body is URL-encoded
-    //         // and the `Content-Type` header is set accordingly.
-    //         .form(body)
-    //         .send()
-    //         .await
-    //         .expect("Failed to execute request.")
     // }
 
     // pub async fn get_login_html(&self) -> String {
