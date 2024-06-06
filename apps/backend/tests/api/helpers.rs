@@ -193,6 +193,16 @@ impl TestApp {
             .await
             .expect("Failed to execute request.")
     }
+
+    pub async fn post_logout(&self, cookie: &str) -> reqwest::Response {
+        self.api_client
+            .post(&format!("{}/logout", &self.address))
+            .header("Cookie", cookie)
+            .send()
+            .await
+            .expect("Failed to execute request.")
+    }
+
     // pub async fn post_newsletters(&self, body: serde_json::Value) -> reqwest::Response {
     //     self.api_client
     //         .post(&format!("{}/newsletters", &self.address))

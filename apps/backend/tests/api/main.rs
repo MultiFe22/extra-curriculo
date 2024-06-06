@@ -5,3 +5,4 @@ mod login;
 mod programs;
 mod projects;
 mod tags;
+mod logout;
