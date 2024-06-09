@@ -8,6 +8,13 @@ interface LoginCredentials {
   password: string;
 }
 
+interface SignUpForm {
+  username: string;
+  email: string;
+  password: string;
+
+}
+
 const login = async (credentials: LoginCredentials): Promise<number> => {
   const response = await fetch("http://localhost:8000/login", {
     method: "POST",
@@ -26,6 +33,24 @@ const login = async (credentials: LoginCredentials): Promise<number> => {
   return response.status;
 };
 
+const signup = async (credentials: SignUpForm): Promise<number> => {
+  const response = await fetch("http://localhost:8000/signup", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+    body: JSON.stringify(credentials),
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || "Failed to sign up");
+  }
+
+  return response.status;
+}
+
 const useLogin = () => {
   return useMutation<number, Error, LoginCredentials>({
     mutationFn: login,
@@ -40,12 +65,28 @@ const useLogin = () => {
   });
 };
 
+const useSignUp = () => {
+  return useMutation<number, Error, SignUpForm>({
+    mutationFn: signup,
+    onSuccess: (data: number) => {
+      // Handle successful sign up
+      console.log("Sign up successful:", data);
+    },
+    onError: (error: Error) => {
+      // Handle sign up error
+      console.error("Sign up error:", error);
+    },
+  });
+}
+
 const SignUpForm: React.FC = () => {
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const location = useLocation();
   const loginMutation = useLogin();
+  const signUpMutation = useSignUp();
+  
   const navigate = useNavigate();
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setName(e.target.value);
@@ -58,7 +99,13 @@ const SignUpForm: React.FC = () => {
       setPassword("");
       navigate("/");
     }
-  }, [loginMutation.isSuccess, navigate]);
+    if (signUpMutation.isSuccess) {
+      setName("");
+      setEmail("");
+      setPassword("");
+      navigate("/");
+    }
+  }, [loginMutation.isSuccess, signUpMutation.isSuccess ,navigate]);
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
@@ -68,12 +115,18 @@ const SignUpForm: React.FC = () => {
     setPassword(e.target.value);
   };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    loginMutation.mutate({ email, password });
-  };
 
   const isLogin = location.pathname === "/login";
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (isLogin) {
+      loginMutation.mutate({ email, password });
+    }
+    else {
+      signUpMutation.mutate({ username: name, email, password });
+    }
+  };
 
   return (
     <form
