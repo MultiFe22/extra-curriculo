@@ -25,7 +25,7 @@ export const ProjectContent: React.FC<ProjectContentProps> = ({ project }) => {
               <img
                 className="self-stretch mq1920:flex-1 relative max-w-full overflow-hidden max-h-full object-cover"
                 alt=""
-                src="https://source.unsplash.com/a8JHGzB7h4A"
+                src="https://images.unsplash.com/photo-1715484620057-1145dba8ac76"
               />
             </div>
             <div className="mq1920:hidden self-stretch flex flex-col items-start justify-start gap-[32px] text-base text-brand-600">

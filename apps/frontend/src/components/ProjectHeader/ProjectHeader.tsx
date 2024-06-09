@@ -84,7 +84,7 @@ export const ProjectHeader: React.FC<ProjectHeaderProps> = ({ project }) => {
       <img
         className="self-stretch relative max-w-full overflow-hidden max-h-full object-cover mq1920:hidden"
         alt=""
-        src="https://source.unsplash.com/a8JHGzB7h4A"
+        src="https://images.unsplash.com/photo-1715484620057-1145dba8ac76"
       />
       <div className="self-stretch flex flex-row mq1920:flex-wrap mq768:items-start mq1920:items-center justify-start py-0 mq768:px-4 m1920:px-8 mq1920:gap-[32px] box-border max-w-full text-sm">
         <div className="flex-1 flex flex-col items-start justify-start mq768:gap-[32px] mq1920:gap-[48px] max-w-full mq1920:box-border mq1920:py-5 mq1920:px-0">
@@ -201,7 +201,7 @@ export const ProjectHeader: React.FC<ProjectHeaderProps> = ({ project }) => {
         <img
           className="mq768:hidden h-[512px] flex-1 relative max-w-full overflow-hidden object-cover min-w-[541px] min-h-[512px] mq950:min-w-full"
           alt=""
-          src="https://source.unsplash.com/a8JHGzB7h4A"
+          src="https://images.unsplash.com/photo-1715484620057-1145dba8ac76"
         />
       </div>
     </section>

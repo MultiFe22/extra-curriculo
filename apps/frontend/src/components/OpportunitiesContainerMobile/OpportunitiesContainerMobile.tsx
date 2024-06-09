@@ -21,7 +21,7 @@ export const OpportunitiesContainerMobile: React.FC<
           <ProjectCard
             key={project.id}
             id={project.id}
-            image="https://source.unsplash.com/a8JHGzB7h4A"
+            image="https://images.unsplash.com/photo-1715484620057-1145dba8ac76"
             name={project.name}
             tags={project.tags}
             modality={project.modality}
