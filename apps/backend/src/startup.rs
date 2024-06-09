@@ -22,6 +22,7 @@ use crate::routes::post_project;
 use crate::routes::post_tag;
 use crate::routes::put_project;
 use crate::routes::put_project_tags;
+use crate::routes::signup;
 use actix_cors::Cors;
 use actix_session::config::PersistentSession;
 use actix_session::storage::RedisSessionStore;
@@ -92,6 +93,7 @@ async fn run(
             // .route("/login", web::get().to(login_form))
             .route("/login", web::post().to(login))
             .route("/logout", web::post().to(logout))
+            .route("/signup", web::post().to(signup))
             .service(
                 web::scope("/test")
                     .wrap(from_fn(reject_anonymous_users))

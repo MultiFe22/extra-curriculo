@@ -25,7 +25,7 @@ async fn login_returns_200_for_valid_credentials() {
     });
 
     let response = app.post_login(&login_body).await;
-    // assert 200 
+    // assert 200
     assert_eq!(response.status().as_u16(), 200);
 }
 

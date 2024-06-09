@@ -3,7 +3,7 @@ use anyhow::Context;
 use argon2::password_hash::SaltString;
 use argon2::{Algorithm, Argon2, Params, PasswordHash, PasswordHasher, PasswordVerifier, Version};
 use secrecy::{ExposeSecret, Secret};
-use sqlx::PgPool;
+use sqlx::{PgPool, Postgres, Transaction};
 
 #[derive(thiserror::Error, Debug)]
 pub enum AuthError {
@@ -114,6 +114,33 @@ pub async fn change_password(
     .await
     .context("Failed to change user's password in the database.")?;
     Ok(())
+}
+
+#[tracing::instrument(name = "Create new user", skip(password, transaction))]
+pub async fn create_user(
+    username: &str,
+    email: &str,
+    password: Secret<String>,
+    transaction: &mut Transaction<'_, Postgres>,
+) -> Result<uuid::Uuid, anyhow::Error> {
+    let password_hash = spawn_blocking_with_tracing(move || compute_password_hash(password))
+        .await?
+        .context("Failed to hash password")?;
+    let user_id = uuid::Uuid::new_v4();
+    sqlx::query!(
+        r#"
+            INSERT INTO users (user_id, username, email, password_hash)
+            VALUES ($1, $2, $3, $4)
+            "#,
+        user_id,
+        username,
+        email,
+        password_hash.expose_secret()
+    )
+    .execute(transaction)
+    .await
+    .context("Failed to create a new user in the database.")?;
+    Ok(user_id)
 }
 
 fn compute_password_hash(password: Secret<String>) -> Result<Secret<String>, anyhow::Error> {

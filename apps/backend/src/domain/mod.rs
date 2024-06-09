@@ -32,4 +32,5 @@ pub use tag::TagName;
 pub use user::NewUser;
 pub use user::UserEmail;
 pub use user::UserName;
+pub use user::UserPassword;
 pub use user::UserProfilePic;

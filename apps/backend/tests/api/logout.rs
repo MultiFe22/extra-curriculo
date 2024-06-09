@@ -11,7 +11,10 @@ async fn logout_returns_200_for_valid_credentials() {
 
     let login_response = app.post_login(&login_body).await;
     // get the "Set-Cookie" header
-    let cookie = login_response.headers().get("Set-Cookie").expect("no cookie found");
+    let cookie = login_response
+        .headers()
+        .get("Set-Cookie")
+        .expect("no cookie found");
     // get the cookie value
     let cookie_value = cookie
         .to_str()
@@ -23,7 +26,6 @@ async fn logout_returns_200_for_valid_credentials() {
     let logout_response = app.post_logout(cookie_value).await;
     // assert 200
     assert_eq!(logout_response.status().as_u16(), 200);
-
 }
 
 #[tokio::test]
