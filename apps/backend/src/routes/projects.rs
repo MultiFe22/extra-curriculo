@@ -139,11 +139,11 @@ pub async fn post_project(
         .context("Failed to acquire a Postgres connection from the Pool.")?;
     let project_id = insert_project(&mut transaction, &new_project)
         .await
-        .context("Failed to insert new subscriber in the database.")?;
+        .context("Failed to insert new project in the database.")?;
     transaction
         .commit()
         .await
-        .context("Failed to commit SQL transaction to store a new subscriber.")?;
+        .context("Failed to commit SQL transaction to store a new project.")?;
     Ok(HttpResponse::Created().json(project_id))
 }
 
